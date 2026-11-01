@@ -1,0 +1,44 @@
+# Open-weight models of the T1 testbed (autoagentnet/testbed/grid.py reads this file).
+# Facts and sources: research/lit/ow_testbed_sources.md (read 2026-10-26).
+families:
+  qwen3.5:
+    licence: Apache-2.0
+    repos:            # size_b -> Hugging Face repo; dense FFN with hybrid Gated DeltaNet + gated attention (3:1),
+      2: Qwen/Qwen3.5-2B      # multimodal checkpoints served text-only (vllm serve --language-model-only)
+      4: Qwen/Qwen3.5-4B
+      9: Qwen/Qwen3.5-9B
+    revisions:        # pinned commits (runbook step 2 checks them)
+      2: 15852e8c16360a2fea060d615a32b45270f8a8fc
+      4: 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a
+      9: c202236235762e1c871ad0ccb60c8ee5ba337b9a
+    min_vllm: "0.17.0"
+    serve_args: ["--language-model-only"]
+    think_start: "<think>"
+    think_end: "</think>"
+    answer_max_tokens: 2048     # with thinking off the whole reasoning (and any program) is in the answer phase
+    logprobs: 5
+    # Sampling: the card's general thinking row for every size and both modes. The card's non-thinking rows differ by
+    # size (4B: 0.7 / 0.8 / presence 1.5; 2B: 1.0 / 1.0 / presence 2.0); one setting for every config keeps the
+    # budget and size axes from being confounded with sampling (deviation from the card for non-thinking mode,
+    # recorded in research/v4/testbed/prereg.md).
+    sampling:
+      thinking: {temperature: 1.0, top_p: 0.95, top_k: 20, min_p: 0.0, presence_penalty: 1.5}
+      non_thinking: {temperature: 1.0, top_p: 0.95, top_k: 20, min_p: 0.0, presence_penalty: 1.5}
+  gpt-oss:            # stage 2 only
+    licence: Apache-2.0
+    repos:
+      20: openai/gpt-oss-20b                 # native MXFP4 MoE weights
+    bf16_repo: unsloth/gpt-oss-20b-BF16      # third-party BF16 upcast (the only one found)
+    revisions:
+      20: 6cee5e81ee83917806bbde320786a8fb61efebee
+    bf16_revision: 5a6fe4c0c1a86147cb9dc1bb99486e61d12a3c9e
+    serve_args: []
+    # Effort is set by a "Reasoning: <effort>" system line; whether vLLM's template also takes a reasoning_effort
+    # kwarg is unverified (check in the stage-2 dry run). Thinking tokens are not split from answer tokens here.
+    think_start: "<|channel|>analysis<|message|>"
+    think_end: "<|end|>"
+    answer_max_tokens: 8192
+    logprobs: 5
+    sampling:         # card defaults unverified; temperature 1.0, top_p 1.0
+      thinking: {temperature: 1.0, top_p: 1.0}
+      non_thinking: {temperature: 1.0, top_p: 1.0}

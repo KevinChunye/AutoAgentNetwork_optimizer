@@ -1,0 +1,6 @@
+pick,n_similar_cost,random_heldout_error,pick_heldout_error,advantage,advantage_lo,advantage_hi,method
+k3-3-1-1,7,0.4893,0.45,0.0393,-0.0465,0.1214,"joint (exhaustive, labeled)"
+k6-6-6-1,3,0.4417,0.4,0.0417,-0.0167,0.1083,"joint (exhaustive, label-free)"
+k6-6-1-1,10,0.45,0.45,-0.0,-0.1025,0.095,stage-by-stage sensitivity
+k6-6-6-1,3,0.4417,0.4,0.0417,-0.0167,0.1083,best uniform
+k3-3-1-1,7,0.4893,0.45,0.0393,-0.0465,0.1214,"budgeted, <= 50% of dense cost"

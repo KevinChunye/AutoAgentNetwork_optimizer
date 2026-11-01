@@ -1,0 +1,90 @@
+{
+  "run_id": "e60_cd_open_code-1793130475",
+  "state": "completed",
+  "reason": "",
+  "vendor": "openai",
+  "task_kind": "code",
+  "items": [
+    4,
+    6
+  ],
+  "sources": [
+    {
+      "ref": "sol61_med",
+      "calls": 1,
+      "first_call": 0,
+      "prompt": "base",
+      "max_tokens": 128000,
+      "items": null,
+      "checks": null
+    },
+    {
+      "ref": "luna_low_ev",
+      "calls": 3,
+      "first_call": 0,
+      "prompt": "base",
+      "max_tokens": 128000,
+      "items": null,
+      "checks": null
+    }
+  ],
+  "template_hash": "39a6a37dd61080da",
+  "code": {
+    "commit": "f7fb484",
+    "dirty": false,
+    "dirty_paths": []
+  },
+  "panel_files": [],
+  "checkpoints": [
+    "committed and pushed"
+  ],
+  "calls": 8,
+  "live_calls": 8,
+  "by_source": {
+    "luna_low_ev:base": {
+      "calls": 6,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.00198,
+      "live": 6,
+      "refused": 0
+    },
+    "sol61_med:base": {
+      "calls": 2,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.0133,
+      "live": 2,
+      "refused": 0
+    }
+  },
+  "model_versions": [
+    "gpt-6-luna",
+    "gpt-6.1-sol"
+  ],
+  "budget": {
+    "spent_by_account": {
+      "anthropic": 89.4047,
+      "openai": 26.7983
+    },
+    "hard_caps_usd": {
+      "anthropic": 125.0,
+      "openai": 100.0
+    },
+    "phase": "evidence",
+    "phase_total_usd": 150.0,
+    "account_caps_usd": {
+      "anthropic": 125.0,
+      "openai": 50.0
+    },
+    "room_by_account_usd": {
+      "anthropic": 14.2318,
+      "openai": 14.2318
+    },
+    "spent_total_usd": 116.203,
+    "run_spent_usd": 0.0153,
+    "run_cap_usd": 4.0,
+    "safety_multiplier": 1.15
+  },
+  "rate_limits": {}
+}

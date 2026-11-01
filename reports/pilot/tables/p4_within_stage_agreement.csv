@@ -1,0 +1,5 @@
+stage,pairwise_agreement,majority_share,accuracy
+propose,0.478,0.652,0.446
+critique,0.803,0.869,0.575
+refine,0.885,0.929,0.602
+aggregate,,1.0,0.625

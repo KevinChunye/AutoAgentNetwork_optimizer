@@ -1,0 +1,2780 @@
+{
+ "cv": [
+  {
+   "cv_acc": 0.8409090909090909,
+   "cv_cost": 0.020583448543123526,
+   "lam": 0.0,
+   "use_family": false
+  },
+  {
+   "cv_acc": 0.8484848484848485,
+   "cv_cost": 0.018186956118881104,
+   "lam": 3.0,
+   "use_family": false
+  },
+  {
+   "cv_acc": 0.8484848484848485,
+   "cv_cost": 0.016415039452214435,
+   "lam": 10.0,
+   "use_family": false
+  },
+  {
+   "cv_acc": 0.8484848484848485,
+   "cv_cost": 0.015735443298368283,
+   "lam": 30.0,
+   "use_family": false
+  },
+  {
+   "cv_acc": 0.842074592074592,
+   "cv_cost": 0.015483596081002315,
+   "lam": 100.0,
+   "use_family": false
+  },
+  {
+   "cv_acc": 0.8409090909090909,
+   "cv_cost": 0.020583448543123526,
+   "lam": 0.0,
+   "use_family": true
+  },
+  {
+   "cv_acc": 0.8484848484848485,
+   "cv_cost": 0.018186956118881104,
+   "lam": 3.0,
+   "use_family": true
+  },
+  {
+   "cv_acc": 0.8484848484848485,
+   "cv_cost": 0.016415039452214435,
+   "lam": 10.0,
+   "use_family": true
+  },
+  {
+   "cv_acc": 0.8484848484848485,
+   "cv_cost": 0.015735443298368283,
+   "lam": 30.0,
+   "use_family": true
+  },
+  {
+   "cv_acc": 0.842074592074592,
+   "cv_cost": 0.015483596081002315,
+   "lam": 100.0,
+   "use_family": true
+  }
+ ],
+ "dev": "results/sos_lab_gpt_dev/calls.csv",
+ "dev_items": 144,
+ "fixed_peers": {
+  "A": "C",
+  "B": "C",
+  "C": "B"
+ },
+ "forced_social": {
+  "allow_stop": false,
+  "cells": {
+   "L0": {
+    "consult": [
+     676.0,
+     864.0
+    ],
+    "reflect": [
+     323.0,
+     432.0
+    ],
+    "stop": [
+     334.0,
+     432.0
+    ]
+   },
+   "L1": {
+    "A|consult:B": [
+     108.0,
+     144.0
+    ],
+    "A|consult:C": [
+     112.0,
+     144.0
+    ],
+    "A|reflect": [
+     93.0,
+     144.0
+    ],
+    "A|stop": [
+     99.0,
+     144.0
+    ],
+    "B|consult:A": [
+     112.0,
+     144.0
+    ],
+    "B|consult:C": [
+     116.0,
+     144.0
+    ],
+    "B|reflect": [
+     114.0,
+     144.0
+    ],
+    "B|stop": [
+     115.0,
+     144.0
+    ],
+    "C|consult:A": [
+     113.0,
+     144.0
+    ],
+    "C|consult:B": [
+     115.0,
+     144.0
+    ],
+    "C|reflect": [
+     116.0,
+     144.0
+    ],
+    "C|stop": [
+     120.0,
+     144.0
+    ]
+   },
+   "L2": {
+    "A|all_agree|consult:B": [
+     81.0,
+     95.0
+    ],
+    "A|all_agree|consult:C": [
+     82.0,
+     95.0
+    ],
+    "A|all_agree|reflect": [
+     77.0,
+     95.0
+    ],
+    "A|all_agree|stop": [
+     85.0,
+     95.0
+    ],
+    "A|majority|consult:B": [
+     5.0,
+     12.0
+    ],
+    "A|majority|consult:C": [
+     7.0,
+     12.0
+    ],
+    "A|majority|reflect": [
+     6.0,
+     12.0
+    ],
+    "A|majority|stop": [
+     7.0,
+     12.0
+    ],
+    "A|minority|consult:B": [
+     19.0,
+     29.0
+    ],
+    "A|minority|consult:C": [
+     17.0,
+     29.0
+    ],
+    "A|minority|reflect": [
+     4.0,
+     29.0
+    ],
+    "A|minority|stop": [
+     4.0,
+     29.0
+    ],
+    "A|none|consult:B": [
+     1.0,
+     1.0
+    ],
+    "A|none|consult:C": [
+     1.0,
+     1.0
+    ],
+    "A|none|reflect": [
+     1.0,
+     1.0
+    ],
+    "A|none|stop": [
+     0.0,
+     1.0
+    ],
+    "A|split|consult:B": [
+     2.0,
+     7.0
+    ],
+    "A|split|consult:C": [
+     5.0,
+     7.0
+    ],
+    "A|split|reflect": [
+     5.0,
+     7.0
+    ],
+    "A|split|stop": [
+     3.0,
+     7.0
+    ],
+    "B|all_agree|consult:A": [
+     83.0,
+     95.0
+    ],
+    "B|all_agree|consult:C": [
+     83.0,
+     95.0
+    ],
+    "B|all_agree|reflect": [
+     85.0,
+     95.0
+    ],
+    "B|all_agree|stop": [
+     85.0,
+     95.0
+    ],
+    "B|majority|consult:A": [
+     25.0,
+     33.0
+    ],
+    "B|majority|consult:C": [
+     26.0,
+     33.0
+    ],
+    "B|majority|reflect": [
+     25.0,
+     33.0
+    ],
+    "B|majority|stop": [
+     27.0,
+     33.0
+    ],
+    "B|minority|consult:A": [
+     4.0,
+     8.0
+    ],
+    "B|minority|consult:C": [
+     5.0,
+     8.0
+    ],
+    "B|minority|reflect": [
+     4.0,
+     8.0
+    ],
+    "B|minority|stop": [
+     3.0,
+     8.0
+    ],
+    "B|none|consult:A": [
+     0.0,
+     2.0
+    ],
+    "B|none|consult:C": [
+     0.0,
+     2.0
+    ],
+    "B|none|reflect": [
+     0.0,
+     2.0
+    ],
+    "B|none|stop": [
+     0.0,
+     2.0
+    ],
+    "B|split|consult:A": [
+     0.0,
+     6.0
+    ],
+    "B|split|consult:C": [
+     2.0,
+     6.0
+    ],
+    "B|split|reflect": [
+     0.0,
+     6.0
+    ],
+    "B|split|stop": [
+     0.0,
+     6.0
+    ],
+    "C|all_agree|consult:A": [
+     83.0,
+     95.0
+    ],
+    "C|all_agree|consult:B": [
+     84.0,
+     95.0
+    ],
+    "C|all_agree|reflect": [
+     83.0,
+     95.0
+    ],
+    "C|all_agree|stop": [
+     85.0,
+     95.0
+    ],
+    "C|majority|consult:A": [
+     27.0,
+     39.0
+    ],
+    "C|majority|consult:B": [
+     28.0,
+     39.0
+    ],
+    "C|majority|reflect": [
+     30.0,
+     39.0
+    ],
+    "C|majority|stop": [
+     30.0,
+     39.0
+    ],
+    "C|minority|consult:A": [
+     0.0,
+     2.0
+    ],
+    "C|minority|consult:B": [
+     0.0,
+     2.0
+    ],
+    "C|minority|reflect": [
+     0.0,
+     2.0
+    ],
+    "C|minority|stop": [
+     1.0,
+     2.0
+    ],
+    "C|none|consult:A": [
+     0.0,
+     2.0
+    ],
+    "C|none|consult:B": [
+     0.0,
+     2.0
+    ],
+    "C|none|reflect": [
+     0.0,
+     2.0
+    ],
+    "C|none|stop": [
+     0.0,
+     2.0
+    ],
+    "C|split|consult:A": [
+     3.0,
+     6.0
+    ],
+    "C|split|consult:B": [
+     3.0,
+     6.0
+    ],
+    "C|split|reflect": [
+     3.0,
+     6.0
+    ],
+    "C|split|stop": [
+     4.0,
+     6.0
+    ]
+   }
+  },
+  "costs": {
+   "A|consult:B": 0.00043591944444442636,
+   "A|consult:C": 0.0004226615972222104,
+   "A|reflect": 0.00044360781249998954,
+   "B|consult:A": 0.004529840277777778,
+   "B|consult:C": 0.004470475,
+   "B|reflect": 0.004945572916666667,
+   "C|consult:A": 0.005713975694444444,
+   "C|consult:B": 0.008462635416666666,
+   "C|reflect": 0.008715774305555556
+  },
+  "kinds": [
+   "stop",
+   "reflect",
+   "consult"
+  ],
+  "lam": 30.0,
+  "shrink": 5.0,
+  "team": [
+   "A",
+   "B",
+   "C"
+  ],
+  "use_family": false
+ },
+ "lam_curve": {
+  "0.0": {
+   "allow_stop": true,
+   "cells": {
+    "L0": {
+     "consult": [
+      676.0,
+      864.0
+     ],
+     "reflect": [
+      323.0,
+      432.0
+     ],
+     "stop": [
+      334.0,
+      432.0
+     ]
+    },
+    "L1": {
+     "A|consult:B": [
+      108.0,
+      144.0
+     ],
+     "A|consult:C": [
+      112.0,
+      144.0
+     ],
+     "A|reflect": [
+      93.0,
+      144.0
+     ],
+     "A|stop": [
+      99.0,
+      144.0
+     ],
+     "B|consult:A": [
+      112.0,
+      144.0
+     ],
+     "B|consult:C": [
+      116.0,
+      144.0
+     ],
+     "B|reflect": [
+      114.0,
+      144.0
+     ],
+     "B|stop": [
+      115.0,
+      144.0
+     ],
+     "C|consult:A": [
+      113.0,
+      144.0
+     ],
+     "C|consult:B": [
+      115.0,
+      144.0
+     ],
+     "C|reflect": [
+      116.0,
+      144.0
+     ],
+     "C|stop": [
+      120.0,
+      144.0
+     ]
+    },
+    "L2": {
+     "A|all_agree|consult:B": [
+      81.0,
+      95.0
+     ],
+     "A|all_agree|consult:C": [
+      82.0,
+      95.0
+     ],
+     "A|all_agree|reflect": [
+      77.0,
+      95.0
+     ],
+     "A|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "A|majority|consult:B": [
+      5.0,
+      12.0
+     ],
+     "A|majority|consult:C": [
+      7.0,
+      12.0
+     ],
+     "A|majority|reflect": [
+      6.0,
+      12.0
+     ],
+     "A|majority|stop": [
+      7.0,
+      12.0
+     ],
+     "A|minority|consult:B": [
+      19.0,
+      29.0
+     ],
+     "A|minority|consult:C": [
+      17.0,
+      29.0
+     ],
+     "A|minority|reflect": [
+      4.0,
+      29.0
+     ],
+     "A|minority|stop": [
+      4.0,
+      29.0
+     ],
+     "A|none|consult:B": [
+      1.0,
+      1.0
+     ],
+     "A|none|consult:C": [
+      1.0,
+      1.0
+     ],
+     "A|none|reflect": [
+      1.0,
+      1.0
+     ],
+     "A|none|stop": [
+      0.0,
+      1.0
+     ],
+     "A|split|consult:B": [
+      2.0,
+      7.0
+     ],
+     "A|split|consult:C": [
+      5.0,
+      7.0
+     ],
+     "A|split|reflect": [
+      5.0,
+      7.0
+     ],
+     "A|split|stop": [
+      3.0,
+      7.0
+     ],
+     "B|all_agree|consult:A": [
+      83.0,
+      95.0
+     ],
+     "B|all_agree|consult:C": [
+      83.0,
+      95.0
+     ],
+     "B|all_agree|reflect": [
+      85.0,
+      95.0
+     ],
+     "B|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "B|majority|consult:A": [
+      25.0,
+      33.0
+     ],
+     "B|majority|consult:C": [
+      26.0,
+      33.0
+     ],
+     "B|majority|reflect": [
+      25.0,
+      33.0
+     ],
+     "B|majority|stop": [
+      27.0,
+      33.0
+     ],
+     "B|minority|consult:A": [
+      4.0,
+      8.0
+     ],
+     "B|minority|consult:C": [
+      5.0,
+      8.0
+     ],
+     "B|minority|reflect": [
+      4.0,
+      8.0
+     ],
+     "B|minority|stop": [
+      3.0,
+      8.0
+     ],
+     "B|none|consult:A": [
+      0.0,
+      2.0
+     ],
+     "B|none|consult:C": [
+      0.0,
+      2.0
+     ],
+     "B|none|reflect": [
+      0.0,
+      2.0
+     ],
+     "B|none|stop": [
+      0.0,
+      2.0
+     ],
+     "B|split|consult:A": [
+      0.0,
+      6.0
+     ],
+     "B|split|consult:C": [
+      2.0,
+      6.0
+     ],
+     "B|split|reflect": [
+      0.0,
+      6.0
+     ],
+     "B|split|stop": [
+      0.0,
+      6.0
+     ],
+     "C|all_agree|consult:A": [
+      83.0,
+      95.0
+     ],
+     "C|all_agree|consult:B": [
+      84.0,
+      95.0
+     ],
+     "C|all_agree|reflect": [
+      83.0,
+      95.0
+     ],
+     "C|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "C|majority|consult:A": [
+      27.0,
+      39.0
+     ],
+     "C|majority|consult:B": [
+      28.0,
+      39.0
+     ],
+     "C|majority|reflect": [
+      30.0,
+      39.0
+     ],
+     "C|majority|stop": [
+      30.0,
+      39.0
+     ],
+     "C|minority|consult:A": [
+      0.0,
+      2.0
+     ],
+     "C|minority|consult:B": [
+      0.0,
+      2.0
+     ],
+     "C|minority|reflect": [
+      0.0,
+      2.0
+     ],
+     "C|minority|stop": [
+      1.0,
+      2.0
+     ],
+     "C|none|consult:A": [
+      0.0,
+      2.0
+     ],
+     "C|none|consult:B": [
+      0.0,
+      2.0
+     ],
+     "C|none|reflect": [
+      0.0,
+      2.0
+     ],
+     "C|none|stop": [
+      0.0,
+      2.0
+     ],
+     "C|split|consult:A": [
+      3.0,
+      6.0
+     ],
+     "C|split|consult:B": [
+      3.0,
+      6.0
+     ],
+     "C|split|reflect": [
+      3.0,
+      6.0
+     ],
+     "C|split|stop": [
+      4.0,
+      6.0
+     ]
+    }
+   },
+   "costs": {
+    "A|consult:B": 0.00043591944444442636,
+    "A|consult:C": 0.0004226615972222104,
+    "A|reflect": 0.00044360781249998954,
+    "B|consult:A": 0.004529840277777778,
+    "B|consult:C": 0.004470475,
+    "B|reflect": 0.004945572916666667,
+    "C|consult:A": 0.005713975694444444,
+    "C|consult:B": 0.008462635416666666,
+    "C|reflect": 0.008715774305555556
+   },
+   "kinds": [
+    "stop",
+    "reflect",
+    "consult"
+   ],
+   "lam": 0.0,
+   "shrink": 5.0,
+   "team": [
+    "A",
+    "B",
+    "C"
+   ],
+   "use_family": false
+  },
+  "10.0": {
+   "allow_stop": true,
+   "cells": {
+    "L0": {
+     "consult": [
+      676.0,
+      864.0
+     ],
+     "reflect": [
+      323.0,
+      432.0
+     ],
+     "stop": [
+      334.0,
+      432.0
+     ]
+    },
+    "L1": {
+     "A|consult:B": [
+      108.0,
+      144.0
+     ],
+     "A|consult:C": [
+      112.0,
+      144.0
+     ],
+     "A|reflect": [
+      93.0,
+      144.0
+     ],
+     "A|stop": [
+      99.0,
+      144.0
+     ],
+     "B|consult:A": [
+      112.0,
+      144.0
+     ],
+     "B|consult:C": [
+      116.0,
+      144.0
+     ],
+     "B|reflect": [
+      114.0,
+      144.0
+     ],
+     "B|stop": [
+      115.0,
+      144.0
+     ],
+     "C|consult:A": [
+      113.0,
+      144.0
+     ],
+     "C|consult:B": [
+      115.0,
+      144.0
+     ],
+     "C|reflect": [
+      116.0,
+      144.0
+     ],
+     "C|stop": [
+      120.0,
+      144.0
+     ]
+    },
+    "L2": {
+     "A|all_agree|consult:B": [
+      81.0,
+      95.0
+     ],
+     "A|all_agree|consult:C": [
+      82.0,
+      95.0
+     ],
+     "A|all_agree|reflect": [
+      77.0,
+      95.0
+     ],
+     "A|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "A|majority|consult:B": [
+      5.0,
+      12.0
+     ],
+     "A|majority|consult:C": [
+      7.0,
+      12.0
+     ],
+     "A|majority|reflect": [
+      6.0,
+      12.0
+     ],
+     "A|majority|stop": [
+      7.0,
+      12.0
+     ],
+     "A|minority|consult:B": [
+      19.0,
+      29.0
+     ],
+     "A|minority|consult:C": [
+      17.0,
+      29.0
+     ],
+     "A|minority|reflect": [
+      4.0,
+      29.0
+     ],
+     "A|minority|stop": [
+      4.0,
+      29.0
+     ],
+     "A|none|consult:B": [
+      1.0,
+      1.0
+     ],
+     "A|none|consult:C": [
+      1.0,
+      1.0
+     ],
+     "A|none|reflect": [
+      1.0,
+      1.0
+     ],
+     "A|none|stop": [
+      0.0,
+      1.0
+     ],
+     "A|split|consult:B": [
+      2.0,
+      7.0
+     ],
+     "A|split|consult:C": [
+      5.0,
+      7.0
+     ],
+     "A|split|reflect": [
+      5.0,
+      7.0
+     ],
+     "A|split|stop": [
+      3.0,
+      7.0
+     ],
+     "B|all_agree|consult:A": [
+      83.0,
+      95.0
+     ],
+     "B|all_agree|consult:C": [
+      83.0,
+      95.0
+     ],
+     "B|all_agree|reflect": [
+      85.0,
+      95.0
+     ],
+     "B|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "B|majority|consult:A": [
+      25.0,
+      33.0
+     ],
+     "B|majority|consult:C": [
+      26.0,
+      33.0
+     ],
+     "B|majority|reflect": [
+      25.0,
+      33.0
+     ],
+     "B|majority|stop": [
+      27.0,
+      33.0
+     ],
+     "B|minority|consult:A": [
+      4.0,
+      8.0
+     ],
+     "B|minority|consult:C": [
+      5.0,
+      8.0
+     ],
+     "B|minority|reflect": [
+      4.0,
+      8.0
+     ],
+     "B|minority|stop": [
+      3.0,
+      8.0
+     ],
+     "B|none|consult:A": [
+      0.0,
+      2.0
+     ],
+     "B|none|consult:C": [
+      0.0,
+      2.0
+     ],
+     "B|none|reflect": [
+      0.0,
+      2.0
+     ],
+     "B|none|stop": [
+      0.0,
+      2.0
+     ],
+     "B|split|consult:A": [
+      0.0,
+      6.0
+     ],
+     "B|split|consult:C": [
+      2.0,
+      6.0
+     ],
+     "B|split|reflect": [
+      0.0,
+      6.0
+     ],
+     "B|split|stop": [
+      0.0,
+      6.0
+     ],
+     "C|all_agree|consult:A": [
+      83.0,
+      95.0
+     ],
+     "C|all_agree|consult:B": [
+      84.0,
+      95.0
+     ],
+     "C|all_agree|reflect": [
+      83.0,
+      95.0
+     ],
+     "C|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "C|majority|consult:A": [
+      27.0,
+      39.0
+     ],
+     "C|majority|consult:B": [
+      28.0,
+      39.0
+     ],
+     "C|majority|reflect": [
+      30.0,
+      39.0
+     ],
+     "C|majority|stop": [
+      30.0,
+      39.0
+     ],
+     "C|minority|consult:A": [
+      0.0,
+      2.0
+     ],
+     "C|minority|consult:B": [
+      0.0,
+      2.0
+     ],
+     "C|minority|reflect": [
+      0.0,
+      2.0
+     ],
+     "C|minority|stop": [
+      1.0,
+      2.0
+     ],
+     "C|none|consult:A": [
+      0.0,
+      2.0
+     ],
+     "C|none|consult:B": [
+      0.0,
+      2.0
+     ],
+     "C|none|reflect": [
+      0.0,
+      2.0
+     ],
+     "C|none|stop": [
+      0.0,
+      2.0
+     ],
+     "C|split|consult:A": [
+      3.0,
+      6.0
+     ],
+     "C|split|consult:B": [
+      3.0,
+      6.0
+     ],
+     "C|split|reflect": [
+      3.0,
+      6.0
+     ],
+     "C|split|stop": [
+      4.0,
+      6.0
+     ]
+    }
+   },
+   "costs": {
+    "A|consult:B": 0.00043591944444442636,
+    "A|consult:C": 0.0004226615972222104,
+    "A|reflect": 0.00044360781249998954,
+    "B|consult:A": 0.004529840277777778,
+    "B|consult:C": 0.004470475,
+    "B|reflect": 0.004945572916666667,
+    "C|consult:A": 0.005713975694444444,
+    "C|consult:B": 0.008462635416666666,
+    "C|reflect": 0.008715774305555556
+   },
+   "kinds": [
+    "stop",
+    "reflect",
+    "consult"
+   ],
+   "lam": 10.0,
+   "shrink": 5.0,
+   "team": [
+    "A",
+    "B",
+    "C"
+   ],
+   "use_family": false
+  },
+  "100.0": {
+   "allow_stop": true,
+   "cells": {
+    "L0": {
+     "consult": [
+      676.0,
+      864.0
+     ],
+     "reflect": [
+      323.0,
+      432.0
+     ],
+     "stop": [
+      334.0,
+      432.0
+     ]
+    },
+    "L1": {
+     "A|consult:B": [
+      108.0,
+      144.0
+     ],
+     "A|consult:C": [
+      112.0,
+      144.0
+     ],
+     "A|reflect": [
+      93.0,
+      144.0
+     ],
+     "A|stop": [
+      99.0,
+      144.0
+     ],
+     "B|consult:A": [
+      112.0,
+      144.0
+     ],
+     "B|consult:C": [
+      116.0,
+      144.0
+     ],
+     "B|reflect": [
+      114.0,
+      144.0
+     ],
+     "B|stop": [
+      115.0,
+      144.0
+     ],
+     "C|consult:A": [
+      113.0,
+      144.0
+     ],
+     "C|consult:B": [
+      115.0,
+      144.0
+     ],
+     "C|reflect": [
+      116.0,
+      144.0
+     ],
+     "C|stop": [
+      120.0,
+      144.0
+     ]
+    },
+    "L2": {
+     "A|all_agree|consult:B": [
+      81.0,
+      95.0
+     ],
+     "A|all_agree|consult:C": [
+      82.0,
+      95.0
+     ],
+     "A|all_agree|reflect": [
+      77.0,
+      95.0
+     ],
+     "A|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "A|majority|consult:B": [
+      5.0,
+      12.0
+     ],
+     "A|majority|consult:C": [
+      7.0,
+      12.0
+     ],
+     "A|majority|reflect": [
+      6.0,
+      12.0
+     ],
+     "A|majority|stop": [
+      7.0,
+      12.0
+     ],
+     "A|minority|consult:B": [
+      19.0,
+      29.0
+     ],
+     "A|minority|consult:C": [
+      17.0,
+      29.0
+     ],
+     "A|minority|reflect": [
+      4.0,
+      29.0
+     ],
+     "A|minority|stop": [
+      4.0,
+      29.0
+     ],
+     "A|none|consult:B": [
+      1.0,
+      1.0
+     ],
+     "A|none|consult:C": [
+      1.0,
+      1.0
+     ],
+     "A|none|reflect": [
+      1.0,
+      1.0
+     ],
+     "A|none|stop": [
+      0.0,
+      1.0
+     ],
+     "A|split|consult:B": [
+      2.0,
+      7.0
+     ],
+     "A|split|consult:C": [
+      5.0,
+      7.0
+     ],
+     "A|split|reflect": [
+      5.0,
+      7.0
+     ],
+     "A|split|stop": [
+      3.0,
+      7.0
+     ],
+     "B|all_agree|consult:A": [
+      83.0,
+      95.0
+     ],
+     "B|all_agree|consult:C": [
+      83.0,
+      95.0
+     ],
+     "B|all_agree|reflect": [
+      85.0,
+      95.0
+     ],
+     "B|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "B|majority|consult:A": [
+      25.0,
+      33.0
+     ],
+     "B|majority|consult:C": [
+      26.0,
+      33.0
+     ],
+     "B|majority|reflect": [
+      25.0,
+      33.0
+     ],
+     "B|majority|stop": [
+      27.0,
+      33.0
+     ],
+     "B|minority|consult:A": [
+      4.0,
+      8.0
+     ],
+     "B|minority|consult:C": [
+      5.0,
+      8.0
+     ],
+     "B|minority|reflect": [
+      4.0,
+      8.0
+     ],
+     "B|minority|stop": [
+      3.0,
+      8.0
+     ],
+     "B|none|consult:A": [
+      0.0,
+      2.0
+     ],
+     "B|none|consult:C": [
+      0.0,
+      2.0
+     ],
+     "B|none|reflect": [
+      0.0,
+      2.0
+     ],
+     "B|none|stop": [
+      0.0,
+      2.0
+     ],
+     "B|split|consult:A": [
+      0.0,
+      6.0
+     ],
+     "B|split|consult:C": [
+      2.0,
+      6.0
+     ],
+     "B|split|reflect": [
+      0.0,
+      6.0
+     ],
+     "B|split|stop": [
+      0.0,
+      6.0
+     ],
+     "C|all_agree|consult:A": [
+      83.0,
+      95.0
+     ],
+     "C|all_agree|consult:B": [
+      84.0,
+      95.0
+     ],
+     "C|all_agree|reflect": [
+      83.0,
+      95.0
+     ],
+     "C|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "C|majority|consult:A": [
+      27.0,
+      39.0
+     ],
+     "C|majority|consult:B": [
+      28.0,
+      39.0
+     ],
+     "C|majority|reflect": [
+      30.0,
+      39.0
+     ],
+     "C|majority|stop": [
+      30.0,
+      39.0
+     ],
+     "C|minority|consult:A": [
+      0.0,
+      2.0
+     ],
+     "C|minority|consult:B": [
+      0.0,
+      2.0
+     ],
+     "C|minority|reflect": [
+      0.0,
+      2.0
+     ],
+     "C|minority|stop": [
+      1.0,
+      2.0
+     ],
+     "C|none|consult:A": [
+      0.0,
+      2.0
+     ],
+     "C|none|consult:B": [
+      0.0,
+      2.0
+     ],
+     "C|none|reflect": [
+      0.0,
+      2.0
+     ],
+     "C|none|stop": [
+      0.0,
+      2.0
+     ],
+     "C|split|consult:A": [
+      3.0,
+      6.0
+     ],
+     "C|split|consult:B": [
+      3.0,
+      6.0
+     ],
+     "C|split|reflect": [
+      3.0,
+      6.0
+     ],
+     "C|split|stop": [
+      4.0,
+      6.0
+     ]
+    }
+   },
+   "costs": {
+    "A|consult:B": 0.00043591944444442636,
+    "A|consult:C": 0.0004226615972222104,
+    "A|reflect": 0.00044360781249998954,
+    "B|consult:A": 0.004529840277777778,
+    "B|consult:C": 0.004470475,
+    "B|reflect": 0.004945572916666667,
+    "C|consult:A": 0.005713975694444444,
+    "C|consult:B": 0.008462635416666666,
+    "C|reflect": 0.008715774305555556
+   },
+   "kinds": [
+    "stop",
+    "reflect",
+    "consult"
+   ],
+   "lam": 100.0,
+   "shrink": 5.0,
+   "team": [
+    "A",
+    "B",
+    "C"
+   ],
+   "use_family": false
+  },
+  "3.0": {
+   "allow_stop": true,
+   "cells": {
+    "L0": {
+     "consult": [
+      676.0,
+      864.0
+     ],
+     "reflect": [
+      323.0,
+      432.0
+     ],
+     "stop": [
+      334.0,
+      432.0
+     ]
+    },
+    "L1": {
+     "A|consult:B": [
+      108.0,
+      144.0
+     ],
+     "A|consult:C": [
+      112.0,
+      144.0
+     ],
+     "A|reflect": [
+      93.0,
+      144.0
+     ],
+     "A|stop": [
+      99.0,
+      144.0
+     ],
+     "B|consult:A": [
+      112.0,
+      144.0
+     ],
+     "B|consult:C": [
+      116.0,
+      144.0
+     ],
+     "B|reflect": [
+      114.0,
+      144.0
+     ],
+     "B|stop": [
+      115.0,
+      144.0
+     ],
+     "C|consult:A": [
+      113.0,
+      144.0
+     ],
+     "C|consult:B": [
+      115.0,
+      144.0
+     ],
+     "C|reflect": [
+      116.0,
+      144.0
+     ],
+     "C|stop": [
+      120.0,
+      144.0
+     ]
+    },
+    "L2": {
+     "A|all_agree|consult:B": [
+      81.0,
+      95.0
+     ],
+     "A|all_agree|consult:C": [
+      82.0,
+      95.0
+     ],
+     "A|all_agree|reflect": [
+      77.0,
+      95.0
+     ],
+     "A|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "A|majority|consult:B": [
+      5.0,
+      12.0
+     ],
+     "A|majority|consult:C": [
+      7.0,
+      12.0
+     ],
+     "A|majority|reflect": [
+      6.0,
+      12.0
+     ],
+     "A|majority|stop": [
+      7.0,
+      12.0
+     ],
+     "A|minority|consult:B": [
+      19.0,
+      29.0
+     ],
+     "A|minority|consult:C": [
+      17.0,
+      29.0
+     ],
+     "A|minority|reflect": [
+      4.0,
+      29.0
+     ],
+     "A|minority|stop": [
+      4.0,
+      29.0
+     ],
+     "A|none|consult:B": [
+      1.0,
+      1.0
+     ],
+     "A|none|consult:C": [
+      1.0,
+      1.0
+     ],
+     "A|none|reflect": [
+      1.0,
+      1.0
+     ],
+     "A|none|stop": [
+      0.0,
+      1.0
+     ],
+     "A|split|consult:B": [
+      2.0,
+      7.0
+     ],
+     "A|split|consult:C": [
+      5.0,
+      7.0
+     ],
+     "A|split|reflect": [
+      5.0,
+      7.0
+     ],
+     "A|split|stop": [
+      3.0,
+      7.0
+     ],
+     "B|all_agree|consult:A": [
+      83.0,
+      95.0
+     ],
+     "B|all_agree|consult:C": [
+      83.0,
+      95.0
+     ],
+     "B|all_agree|reflect": [
+      85.0,
+      95.0
+     ],
+     "B|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "B|majority|consult:A": [
+      25.0,
+      33.0
+     ],
+     "B|majority|consult:C": [
+      26.0,
+      33.0
+     ],
+     "B|majority|reflect": [
+      25.0,
+      33.0
+     ],
+     "B|majority|stop": [
+      27.0,
+      33.0
+     ],
+     "B|minority|consult:A": [
+      4.0,
+      8.0
+     ],
+     "B|minority|consult:C": [
+      5.0,
+      8.0
+     ],
+     "B|minority|reflect": [
+      4.0,
+      8.0
+     ],
+     "B|minority|stop": [
+      3.0,
+      8.0
+     ],
+     "B|none|consult:A": [
+      0.0,
+      2.0
+     ],
+     "B|none|consult:C": [
+      0.0,
+      2.0
+     ],
+     "B|none|reflect": [
+      0.0,
+      2.0
+     ],
+     "B|none|stop": [
+      0.0,
+      2.0
+     ],
+     "B|split|consult:A": [
+      0.0,
+      6.0
+     ],
+     "B|split|consult:C": [
+      2.0,
+      6.0
+     ],
+     "B|split|reflect": [
+      0.0,
+      6.0
+     ],
+     "B|split|stop": [
+      0.0,
+      6.0
+     ],
+     "C|all_agree|consult:A": [
+      83.0,
+      95.0
+     ],
+     "C|all_agree|consult:B": [
+      84.0,
+      95.0
+     ],
+     "C|all_agree|reflect": [
+      83.0,
+      95.0
+     ],
+     "C|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "C|majority|consult:A": [
+      27.0,
+      39.0
+     ],
+     "C|majority|consult:B": [
+      28.0,
+      39.0
+     ],
+     "C|majority|reflect": [
+      30.0,
+      39.0
+     ],
+     "C|majority|stop": [
+      30.0,
+      39.0
+     ],
+     "C|minority|consult:A": [
+      0.0,
+      2.0
+     ],
+     "C|minority|consult:B": [
+      0.0,
+      2.0
+     ],
+     "C|minority|reflect": [
+      0.0,
+      2.0
+     ],
+     "C|minority|stop": [
+      1.0,
+      2.0
+     ],
+     "C|none|consult:A": [
+      0.0,
+      2.0
+     ],
+     "C|none|consult:B": [
+      0.0,
+      2.0
+     ],
+     "C|none|reflect": [
+      0.0,
+      2.0
+     ],
+     "C|none|stop": [
+      0.0,
+      2.0
+     ],
+     "C|split|consult:A": [
+      3.0,
+      6.0
+     ],
+     "C|split|consult:B": [
+      3.0,
+      6.0
+     ],
+     "C|split|reflect": [
+      3.0,
+      6.0
+     ],
+     "C|split|stop": [
+      4.0,
+      6.0
+     ]
+    }
+   },
+   "costs": {
+    "A|consult:B": 0.00043591944444442636,
+    "A|consult:C": 0.0004226615972222104,
+    "A|reflect": 0.00044360781249998954,
+    "B|consult:A": 0.004529840277777778,
+    "B|consult:C": 0.004470475,
+    "B|reflect": 0.004945572916666667,
+    "C|consult:A": 0.005713975694444444,
+    "C|consult:B": 0.008462635416666666,
+    "C|reflect": 0.008715774305555556
+   },
+   "kinds": [
+    "stop",
+    "reflect",
+    "consult"
+   ],
+   "lam": 3.0,
+   "shrink": 5.0,
+   "team": [
+    "A",
+    "B",
+    "C"
+   ],
+   "use_family": false
+  },
+  "30.0": {
+   "allow_stop": true,
+   "cells": {
+    "L0": {
+     "consult": [
+      676.0,
+      864.0
+     ],
+     "reflect": [
+      323.0,
+      432.0
+     ],
+     "stop": [
+      334.0,
+      432.0
+     ]
+    },
+    "L1": {
+     "A|consult:B": [
+      108.0,
+      144.0
+     ],
+     "A|consult:C": [
+      112.0,
+      144.0
+     ],
+     "A|reflect": [
+      93.0,
+      144.0
+     ],
+     "A|stop": [
+      99.0,
+      144.0
+     ],
+     "B|consult:A": [
+      112.0,
+      144.0
+     ],
+     "B|consult:C": [
+      116.0,
+      144.0
+     ],
+     "B|reflect": [
+      114.0,
+      144.0
+     ],
+     "B|stop": [
+      115.0,
+      144.0
+     ],
+     "C|consult:A": [
+      113.0,
+      144.0
+     ],
+     "C|consult:B": [
+      115.0,
+      144.0
+     ],
+     "C|reflect": [
+      116.0,
+      144.0
+     ],
+     "C|stop": [
+      120.0,
+      144.0
+     ]
+    },
+    "L2": {
+     "A|all_agree|consult:B": [
+      81.0,
+      95.0
+     ],
+     "A|all_agree|consult:C": [
+      82.0,
+      95.0
+     ],
+     "A|all_agree|reflect": [
+      77.0,
+      95.0
+     ],
+     "A|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "A|majority|consult:B": [
+      5.0,
+      12.0
+     ],
+     "A|majority|consult:C": [
+      7.0,
+      12.0
+     ],
+     "A|majority|reflect": [
+      6.0,
+      12.0
+     ],
+     "A|majority|stop": [
+      7.0,
+      12.0
+     ],
+     "A|minority|consult:B": [
+      19.0,
+      29.0
+     ],
+     "A|minority|consult:C": [
+      17.0,
+      29.0
+     ],
+     "A|minority|reflect": [
+      4.0,
+      29.0
+     ],
+     "A|minority|stop": [
+      4.0,
+      29.0
+     ],
+     "A|none|consult:B": [
+      1.0,
+      1.0
+     ],
+     "A|none|consult:C": [
+      1.0,
+      1.0
+     ],
+     "A|none|reflect": [
+      1.0,
+      1.0
+     ],
+     "A|none|stop": [
+      0.0,
+      1.0
+     ],
+     "A|split|consult:B": [
+      2.0,
+      7.0
+     ],
+     "A|split|consult:C": [
+      5.0,
+      7.0
+     ],
+     "A|split|reflect": [
+      5.0,
+      7.0
+     ],
+     "A|split|stop": [
+      3.0,
+      7.0
+     ],
+     "B|all_agree|consult:A": [
+      83.0,
+      95.0
+     ],
+     "B|all_agree|consult:C": [
+      83.0,
+      95.0
+     ],
+     "B|all_agree|reflect": [
+      85.0,
+      95.0
+     ],
+     "B|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "B|majority|consult:A": [
+      25.0,
+      33.0
+     ],
+     "B|majority|consult:C": [
+      26.0,
+      33.0
+     ],
+     "B|majority|reflect": [
+      25.0,
+      33.0
+     ],
+     "B|majority|stop": [
+      27.0,
+      33.0
+     ],
+     "B|minority|consult:A": [
+      4.0,
+      8.0
+     ],
+     "B|minority|consult:C": [
+      5.0,
+      8.0
+     ],
+     "B|minority|reflect": [
+      4.0,
+      8.0
+     ],
+     "B|minority|stop": [
+      3.0,
+      8.0
+     ],
+     "B|none|consult:A": [
+      0.0,
+      2.0
+     ],
+     "B|none|consult:C": [
+      0.0,
+      2.0
+     ],
+     "B|none|reflect": [
+      0.0,
+      2.0
+     ],
+     "B|none|stop": [
+      0.0,
+      2.0
+     ],
+     "B|split|consult:A": [
+      0.0,
+      6.0
+     ],
+     "B|split|consult:C": [
+      2.0,
+      6.0
+     ],
+     "B|split|reflect": [
+      0.0,
+      6.0
+     ],
+     "B|split|stop": [
+      0.0,
+      6.0
+     ],
+     "C|all_agree|consult:A": [
+      83.0,
+      95.0
+     ],
+     "C|all_agree|consult:B": [
+      84.0,
+      95.0
+     ],
+     "C|all_agree|reflect": [
+      83.0,
+      95.0
+     ],
+     "C|all_agree|stop": [
+      85.0,
+      95.0
+     ],
+     "C|majority|consult:A": [
+      27.0,
+      39.0
+     ],
+     "C|majority|consult:B": [
+      28.0,
+      39.0
+     ],
+     "C|majority|reflect": [
+      30.0,
+      39.0
+     ],
+     "C|majority|stop": [
+      30.0,
+      39.0
+     ],
+     "C|minority|consult:A": [
+      0.0,
+      2.0
+     ],
+     "C|minority|consult:B": [
+      0.0,
+      2.0
+     ],
+     "C|minority|reflect": [
+      0.0,
+      2.0
+     ],
+     "C|minority|stop": [
+      1.0,
+      2.0
+     ],
+     "C|none|consult:A": [
+      0.0,
+      2.0
+     ],
+     "C|none|consult:B": [
+      0.0,
+      2.0
+     ],
+     "C|none|reflect": [
+      0.0,
+      2.0
+     ],
+     "C|none|stop": [
+      0.0,
+      2.0
+     ],
+     "C|split|consult:A": [
+      3.0,
+      6.0
+     ],
+     "C|split|consult:B": [
+      3.0,
+      6.0
+     ],
+     "C|split|reflect": [
+      3.0,
+      6.0
+     ],
+     "C|split|stop": [
+      4.0,
+      6.0
+     ]
+    }
+   },
+   "costs": {
+    "A|consult:B": 0.00043591944444442636,
+    "A|consult:C": 0.0004226615972222104,
+    "A|reflect": 0.00044360781249998954,
+    "B|consult:A": 0.004529840277777778,
+    "B|consult:C": 0.004470475,
+    "B|reflect": 0.004945572916666667,
+    "C|consult:A": 0.005713975694444444,
+    "C|consult:B": 0.008462635416666666,
+    "C|reflect": 0.008715774305555556
+   },
+   "kinds": [
+    "stop",
+    "reflect",
+    "consult"
+   ],
+   "lam": 30.0,
+   "shrink": 5.0,
+   "team": [
+    "A",
+    "B",
+    "C"
+   ],
+   "use_family": false
+  }
+ },
+ "lam_grid": [
+  0.0,
+  3.0,
+  10.0,
+  30.0,
+  100.0
+ ],
+ "order": [
+  2,
+  1,
+  0
+ ],
+ "picked": {
+  "lam": 30.0,
+  "use_family": false
+ },
+ "policy": {
+  "allow_stop": true,
+  "cells": {
+   "L0": {
+    "consult": [
+     676.0,
+     864.0
+    ],
+    "reflect": [
+     323.0,
+     432.0
+    ],
+    "stop": [
+     334.0,
+     432.0
+    ]
+   },
+   "L1": {
+    "A|consult:B": [
+     108.0,
+     144.0
+    ],
+    "A|consult:C": [
+     112.0,
+     144.0
+    ],
+    "A|reflect": [
+     93.0,
+     144.0
+    ],
+    "A|stop": [
+     99.0,
+     144.0
+    ],
+    "B|consult:A": [
+     112.0,
+     144.0
+    ],
+    "B|consult:C": [
+     116.0,
+     144.0
+    ],
+    "B|reflect": [
+     114.0,
+     144.0
+    ],
+    "B|stop": [
+     115.0,
+     144.0
+    ],
+    "C|consult:A": [
+     113.0,
+     144.0
+    ],
+    "C|consult:B": [
+     115.0,
+     144.0
+    ],
+    "C|reflect": [
+     116.0,
+     144.0
+    ],
+    "C|stop": [
+     120.0,
+     144.0
+    ]
+   },
+   "L2": {
+    "A|all_agree|consult:B": [
+     81.0,
+     95.0
+    ],
+    "A|all_agree|consult:C": [
+     82.0,
+     95.0
+    ],
+    "A|all_agree|reflect": [
+     77.0,
+     95.0
+    ],
+    "A|all_agree|stop": [
+     85.0,
+     95.0
+    ],
+    "A|majority|consult:B": [
+     5.0,
+     12.0
+    ],
+    "A|majority|consult:C": [
+     7.0,
+     12.0
+    ],
+    "A|majority|reflect": [
+     6.0,
+     12.0
+    ],
+    "A|majority|stop": [
+     7.0,
+     12.0
+    ],
+    "A|minority|consult:B": [
+     19.0,
+     29.0
+    ],
+    "A|minority|consult:C": [
+     17.0,
+     29.0
+    ],
+    "A|minority|reflect": [
+     4.0,
+     29.0
+    ],
+    "A|minority|stop": [
+     4.0,
+     29.0
+    ],
+    "A|none|consult:B": [
+     1.0,
+     1.0
+    ],
+    "A|none|consult:C": [
+     1.0,
+     1.0
+    ],
+    "A|none|reflect": [
+     1.0,
+     1.0
+    ],
+    "A|none|stop": [
+     0.0,
+     1.0
+    ],
+    "A|split|consult:B": [
+     2.0,
+     7.0
+    ],
+    "A|split|consult:C": [
+     5.0,
+     7.0
+    ],
+    "A|split|reflect": [
+     5.0,
+     7.0
+    ],
+    "A|split|stop": [
+     3.0,
+     7.0
+    ],
+    "B|all_agree|consult:A": [
+     83.0,
+     95.0
+    ],
+    "B|all_agree|consult:C": [
+     83.0,
+     95.0
+    ],
+    "B|all_agree|reflect": [
+     85.0,
+     95.0
+    ],
+    "B|all_agree|stop": [
+     85.0,
+     95.0
+    ],
+    "B|majority|consult:A": [
+     25.0,
+     33.0
+    ],
+    "B|majority|consult:C": [
+     26.0,
+     33.0
+    ],
+    "B|majority|reflect": [
+     25.0,
+     33.0
+    ],
+    "B|majority|stop": [
+     27.0,
+     33.0
+    ],
+    "B|minority|consult:A": [
+     4.0,
+     8.0
+    ],
+    "B|minority|consult:C": [
+     5.0,
+     8.0
+    ],
+    "B|minority|reflect": [
+     4.0,
+     8.0
+    ],
+    "B|minority|stop": [
+     3.0,
+     8.0
+    ],
+    "B|none|consult:A": [
+     0.0,
+     2.0
+    ],
+    "B|none|consult:C": [
+     0.0,
+     2.0
+    ],
+    "B|none|reflect": [
+     0.0,
+     2.0
+    ],
+    "B|none|stop": [
+     0.0,
+     2.0
+    ],
+    "B|split|consult:A": [
+     0.0,
+     6.0
+    ],
+    "B|split|consult:C": [
+     2.0,
+     6.0
+    ],
+    "B|split|reflect": [
+     0.0,
+     6.0
+    ],
+    "B|split|stop": [
+     0.0,
+     6.0
+    ],
+    "C|all_agree|consult:A": [
+     83.0,
+     95.0
+    ],
+    "C|all_agree|consult:B": [
+     84.0,
+     95.0
+    ],
+    "C|all_agree|reflect": [
+     83.0,
+     95.0
+    ],
+    "C|all_agree|stop": [
+     85.0,
+     95.0
+    ],
+    "C|majority|consult:A": [
+     27.0,
+     39.0
+    ],
+    "C|majority|consult:B": [
+     28.0,
+     39.0
+    ],
+    "C|majority|reflect": [
+     30.0,
+     39.0
+    ],
+    "C|majority|stop": [
+     30.0,
+     39.0
+    ],
+    "C|minority|consult:A": [
+     0.0,
+     2.0
+    ],
+    "C|minority|consult:B": [
+     0.0,
+     2.0
+    ],
+    "C|minority|reflect": [
+     0.0,
+     2.0
+    ],
+    "C|minority|stop": [
+     1.0,
+     2.0
+    ],
+    "C|none|consult:A": [
+     0.0,
+     2.0
+    ],
+    "C|none|consult:B": [
+     0.0,
+     2.0
+    ],
+    "C|none|reflect": [
+     0.0,
+     2.0
+    ],
+    "C|none|stop": [
+     0.0,
+     2.0
+    ],
+    "C|split|consult:A": [
+     3.0,
+     6.0
+    ],
+    "C|split|consult:B": [
+     3.0,
+     6.0
+    ],
+    "C|split|reflect": [
+     3.0,
+     6.0
+    ],
+    "C|split|stop": [
+     4.0,
+     6.0
+    ]
+   }
+  },
+  "costs": {
+   "A|consult:B": 0.00043591944444442636,
+   "A|consult:C": 0.0004226615972222104,
+   "A|reflect": 0.00044360781249998954,
+   "B|consult:A": 0.004529840277777778,
+   "B|consult:C": 0.004470475,
+   "B|reflect": 0.004945572916666667,
+   "C|consult:A": 0.005713975694444444,
+   "C|consult:B": 0.008462635416666666,
+   "C|reflect": 0.008715774305555556
+  },
+  "kinds": [
+   "stop",
+   "reflect",
+   "consult"
+  ],
+  "lam": 30.0,
+  "shrink": 5.0,
+  "team": [
+   "A",
+   "B",
+   "C"
+  ],
+  "use_family": false
+ },
+ "policy_hash": "7ee99724e790c5c5",
+ "self_only": {
+  "allow_stop": true,
+  "cells": {
+   "L0": {
+    "consult": [
+     676.0,
+     864.0
+    ],
+    "reflect": [
+     323.0,
+     432.0
+    ],
+    "stop": [
+     334.0,
+     432.0
+    ]
+   },
+   "L1": {
+    "A|consult:B": [
+     108.0,
+     144.0
+    ],
+    "A|consult:C": [
+     112.0,
+     144.0
+    ],
+    "A|reflect": [
+     93.0,
+     144.0
+    ],
+    "A|stop": [
+     99.0,
+     144.0
+    ],
+    "B|consult:A": [
+     112.0,
+     144.0
+    ],
+    "B|consult:C": [
+     116.0,
+     144.0
+    ],
+    "B|reflect": [
+     114.0,
+     144.0
+    ],
+    "B|stop": [
+     115.0,
+     144.0
+    ],
+    "C|consult:A": [
+     113.0,
+     144.0
+    ],
+    "C|consult:B": [
+     115.0,
+     144.0
+    ],
+    "C|reflect": [
+     116.0,
+     144.0
+    ],
+    "C|stop": [
+     120.0,
+     144.0
+    ]
+   },
+   "L2": {
+    "A|all_agree|consult:B": [
+     81.0,
+     95.0
+    ],
+    "A|all_agree|consult:C": [
+     82.0,
+     95.0
+    ],
+    "A|all_agree|reflect": [
+     77.0,
+     95.0
+    ],
+    "A|all_agree|stop": [
+     85.0,
+     95.0
+    ],
+    "A|majority|consult:B": [
+     5.0,
+     12.0
+    ],
+    "A|majority|consult:C": [
+     7.0,
+     12.0
+    ],
+    "A|majority|reflect": [
+     6.0,
+     12.0
+    ],
+    "A|majority|stop": [
+     7.0,
+     12.0
+    ],
+    "A|minority|consult:B": [
+     19.0,
+     29.0
+    ],
+    "A|minority|consult:C": [
+     17.0,
+     29.0
+    ],
+    "A|minority|reflect": [
+     4.0,
+     29.0
+    ],
+    "A|minority|stop": [
+     4.0,
+     29.0
+    ],
+    "A|none|consult:B": [
+     1.0,
+     1.0
+    ],
+    "A|none|consult:C": [
+     1.0,
+     1.0
+    ],
+    "A|none|reflect": [
+     1.0,
+     1.0
+    ],
+    "A|none|stop": [
+     0.0,
+     1.0
+    ],
+    "A|split|consult:B": [
+     2.0,
+     7.0
+    ],
+    "A|split|consult:C": [
+     5.0,
+     7.0
+    ],
+    "A|split|reflect": [
+     5.0,
+     7.0
+    ],
+    "A|split|stop": [
+     3.0,
+     7.0
+    ],
+    "B|all_agree|consult:A": [
+     83.0,
+     95.0
+    ],
+    "B|all_agree|consult:C": [
+     83.0,
+     95.0
+    ],
+    "B|all_agree|reflect": [
+     85.0,
+     95.0
+    ],
+    "B|all_agree|stop": [
+     85.0,
+     95.0
+    ],
+    "B|majority|consult:A": [
+     25.0,
+     33.0
+    ],
+    "B|majority|consult:C": [
+     26.0,
+     33.0
+    ],
+    "B|majority|reflect": [
+     25.0,
+     33.0
+    ],
+    "B|majority|stop": [
+     27.0,
+     33.0
+    ],
+    "B|minority|consult:A": [
+     4.0,
+     8.0
+    ],
+    "B|minority|consult:C": [
+     5.0,
+     8.0
+    ],
+    "B|minority|reflect": [
+     4.0,
+     8.0
+    ],
+    "B|minority|stop": [
+     3.0,
+     8.0
+    ],
+    "B|none|consult:A": [
+     0.0,
+     2.0
+    ],
+    "B|none|consult:C": [
+     0.0,
+     2.0
+    ],
+    "B|none|reflect": [
+     0.0,
+     2.0
+    ],
+    "B|none|stop": [
+     0.0,
+     2.0
+    ],
+    "B|split|consult:A": [
+     0.0,
+     6.0
+    ],
+    "B|split|consult:C": [
+     2.0,
+     6.0
+    ],
+    "B|split|reflect": [
+     0.0,
+     6.0
+    ],
+    "B|split|stop": [
+     0.0,
+     6.0
+    ],
+    "C|all_agree|consult:A": [
+     83.0,
+     95.0
+    ],
+    "C|all_agree|consult:B": [
+     84.0,
+     95.0
+    ],
+    "C|all_agree|reflect": [
+     83.0,
+     95.0
+    ],
+    "C|all_agree|stop": [
+     85.0,
+     95.0
+    ],
+    "C|majority|consult:A": [
+     27.0,
+     39.0
+    ],
+    "C|majority|consult:B": [
+     28.0,
+     39.0
+    ],
+    "C|majority|reflect": [
+     30.0,
+     39.0
+    ],
+    "C|majority|stop": [
+     30.0,
+     39.0
+    ],
+    "C|minority|consult:A": [
+     0.0,
+     2.0
+    ],
+    "C|minority|consult:B": [
+     0.0,
+     2.0
+    ],
+    "C|minority|reflect": [
+     0.0,
+     2.0
+    ],
+    "C|minority|stop": [
+     1.0,
+     2.0
+    ],
+    "C|none|consult:A": [
+     0.0,
+     2.0
+    ],
+    "C|none|consult:B": [
+     0.0,
+     2.0
+    ],
+    "C|none|reflect": [
+     0.0,
+     2.0
+    ],
+    "C|none|stop": [
+     0.0,
+     2.0
+    ],
+    "C|split|consult:A": [
+     3.0,
+     6.0
+    ],
+    "C|split|consult:B": [
+     3.0,
+     6.0
+    ],
+    "C|split|reflect": [
+     3.0,
+     6.0
+    ],
+    "C|split|stop": [
+     4.0,
+     6.0
+    ]
+   }
+  },
+  "costs": {
+   "A|consult:B": 0.00043591944444442636,
+   "A|consult:C": 0.0004226615972222104,
+   "A|reflect": 0.00044360781249998954,
+   "B|consult:A": 0.004529840277777778,
+   "B|consult:C": 0.004470475,
+   "B|reflect": 0.004945572916666667,
+   "C|consult:A": 0.005713975694444444,
+   "C|consult:B": 0.008462635416666666,
+   "C|reflect": 0.008715774305555556
+  },
+  "kinds": [
+   "stop",
+   "reflect"
+  ],
+  "lam": 30.0,
+  "shrink": 5.0,
+  "team": [
+   "A",
+   "B",
+   "C"
+  ],
+  "use_family": false
+ },
+ "shrink": 5.0,
+ "smartest_peers": {
+  "A": "C",
+  "B": "C",
+  "C": "B"
+ },
+ "team": [
+  "A",
+  "B",
+  "C"
+ ]
+}

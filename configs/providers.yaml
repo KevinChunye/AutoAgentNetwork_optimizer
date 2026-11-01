@@ -1,0 +1,222 @@
+# Model refs. Networks and agents name a ref ("haiku"), never a vendor model ID.
+#
+# Switching providers:
+#   one stage        -> set `model:` on that stage in the network YAML
+#   a whole run      -> `model_override: <ref>` in the experiment YAML, `--model-override <ref>`,
+#                       or the env var AAN_MODEL_OVERRIDE
+#   a new endpoint   -> add a ref below; anything OpenAI-compatible needs no code
+#
+# account: who is billed. It must have a hard cap in configs/budget.yaml or paid calls are refused.
+# Keys come from AAN_-prefixed env vars on purpose: a variable named ANTHROPIC_API_KEY can be
+# picked up by Claude Code itself and would bill its own work to the research budget.
+# workspace_id_env (Anthropic): if this env var is set, its value is sent as the anthropic-workspace-id
+#   header, which the API requires when the key is not scoped to a workspace.
+# request_options: extra API fields sent with every call, e.g.
+#   {thinking: {type: disabled}} (Haiku 5.5; Sonnet 5.5 needs {type: between_tools}) or {reasoning_effort: low} (OpenAI reasoning models).
+models:
+  fake:
+    provider: fake            # offline, free, deterministic; for tests and dry runs
+    model: fake-model
+
+  haiku:                      # API defaults: adaptive thinking on, effort medium (thinking counts against max_tokens)
+    provider: anthropic
+    model: claude-haiku-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+  haiku_nothink:              # P0 candidate: thinking off (accepted at effort low/medium/high)
+    provider: anthropic
+    model: claude-haiku-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    request_options: {thinking: {type: disabled}}
+  haiku_low:                  # P0 candidate: adaptive thinking at effort low; v4 anchor "Haiku effort low" (ceiling 12,288)
+    provider: anthropic
+    model: claude-haiku-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    request_options: {output_config: {effort: low}}
+  haiku_high:                 # v4 anchor (session E5): "Haiku effort high" (ceilings 18,432 BBEH, 36,864 math)
+    provider: anthropic       # (Claude 5.5 models reject budget_tokens; arms are named by effort, audits 69-70)
+    model: claude-haiku-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    request_options: {output_config: {effort: high}}
+  sonnet_low:                 # v4 anchor: "Sonnet effort low" (ceiling 12,288), AH1's reasoning arm
+    provider: anthropic
+    model: claude-sonnet-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    request_options: {output_config: {effort: low}}
+  sonnet_high:                # v4 anchor tier 2: "Sonnet effort high" (ceilings 18,432 BBEH, 36,864 math)
+    provider: anthropic
+    model: claude-sonnet-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    request_options: {output_config: {effort: high}}
+  # Study CD (session E6): every effort level of Haiku 5.5 and Sonnet 5.5 (low, medium, high, xhigh, max;
+  # adaptive thinking, the docs checked 2026-10-27) and Opus 5.5 at medium and max. low and high are above.
+  haiku_med:               # CD: Haiku effort medium (its default, stated)
+    provider: anthropic
+    model: claude-haiku-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    request_options: {output_config: {effort: medium}}
+  haiku_xhigh:             # CD: Haiku effort xhigh (thinking cannot be off here)
+    provider: anthropic
+    model: claude-haiku-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    request_options: {output_config: {effort: xhigh}}
+  haiku_max:               # CD: Haiku effort max, its highest
+    provider: anthropic
+    model: claude-haiku-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    request_options: {output_config: {effort: max}}
+  sonnet_med:              # CD: Sonnet effort medium
+    provider: anthropic
+    model: claude-sonnet-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    request_options: {output_config: {effort: medium}}
+  sonnet_xhigh:            # CD: Sonnet effort xhigh
+    provider: anthropic
+    model: claude-sonnet-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    request_options: {output_config: {effort: xhigh}}
+  sonnet_max:              # CD: Sonnet effort max, its highest
+    provider: anthropic
+    model: claude-sonnet-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    request_options: {output_config: {effort: max}}
+  opus_med:                # CD tier B: Opus effort medium (its default, stated)
+    provider: anthropic
+    model: claude-opus-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    request_options: {output_config: {effort: medium}}
+  opus_max:                # CD tier B: Opus effort max, its highest
+    provider: anthropic
+    model: claude-opus-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    request_options: {output_config: {effort: max}}
+  sonnet:
+    provider: anthropic
+    model: claude-sonnet-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+  sonnet_nothink:             # the "one senior" baseline and the escalation judge; 20x Haiku's price
+    provider: anthropic
+    model: claude-sonnet-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    # Sonnet 5.5 rejects {type: disabled} (400, session 4); between_tools is its "thinking off":
+    # no thinking before answering, and without tools there is nothing in between.
+    request_options: {thinking: {type: between_tools}}
+  opus:
+    provider: anthropic
+    model: claude-opus-5-5
+    api_key_env: AAN_ANTHROPIC_API_KEY
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+
+  gpt_small:                  # OpenAI direct; confirm the model ID with GET /v1/models first
+    provider: openai_compat
+    model: gpt-6-luna
+    model_env: AAN_OPENAI_MODEL
+    api_key_env: AAN_OPENAI_API_KEY
+    long_requests: background  # D5 (session E6): above 8,192 output tokens, submit, poll and fetch
+    send_temperature: false   # gpt-6-luna accepts only the default temperature (400 on 0.0; session 3)
+
+  luna_low:                   # GPT-6 Luna (same list price as Haiku 5.5) with little hidden reasoning
+    provider: openai_compat
+    model: gpt-6-luna
+    model_env: AAN_OPENAI_MODEL
+    api_key_env: AAN_OPENAI_API_KEY
+    long_requests: background  # D5 (session E6): above 8,192 output tokens, submit, poll and fetch
+    send_temperature: false   # gpt-6-luna accepts only the default temperature (400 on 0.0; session 3)
+    request_options: {reasoning_effort: low}
+
+  # ---- Evidence per dollar (research/v3/evidence/plan.md, step 0.4). No model_env on these refs,
+  # so AAN_OPENAI_MODEL can never swap a dearer model in. Default temperature everywhere: OpenAI
+  # reasoning models accept no other, and the Anthropic client sends none.
+  luna_none:                  # GPT-6 Luna, reasoning off; pairs with haiku_nothink (same list price)
+    provider: openai_compat
+    model: gpt-6-luna
+    api_key_env: AAN_OPENAI_API_KEY
+    long_requests: background  # D5 (session E6): above 8,192 output tokens, submit, poll and fetch
+    send_temperature: false
+    request_options: {reasoning_effort: none}
+  luna_low_ev:                # GPT-6 Luna at reasoning low, without model_env (audit 51's Luna check; session E4)
+    provider: openai_compat
+    model: gpt-6-luna
+    api_key_env: AAN_OPENAI_API_KEY
+    long_requests: background  # D5 (session E6): above 8,192 output tokens, submit, poll and fetch
+    send_temperature: false
+    request_options: {reasoning_effort: low}
+  luna_med:                   # GPT-6 Luna at reasoning medium; pairs with haiku (adaptive thinking, medium) in step 2.3
+    provider: openai_compat
+    model: gpt-6-luna
+    api_key_env: AAN_OPENAI_API_KEY
+    long_requests: background  # D5 (session E6): above 8,192 output tokens, submit, poll and fetch
+    send_temperature: false
+    request_options: {reasoning_effort: medium}
+  sol61_low:                  # GPT-6.1 Sol at its lowest setting (it rejects none); pairs with sonnet_nothink
+    provider: openai_compat
+    model: gpt-6.1-sol
+    api_key_env: AAN_OPENAI_API_KEY
+    long_requests: background  # D5 (session E6): above 8,192 output tokens, submit, poll and fetch
+    send_temperature: false
+    request_options: {reasoning_effort: low}
+  sol61_med:                  # v4 anchor: GPT-6.1 Sol at reasoning medium
+    provider: openai_compat
+    model: gpt-6.1-sol
+    api_key_env: AAN_OPENAI_API_KEY
+    long_requests: background  # D5 (session E6): above 8,192 output tokens, submit, poll and fetch
+    send_temperature: false
+    request_options: {reasoning_effort: medium}
+  terra61_low:                # GPT-6.1 Terra at reasoning low (ScienceClaw family arms and LAB-Bench GPT team; Kevin,
+    provider: openai_compat   # 2026-11-01). Needs Kevin's gpt-6.1-terra row in configs/pricing.yaml before any call.
+    model: gpt-6.1-terra
+    api_key_env: AAN_OPENAI_API_KEY
+    long_requests: background  # D5 (session E6): above 8,192 output tokens, submit, poll and fetch
+    send_temperature: false
+    request_options: {reasoning_effort: low}
+  astra_low:                  # GPT-6 Astra, reasoning low; gated step 2.4b only
+    provider: openai_compat
+    model: gpt-6-astra
+    api_key_env: AAN_OPENAI_API_KEY
+    long_requests: background  # D5 (session E6): above 8,192 output tokens, submit, poll and fetch
+    send_temperature: false
+    request_options: {reasoning_effort: low}
+  opus_nothink:               # Opus 5.5 at its least thinking (step 2.4). Opus 5.5 cannot turn thinking off:
+    provider: anthropic       # {type: disabled} and {type: between_tools} both return 400 (the second seen in
+    model: claude-opus-5-5    # e11_probe_bbeh_anth, 2026-10-22), so thinking stays adaptive and effort is low
+    api_key_env: AAN_ANTHROPIC_API_KEY  # (its default is medium). The name is kept so configs and analysis match.
+    workspace_id_env: AAN_ANTHROPIC_WORKSPACE_ID
+    request_options: {output_config: {effort: low}}
+
+  maritime_proxy:             # Maritime's built-in LLM proxy (bills Maritime credits, not these budgets)
+    provider: openai_compat
+    account: maritime
+    model: gpt-6-luna
+    model_env: MARITIME_MODEL
+    api_key_env: AAN_MARITIME_PROXY_KEY   # set it from the container's proxy key at deploy (key hygiene, patch 2.1)
+    base_url_env: AAN_MARITIME_PROXY_URL
+
+  openrouter_oss:             # open-weight model through OpenRouter (separate account)
+    provider: openai_compat
+    account: openrouter
+    model: openai/gpt-oss-120b
+    api_key_env: AAN_OPENROUTER_API_KEY
+    base_url: https://openrouter.ai/api/v1
+    token_param: max_tokens
+
+  local_vllm:                 # your own vLLM / Ollama server
+    provider: openai_compat
+    account: local
+    model: openai/gpt-oss-120b
+    base_url: http://localhost:8000/v1
+    token_param: max_tokens

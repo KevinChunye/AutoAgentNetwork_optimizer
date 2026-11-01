@@ -1,0 +1,30 @@
+# Market town m3_sonnet: prereg copied from research/market/plan.md by scripts/make_market_configs.py; edit the plan and the script, not this file.
+kind: market
+trader: llm
+rounds: 8
+max_tokens: 200
+temperature: 1.0
+name: m3_sonnet
+condition: sonnet
+prereg:
+  question: Does an all-Sonnet (sonnet_nothink) market (2 sessions, seeds 21-22) trade less and less efficiently than the
+    all-Haiku market, the pattern Struski et al. report for GPT Large (waiting for the spread to close)?
+  prediction: Fewer trades per period and lower mean session efficiency than M2 (point estimates over all sessions); a higher
+    late PASS share (rounds 6-8, traders with a positive CE profit) and a wider final spread than M2.
+  kill: 'A session''s actual spend over 1.5x its re-projection after M1 (section 5), or a session with zero trades in every
+    period: stop and audit. The run also stops itself after 3 periods in a row without a trade, or at over 10% unparsed or
+    over 5% truncated replies (checked after every round). If the market''s actual spend so far plus this run''s re-projection
+    passes $8, the run does not start.'
+  decision: 'Holds only if M3''s mean efficiency is at least 7 points below M2''s and M3 has fewer trades per period (a 2-vs-4-session
+    ZI-C null reaches -7 points 2.8% of the time): the scale pattern appears on Claude too; with a higher late PASS share
+    and wider final spread it is waiting, which R = 8 penalizes, not mispricing. Otherwise: not shown at this n; report the
+    point estimates. M3 runs last (Kevin''s order: M1, M2, M4, M3).'
+seeds: [21, 22]
+periods: 5
+model: sonnet_nothink
+max_usd: 4.0
+expect:
+  min_turns: 40
+  max_unparsed_rate: 0.1
+  max_truncation_rate: 0.05
+  stop_after_zero_trade_periods: 3

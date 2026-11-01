@@ -1,0 +1,43 @@
+{
+  "run_id": "p4_bbeh_grid_d-1792437469",
+  "state": "completed",
+  "reason": "",
+  "checkpoints": [
+    "committed and pushed",
+    "committed and pushed",
+    "committed and pushed"
+  ],
+  "tasks_done": 5,
+  "budget": {
+    "spent_by_account": {
+      "anthropic": 2.8218,
+      "openai": 0.0069
+    },
+    "hard_caps_usd": {
+      "anthropic": 100.0,
+      "openai": 100.0
+    },
+    "phase": "pilot",
+    "phase_total_usd": 20.0,
+    "spent_total_usd": 2.8286,
+    "run_spent_usd": 0.2496,
+    "run_cap_usd": 4.0,
+    "safety_multiplier": 1.15
+  },
+  "rate_limits": {
+    "haiku_nothink": {
+      "input-tokens-limit": "10000000",
+      "input-tokens-remaining": "9998000",
+      "input-tokens-reset": "2026-10-19T19:19:44Z",
+      "output-tokens-limit": "2000000",
+      "output-tokens-remaining": "2000000",
+      "output-tokens-reset": "2026-10-19T19:19:47Z",
+      "requests-limit": "10000",
+      "requests-remaining": "9999",
+      "requests-reset": "2026-10-19T19:19:44Z",
+      "tokens-limit": "12000000",
+      "tokens-remaining": "11998000",
+      "tokens-reset": "2026-10-19T19:19:44Z"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+kind: phoenix
+name: phoenix_smoke_sol61_low
+mode: calibrate
+prereg:
+  question: Does one real call produce schema-valid executable PHOENIX pipeline JSON
+    through the governed registry and persist its usage?
+  prediction: One call, one parsed pipeline, one independently executed validation
+    result, no truncation, and successful state synchronization.
+  kill: Stop this model after any access, transport, schema, execution, budget, or
+    synchronization failure. No free retry or model substitution.
+  decision: Passing establishes integration smoke readiness only. A failure requires
+    repair and a new preregistration; no formal experiments follow in this session.
+checkpoint: null
+capability_table: null
+frozen_hashes:
+  implementation: 5472c0fdf907fa45714d60799a255c55f57d0dc6ebe02ad8a251795be4d69da1
+  runtime_dependencies: fbba67030aa3a0f01219cc51c775cb542ee5f5175dd480e7a9ee4e5962609bee
+  providers: 273a4cb620ccdadb979bb689938b3bfd13b779225f2c271b5649ef8e7e760e5a
+  pricing: d7827d7fe867b228393412b1aa85cb8e89ca74a9aad1f63ba39101335c563ed0
+  budget: 4e838a76b0c5b3cbf2e286b4ebef90e0faff5d8f230f5eac62906ba72f917ab2
+  calibration_0: 897a147b754ab57a56fda885c9c131be595dea5177f39851f17888073bc89dc1
+  templates: 82f3f2788b068c6cf0b032d083c981c861b223b218d23fcf88e3c59780d54cac
+policy: full
+fault: healthy
+withdrawn_model: sonnet_low
+shutdown_member: A
+models:
+- luna_low_ev
+- sol61_low
+planner_model: luna_low_ev
+api_budget_usd: 0.06
+cpu_budget_s: 120
+max_calls: 1
+max_tools: 24
+wall_s: 1200
+tool_timeout_s: 30
+max_tokens: 4096
+max_input_tokens: 6000
+proposal_rounds: 3
+seed: 101
+model_override: null
+task_offset: 0
+task_limit: null
+calibration_model: sol61_low
+calibration_data:
+- data/phoenix_smoke/calibration_fixture.npz
+max_usd: 0.08
+providers: configs/providers.yaml
+pricing: configs/pricing.yaml
+budget: configs/budget.yaml
+ledger: state/ledger.jsonl
+cache: state/phoenix_smoke_cache
+require_ledger: true
+git_checkpoint: true
+out_dir: results
+fixed_proposals: null

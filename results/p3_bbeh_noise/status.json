@@ -1,0 +1,27 @@
+{
+  "run_id": "p3_bbeh_noise-1792436300",
+  "state": "completed",
+  "reason": "",
+  "checkpoints": [
+    "nothing new to checkpoint",
+    "nothing new to checkpoint"
+  ],
+  "tasks_done": 10,
+  "budget": {
+    "spent_by_account": {
+      "anthropic": 1.8763,
+      "openai": 0.0069
+    },
+    "hard_caps_usd": {
+      "anthropic": 100.0,
+      "openai": 100.0
+    },
+    "phase": "pilot",
+    "phase_total_usd": 20.0,
+    "spent_total_usd": 1.8831,
+    "run_spent_usd": 0.0,
+    "run_cap_usd": 2.0,
+    "safety_multiplier": 1.15
+  },
+  "rate_limits": {}
+}

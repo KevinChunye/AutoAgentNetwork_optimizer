@@ -1,0 +1,12 @@
+name: single
+description: >
+  One agent, one call per task. The baseline every network must beat (the gate).
+default_model: haiku
+default_max_tokens: 3200
+stages:
+  - name: solve
+    width: 1
+    system: |
+      Solve the problem. Be concise. End with a final line of the form "ANSWER: <answer>".
+    instruction: |
+      Solve the task above.

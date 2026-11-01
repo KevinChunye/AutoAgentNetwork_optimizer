@@ -1,0 +1,17 @@
+# Ground-truth landscape: all 216 configs of dense_3x6. The call cache makes this
+# 474 live calls per task (vs 19 for one dense run). Pilot size: 30 tasks.
+#   aan estimate configs/experiments/landscape_3x6.yaml          # worst-case cost first
+#   aan run configs/experiments/landscape_3x6.yaml --model-override fake --task-limit 2   # dry run
+name: landscape_3x6
+network: configs/networks/dense_3x6.yaml
+tasks: data/tasks/sample.jsonl     # replace with the validation slice chosen by the gate
+task_limit: 30
+configs: all
+max_usd: 4                          # run cap; the pilot phase also caps runs at $4
+chunk_size: 5
+expect:
+  min_tasks: 5
+  dense_error_range: [0.15, 0.75]   # outside this, the task has nothing to prune or is broken
+  max_dense_cost_per_task_usd: 0.05
+  max_truncation_rate: 0.05
+  max_unparsed_rate: 0.10

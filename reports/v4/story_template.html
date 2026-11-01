@@ -1,0 +1,749 @@
+<title>AutoAgentNetwork Record</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="The record of the AutoAgentNetwork project: the question, every session, setup, finding and run, and what comes next.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (about 68ch) for the record, with chart bands that widen to 1080px; a lab ledger,
+   statuses shown as stamped chips. Data is injected at build time (scripts/build_numbers.py). */
+:root {
+  --bg: #f5f6f8; --surface: #ffffff; --ink: #12151b; --ink2: #4a5262; --muted: #858c99; --rule: #dde1e8;
+  --accent: #2a78d6; --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --neg: #d03b3b; --mid: #eceef1;
+  --chip-conf: #1c5cab; --chip-pre: #19806a; --chip-exp: #a36a00; --chip-post: #6b7280;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step-1: 0.82rem; --step0: 1.02rem; --step1: 1.25rem; --step2: 1.6rem; --step3: clamp(2.1rem, 5vw, 3.4rem);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1115; --surface: #171a20; --ink: #eceef2; --ink2: #b9bfca; --muted: #8a909c; --rule: #2a2f38;
+    --accent: #3987e5; --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --neg: #e66767; --mid: #262a31;
+    --chip-conf: #6da7ec; --chip-pre: #3cc39b; --chip-exp: #e0a33a; --chip-post: #9aa1ad; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1115; --surface: #171a20; --ink: #eceef2; --ink2: #b9bfca; --muted: #8a909c; --rule: #2a2f38;
+  --accent: #3987e5; --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --neg: #e66767; --mid: #262a31;
+  --chip-conf: #6da7ec; --chip-pre: #3cc39b; --chip-exp: #e0a33a; --chip-post: #9aa1ad; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: var(--step0); line-height: 1.55; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.col { max-width: 68ch; }
+h1, h2, h3 { font-family: var(--display); font-stretch: 78%; letter-spacing: -0.01em; text-wrap: balance; line-height: 1.1; }
+h1 { font-size: var(--step3); font-weight: 750; margin: 0; }
+h2 { font-size: var(--step2); font-weight: 700; margin: 0 0 0.6rem; }
+h3 { font-size: var(--step1); font-weight: 650; margin: 1.4rem 0 0.4rem; }
+p { margin: 0 0 0.9rem; }
+a { color: var(--accent); }
+.eyebrow { font-family: var(--mono); font-size: var(--step-1); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+header.hero { padding-block: 2.6rem 1.8rem; border-bottom: 1px solid var(--rule); }
+.thesis { display: grid; gap: 0.25rem; margin-top: 1rem; font-family: var(--display); font-stretch: 85%; font-size: var(--step1); color: var(--ink2); }
+.thesis b { color: var(--ink); font-weight: 650; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--rule);
+  border: 1px solid var(--rule); margin-top: 1.6rem; }
+.tile { background: var(--surface); padding: 0.8rem 0.9rem; display: grid; gap: 0.15rem; min-width: 0; }
+.tile .v { font-family: var(--display); font-stretch: 80%; font-size: 1.9rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tile .k { font-size: var(--step-1); color: var(--ink2); line-height: 1.35; }
+nav.toc { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; padding-block: 0.9rem; font-family: var(--mono); font-size: var(--step-1); }
+nav.toc a { color: var(--ink2); text-decoration: none; border-bottom: 1px solid var(--rule); }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); border-color: var(--accent); }
+section { padding-block: 2.2rem; border-bottom: 1px solid var(--rule); }
+.n { font-family: var(--mono); font-size: 0.92em; font-variant-numeric: tabular-nums; text-decoration: underline dotted var(--muted); text-underline-offset: 3px; cursor: help; }
+.stages { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+.stage { background: var(--surface); border: 1px solid var(--rule); padding: 0.9rem 1rem; display: grid; gap: 0.35rem; min-width: 0; }
+.stage .when { font-family: var(--mono); font-size: var(--step-1); color: var(--muted); }
+.stage h3 { margin: 0; }
+.stage p { margin: 0; font-size: 0.95rem; color: var(--ink2); }
+.timeline { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: 0; }
+.timeline li { display: grid; grid-template-columns: 6.5rem 1fr 7.5rem; gap: 0.8rem; align-items: baseline; padding: 0.55rem 0;
+  border-top: 1px solid var(--rule); transition: background 0.4s; }
+.timeline li.lit { background: color-mix(in srgb, var(--accent) 9%, transparent); }
+.timeline .date { font-family: var(--mono); font-size: var(--step-1); color: var(--muted); }
+.timeline .name { font-family: var(--display); font-stretch: 85%; font-weight: 650; }
+.timeline .what { display: block; font-size: 0.93rem; color: var(--ink2); }
+.timeline .spend { font-family: var(--mono); font-size: var(--step-1); text-align: right; display: grid; gap: 0.25rem; justify-items: end; }
+.timeline .bar { height: 6px; background: var(--s1); border-radius: 0 3px 3px 0; min-width: 1px; transition: width 0.6s ease-out; }
+.timeline .q { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+@media (max-width: 560px) { .timeline li { grid-template-columns: 1fr; gap: 0.2rem; } .timeline .spend { justify-items: start; text-align: left; } }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.4rem; }
+.box { background: var(--surface); border: 1px solid var(--rule); padding: 1rem; min-width: 0; }
+.box h3 { margin-top: 0; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+th, td { text-align: left; padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--mono); font-size: var(--step-1); font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.chip { display: inline-block; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 0.08rem 0.4rem; border: 1.5px solid currentColor; border-radius: 2px; max-width: 100%; }
+.chip[data-s="confirmatory"] { color: var(--chip-conf); border-width: 2px; }
+.chip[data-s="preregistered-descriptive"] { color: var(--chip-pre); }
+.chip[data-s="exploratory"] { color: var(--chip-exp); border-style: dashed; }
+.chip[data-s="post hoc"], .chip[data-s="record"], .chip[data-s="design"], .chip[data-s="cited"] { color: var(--chip-post); border-style: dotted; }
+.chip[data-s="pending"] { color: var(--muted); border-style: dotted; }
+.filters { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.6rem 0 1rem; }
+.filters button, .controls button, select { font-family: var(--mono); font-size: var(--step-1); background: var(--surface); color: var(--ink);
+  border: 1px solid var(--rule); padding: 0.3rem 0.6rem; border-radius: 3px; cursor: pointer; }
+.filters button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+button:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.findings { display: grid; gap: 0; }
+.finding { display: grid; grid-template-columns: 3.2rem 1fr; gap: 0.2rem 0.8rem; padding: 0.7rem 0; border-top: 1px solid var(--rule); }
+.finding .id { font-family: var(--mono); font-weight: 500; color: var(--ink2); }
+.finding .t { font-family: var(--display); font-stretch: 88%; font-weight: 600; }
+.finding .num { font-size: 0.93rem; color: var(--ink2); }
+.finding .meta { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+.finding > div { min-width: 0; }
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 1.4rem; }
+figure { margin: 0; background: var(--surface); border: 1px solid var(--rule); padding: 1rem; min-width: 0; display: grid; gap: 0.5rem; align-content: start; }
+figure.wide { grid-column: 1 / -1; }
+figcaption { font-size: 0.9rem; color: var(--ink2); }
+figcaption b { color: var(--ink); font-family: var(--display); font-stretch: 88%; font-weight: 650; }
+.chart { width: 100%; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart text { font-family: var(--mono); font-size: 11px; fill: var(--ink2); }
+.chart .axis line, .chart .axis path { stroke: var(--rule); }
+.chart .grid line { stroke: var(--rule); stroke-width: 0.6; }
+.chart .zero { stroke: var(--muted); stroke-width: 1; }
+.legend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-family: var(--mono); font-size: 0.75rem; color: var(--ink2); }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 0.35rem; vertical-align: -1px; background: var(--c); border-radius: 50%; }
+.replay { justify-self: start; align-self: start; font-family: var(--mono); font-size: 0.72rem; background: none; border: 1px solid var(--rule); color: var(--ink2); padding: 0.15rem 0.5rem; border-radius: 3px; cursor: pointer; }
+#tip { position: fixed; z-index: 20; pointer-events: none; background: var(--ink); color: var(--bg); font-family: var(--mono);
+  font-size: 0.75rem; padding: 0.35rem 0.5rem; border-radius: 3px; max-width: 280px; line-height: 1.35; }
+.walk { display: grid; gap: 0.8rem; }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 0.8rem; }
+.step { background: var(--surface); border: 1px solid var(--rule); padding: 0.8rem; display: grid; gap: 0.4rem; align-content: start; min-width: 0; transition: opacity 0.4s, transform 0.4s; }
+.step.off { opacity: 0.12; transform: translateY(6px); }
+.step .k { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.call { display: grid; grid-template-columns: 6.6rem 1fr 1.2rem; gap: 0.4rem; font-family: var(--mono); font-size: 0.8rem; align-items: baseline; }
+.call .a { overflow-wrap: anywhere; }
+.ok { color: var(--s3); font-weight: 600; } .no { color: var(--neg); font-weight: 600; }
+.controls { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.verdict { font-family: var(--display); font-stretch: 88%; font-weight: 650; }
+.roadmap h3 { font-size: var(--step1); }
+.roadmap ul, .roadmap ol { padding-left: 1.2rem; margin: 0.2rem 0 0.8rem; }
+.roadmap li { margin: 0.15rem 0; }
+footer { padding-block: 2rem 3rem; color: var(--muted); font-size: 0.85rem; }
+.note { font-size: 0.88rem; color: var(--ink2); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">AutoAgentNetwork · Oct 17-27, 2026 · the project record</div>
+  <h1>Width, depth, verification</h1>
+  <div class="col thesis">
+    <div><b>Failures are shared.</b> Item difficulty carries most of the variation in who fails.</div>
+    <div><b>The first reasoning step pays for cheap models.</b> Beyond it, depth against width is still open.</div>
+    <div><b>Agreement is not a verification signal.</b> Label-free selection fails beside a lone strong system.</div>
+  </div>
+  <div class="tiles" id="tiles"></div>
+</div></header>
+
+<div class="wrap"><nav class="toc" aria-label="Sections">
+  <a href="#question">The question</a><a href="#sessions">Sessions</a><a href="#setups">Setups</a><a href="#findings">Findings</a>
+  <a href="#evidence">Evidence</a><a href="#item">One item</a><a href="#ledger">Every run</a><a href="#process">Process</a><a href="#next">What is next</a>
+</nav></div>
+
+<main>
+<section id="question"><div class="wrap">
+  <div class="eyebrow">How the question changed</div>
+  <h2>From pruning agent networks to buying width, depth or verification</h2>
+  <div class="col"><p>The project started as AMC-style pruning: learn how much of each stage of a multi-agent network to keep.
+  The pilot showed that a single senior call matched the whole network, so the question moved to evidence per dollar, and
+  then to how a fixed budget should be split between more calls, more reasoning and checking answers.</p></div>
+  <div class="stages" id="stages"></div>
+</div></section>
+
+<section id="sessions"><div class="wrap">
+  <div class="eyebrow">Timeline</div>
+  <h2>Sessions and what each spent</h2>
+  <div class="col"><p>API spend per session, computed from the cumulative spend every run's status file records. Total:
+  <span data-n="spend.total"></span> over <span data-n="runs.count"></span> runs. Sessions without paid runs prepared,
+  audited or analysed.</p></div>
+  <ol class="timeline" id="timeline"></ol>
+</div></section>
+
+<section id="setups"><div class="wrap">
+  <div class="eyebrow">Setups</div>
+  <h2>Tasks, models, arms, items and prices</h2>
+  <div class="grid2">
+    <div class="box"><h3>The Atlas (public data)</h3>
+      <p class="note">One factor model per benchmark: ability, item difficulty, failure slope.</p>
+      <div class="tablewrap"><table id="atlas-table"></table></div></div>
+    <div class="box"><h3>The API anchor (sealed items)</h3>
+      <p class="note"><span data-n="anchor.items.bbeh"></span> BBEH items (linguistic puzzles, cartoon captions, word sorting,
+      causal judgement) and <span data-n="anchor.items.math"></span> arXivMath problems, sealed before any call. Arms:
+      Claude Haiku 5.5 off, low and high; Sonnet 5.5 off and low; GPT-6 Luna none, low and medium; GPT-6.1 Sol low and medium;
+      most with three calls per item. Verification: Haiku and Sol self-checks, a Haiku high judge over the Luna pool, a Sol
+      low judge over the Haiku-off and Luna-low pools.</p>
+      <p class="note">Phase 1 before it: <span data-n="phase1.items"></span> sealed BBEH items in four tasks (Boolean expressions, Dyck languages, geometric
+      shapes, web of lies) and ForecastBench questions.</p></div>
+    <div class="box"><h3>List prices (USD per million tokens)</h3><div class="tablewrap"><table id="price-table"></table></div></div>
+    <div class="box"><h3>The open-weight testbed (designed, not run)</h3>
+      <p class="note">Qwen3.5 2B, 4B and 9B at BF16, W8, W4 and W3, thinking off, 1k and 4k, six samples per item on
+      <span data-n="testbed.items.all"></span> items (<span data-n="testbed.items.bbeh"></span> BBEH,
+      <span data-n="testbed.items.math"></span> competition math, <span data-n="testbed.items.code"></span> LiveCodeBench).
+      Pilot estimate <span data-n="testbed.gpu.pilot"></span> of GPU time.</p>
+      <div class="tablewrap"><table id="testbed-table"></table></div></div>
+  </div>
+</div></section>
+
+<section id="findings"><div class="wrap">
+  <div class="eyebrow">Findings</div>
+  <h2>Every finding, with its status</h2>
+  <div class="col"><p>Confirmatory: a preregistered test, read once on sealed items. Preregistered-descriptive: a quantity
+  preregistered without a test. Exploratory: on sealed items, not a preregistered test. Post hoc: chosen after the data
+  were read, or on public data never sealed. Hover any number for its source.</p></div>
+  <div class="filters" id="finding-filters" role="group" aria-label="Filter by status"></div>
+  <div class="findings" id="finding-list"></div>
+</div></section>
+
+<section id="evidence"><div class="wrap">
+  <div class="eyebrow">Evidence</div>
+  <h2>What the data show</h2>
+  <div class="charts">
+    <figure><figcaption><b>Shared failure caps width.</b> SWE-bench Verified, held-out systems on held-out tasks: the share
+      some member of a set resolves, against the factor model, a one-factor copula and independence, each given only the
+      calibration tasks.</figcaption>
+      <div class="legend" style="--c:var(--s1)"><span style="--c:var(--s1)">observed</span><span style="--c:var(--s2)">factor model</span><span style="--c:var(--s4)">one-factor copula</span><span style="--c:var(--s3)">independence</span></div>
+      <div class="chart" id="c-tail"></div><button class="replay" data-chart="tail">Replay</button></figure>
+    <figure><figcaption><b>Price frontier.</b> SWE-bench Verified tasks resolved against dollars per task; the frontier
+      appears in cost order.</figcaption>
+      <div class="legend"><span style="--c:var(--s1)">frontier</span><span style="--c:var(--muted)">other submissions</span></div>
+      <div class="chart" id="c-frontier"></div><button class="replay" data-chart="frontier">Replay</button></figure>
+    <figure class="wide"><figcaption><b>Depth moves ability, not the failure pattern.</b> One model at two adjacent reasoning
+      settings: change in ability (bars, logits) and in failure slope (dots), with 95% intervals. Pooled:
+      ability <span data-n="p2.all.da.pooled"></span>, slope <span data-n="p2.all.db.pooled"></span>.</figcaption>
+      <div class="chart" id="c-depth"></div><button class="replay" data-chart="depth">Replay</button></figure>
+    <figure class="wide"><figcaption><b>One deeper call against the nearest-dollar vote.</b> Points by which one call at the
+      higher setting beats the vote of the lower setting with the nearest dollars. Orange: the anchor's confirmatory AH2 on
+      sealed items (the first effort step of two cheap models; the deeper call cost somewhat more). Blue: public MathArena
+      pairs (post hoc); near zero at the top of a model's range.</figcaption>
+      <div class="chart" id="c-dw"></div><button class="replay" data-chart="dw">Replay</button></figure>
+    <figure><figcaption><b>A judge over cheap answers against the judge answering.</b> The anchor's <span data-n="anchor.items.bbeh"></span> BBEH items. The pools
+      covered fewer items than Sol answered right alone, so even a perfect selector over them would lose: this measures the
+      pools, not the judge's signal.</figcaption>
+      <div class="chart" id="c-judge"></div><button class="replay" data-chart="judge">Replay</button></figure>
+    <figure><figcaption><b>When label-free selection works.</b> Simulated gain over the best system (points): one system at
+      <span data-n="design.p4.top"></span> among others at <span data-n="design.p4.others0"></span>,
+      <span data-n="design.p4.others1"></span> or <span data-n="design.p4.others2"></span>; low or high shared difficulty
+      (systematic share <span data-n="design.p4.share0"></span> or <span data-n="design.p4.share1"></span>); one or three calls each.</figcaption>
+      <div class="chart" id="c-map"></div><button class="replay" data-chart="map">Replay</button></figure>
+  </div>
+</div></section>
+
+<section id="item"><div class="wrap">
+  <div class="eyebrow">Follow one item</div>
+  <h2>One BBEH item through a vote, a consensus exit and a judge</h2>
+  <div class="col"><p id="item-intro"></p></div>
+  <div class="walk">
+    <div class="controls"><button id="walk-play">Play</button><button id="walk-next">Next step</button><button id="walk-reset">Show all</button></div>
+    <div class="steps" id="walk-steps"></div>
+  </div>
+</div></section>
+
+<section id="ledger"><div class="wrap">
+  <div class="eyebrow">Experiments ledger</div>
+  <h2>Every run, its dollars, outcome and audits</h2>
+  <div class="col"><p>From each run's status file; spend is the difference of cumulative spend between runs. Audits are those
+  whose heading names the run. Session E6's review of every run will replace this list when it lands.</p></div>
+  <div class="filters"><label for="ledger-session" class="eyebrow">Session</label><select id="ledger-session"></select></div>
+  <div class="tablewrap"><table id="ledger-table"></table></div>
+</div></section>
+
+<section id="process"><div class="wrap">
+  <div class="eyebrow">Process</div>
+  <h2>How the evidence was kept honest</h2>
+  <div class="grid2">
+    <div class="box"><h3>Preregistration</h3><p class="note">Every paid run carried a question, prediction, kill rule and
+      decision, checked by code before it could spend. Confirmatory tests sit in a Holm family; tests under
+      <span data-n="design.power.min"></span> power were demoted to exploratory before any call.</p></div>
+    <div class="box"><h3>Sealed items, blind collection</h3><p class="note">Items were sealed by hash before any call; runs wrote
+      no grades, and reads regraded with frozen code. A run stops itself on its own expectations: <span data-n="runs.stopped"></span>
+      runs stopped that way, <span data-n="runs.failed"></span> failed on a server error.</p></div>
+    <div class="box"><h3>Single reads</h3><p class="note">Each confirmatory block was read once with code frozen before the read;
+      no rows were added after a read was seen.</p></div>
+    <div class="box"><h3>Audits</h3><p class="note">An independent auditor returned <span data-n="audits.count"></span> verdicts:
+      <span data-n="audits.go"></span> GO, <span data-n="audits.adjust"></span> ADJUST, <span data-n="audits.stop"></span> STOP.
+      ADJUST items were fixed before any further spend.</p></div>
+  </div>
+</div></section>
+
+<section id="next"><div class="wrap">
+  <div class="eyebrow">What is next</div>
+  <h2>The scale-up roadmap</h2>
+  <div class="col roadmap" id="roadmap"></div>
+</div></section>
+</main>
+
+<footer><div class="wrap col">Generated from committed files by scripts/build_numbers.py (data) and reports/v4/story_template.html
+(page). Paper draft: paper/. Atlas extensions: research/v4/atlas/extend.md. Session W1, 2026-10-27.</div></footer>
+<div id="tip" hidden></div>
+
+<script id="story-data" type="application/json">/*STORY_DATA*/</script>
+<script>
+(function () {
+  "use strict";
+  var D = JSON.parse(document.getElementById("story-data").textContent);
+  var N = D.numbers, S = D.series;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var NS = "http://www.w3.org/2000/svg";
+
+  function nm(key) { var r = N[key]; return r ? r.display : "??" + key; }
+  function h(tag, attrs, parent, text) {
+    var e = document.createElement(tag);
+    for (var k in (attrs || {})) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function s(tag, attrs, parent, text) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in (attrs || {})) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function num(span, key) {
+    var r = N[key];
+    span.textContent = r ? r.display : "??" + key;
+    if (r) { span.classList.add("n"); span.title = r.status + " · " + r.source; }
+  }
+  document.querySelectorAll("[data-n]").forEach(function (el) { num(el, el.dataset.n); });
+  function fmtPct(v, d) { return (100 * v).toFixed(d === undefined ? 1 : d); }
+  function money(v) { return v === 0 ? "$0" : "$" + (v >= 1 ? v.toFixed(2) : v >= 0.01 ? v.toFixed(3) : v.toFixed(4)); }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+  // tooltip
+  var tip = document.getElementById("tip");
+  function showTip(evt, text) { tip.textContent = text; tip.hidden = false; moveTip(evt); }
+  function moveTip(evt) {
+    var x = Math.min(evt.clientX + 12, window.innerWidth - tip.offsetWidth - 8);
+    tip.style.left = x + "px"; tip.style.top = (evt.clientY + 14) + "px";
+  }
+  function hideTip() { tip.hidden = true; }
+  function hover(el, text) {
+    el.addEventListener("pointerenter", function (e) { showTip(e, text); });
+    el.addEventListener("pointermove", moveTip);
+    el.addEventListener("pointerleave", hideTip);
+    var t = s("title", {}, el, text);
+    return t;
+  }
+
+  // ---- hero tiles
+  var tiles = [["p6.swe.est", "of the variation in who fails is item difficulty (SWE-bench Verified)"],
+               ["ah2.luna.diff", "points: Luna one effort step up over its no-reasoning 3-vote at the nearest dollars (confirmatory)"],
+               ["p2.all.da.pooled", "logits of ability per public reasoning step; the failure slope stays put"],
+               ["spend.total", "API spend over the whole project"],
+               ["audits.count", "independent audits"]];
+  tiles.forEach(function (t) {
+    var d = h("div", { "class": "tile" }, document.getElementById("tiles"));
+    var v = h("div", { "class": "v" }, d); num(v, t[0]);
+    h("div", { "class": "k" }, d, t[1]);
+  });
+
+  // ---- stages
+  var stageText = {
+    pruning: ["Pruning agent networks", "Sessions 1-5", "Learn which stages of a propose-critique-refine network to keep. The pilot's senior-model control matched the whole network, so pruning lost its point."],
+    evidence: ["Evidence per dollar", "v3 and E1-E4", "How much does each extra call tell us, per dollar? Repeats share errors; one strong reasoning call won the saturated case."],
+    v4: ["Width, depth, verification", "E5, T1, W1, E6", "How to split a budget between more calls, more reasoning and checking answers, tested on public data and sealed items."]
+  };
+  Object.keys(stageText).forEach(function (k) {
+    var st = stageText[k], d = h("div", { "class": "stage" }, document.getElementById("stages"));
+    var sessions = S.timeline.filter(function (x) { return x.question === k; });
+    var dates = sessions.map(function (x) { return x.date; }).filter(function (x) { return x !== "pending"; }).sort();
+    h("div", { "class": "when" }, d, st[1] + " · " + dates[0] + " to " + dates[dates.length - 1]);
+    h("h3", {}, d, st[0]);
+    h("p", {}, d, st[2]);
+  });
+
+  // ---- timeline
+  var tl = document.getElementById("timeline");
+  var maxSpend = Math.max.apply(null, S.timeline.map(function (x) { return x.spend; }));
+  S.timeline.forEach(function (x) {
+    var li = h("li", {}, tl);
+    h("span", { "class": "date" }, li, x.date);
+    var mid = h("span", {}, li);
+    h("span", { "class": "name" }, mid, x.name + " ");
+    h("span", { "class": "q" }, mid, stageText[x.question][0]);
+    h("span", { "class": "what" }, mid, x.what);
+    var sp = h("span", { "class": "spend" }, li);
+    h("span", {}, sp, x.status === "pending" ? "in progress" : money(x.spend) + (x.runs ? " · " + x.runs + " runs" : ""));
+    var bar = h("span", { "class": "bar" }, sp);
+    bar.dataset.w = Math.max(1, 100 * x.spend / maxSpend).toFixed(1) + "%";
+    bar.style.width = bar.dataset.w;
+  });
+
+  // ---- setups
+  (function () {
+    var t = document.getElementById("atlas-table");
+    t.innerHTML = "<thead><tr><th>source</th><th class='num'>systems</th><th class='num'>items</th><th class='num'>shared</th></tr></thead>";
+    var tb = h("tbody", {}, t);
+    [["SWE-bench Verified", "swe"], ["MathArena", "ma"], ["LiveBench", "lb"], ["BBEH Phase 1 panel", "bbeh"]].forEach(function (r) {
+      var tr = h("tr", {}, tb); h("td", {}, tr, r[0]);
+      ["systems", "items"].forEach(function (k) { num(h("td", { "class": "num" }, tr), "atlas." + r[1] + "." + k); });
+      num(h("td", { "class": "num" }, tr), "p6." + r[1] + ".est");
+    });
+    var p = document.getElementById("price-table");
+    p.innerHTML = "<thead><tr><th>model</th><th class='num'>input</th><th class='num'>output</th><th class='num'>cache read</th></tr></thead>";
+    var pb = h("tbody", {}, p);
+    Object.keys(S.prices).forEach(function (m) {
+      var r = S.prices[m], tr = h("tr", {}, pb); h("td", {}, tr, m);
+      ["input", "output", "cache_read"].forEach(function (k) { h("td", { "class": "num" }, tr, r[k] === undefined ? "" : "$" + Number(r[k]).toFixed(2)); });
+    });
+    var tt = document.getElementById("testbed-table");
+    tt.innerHTML = "<thead><tr><th>preregistered test</th><th class='num'>power</th></tr></thead>";
+    var tbb = h("tbody", {}, tt);
+    [["T1 W4 loss survives voting on hard items", "t1"], ["T2 4 x W4 vote vs 1 x BF16", "t2"], ["T3 depth vs cost-matched width", "t3"],
+     ["T4 judge coupling to difficulty", "t4"], ["T5 compositional prediction (exploratory)", "t5"]].forEach(function (r) {
+      var tr = h("tr", {}, tbb); h("td", {}, tr, r[0]); num(h("td", { "class": "num" }, tr), "testbed.power." + r[1]);
+    });
+  })();
+
+  // ---- findings
+  (function () {
+    var all = S.findings.map(function (f) { return { id: f.id, status: f.status, finding: f.finding, number: f.number, source: f.source }; })
+      .concat(S.page_findings);
+    var order = ["confirmatory", "preregistered-descriptive", "exploratory", "post hoc", "method finding"];
+    function kind(st) { return order.filter(function (o) { return st.indexOf(o) >= 0; })[0] || "post hoc"; }  // the strongest status named
+    var statuses = ["all"].concat(order.filter(function (o) { return all.some(function (f) { return kind(f.status) === o; }); }));
+    var list = document.getElementById("finding-list"), bar = document.getElementById("finding-filters");
+    function render(which) {
+      list.innerHTML = "";
+      all.filter(function (f) { return which === "all" || kind(f.status) === which; }).forEach(function (f) {
+        var d = h("div", { "class": "finding" }, list);
+        h("div", { "class": "id" }, d, f.id);
+        var body = h("div", {}, d);
+        h("div", { "class": "t" }, body, f.finding);
+        h("div", { "class": "num" }, body, f.number);
+        var meta = h("div", { "class": "meta" }, body);
+        h("span", { "class": "chip", "data-s": kind(f.status) }, meta, f.status);
+        h("span", {}, meta, f.source);
+      });
+    }
+    statuses.forEach(function (st) {
+      var b = h("button", { type: "button", "aria-pressed": st === "all" ? "true" : "false" }, bar, st);
+      b.addEventListener("click", function () {
+        bar.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", "false"); });
+        b.setAttribute("aria-pressed", "true"); render(st);
+      });
+    });
+    render("all");
+  })();
+
+  // ---- chart helpers
+  function frame(id, height, margin) {
+    var host = document.getElementById(id); host.innerHTML = "";
+    var w = Math.max(280, host.clientWidth);
+    var svg = s("svg", { viewBox: "0 0 " + w + " " + height, role: "img" }, host);
+    return { svg: svg, w: w, h: height, m: margin, iw: w - margin.l - margin.r, ih: height - margin.t - margin.b };
+  }
+  function lin(d0, d1, r0, r1) { return function (v) { return r0 + (v - d0) / (d1 - d0) * (r1 - r0); }; }
+  function logs(d0, d1, r0, r1) { var a = Math.log(d0), b = Math.log(d1); return function (v) { return r0 + (Math.log(v) - a) / (b - a) * (r1 - r0); }; }
+  function ticksY(f, ys, fy, fmt) {
+    var g = s("g", { "class": "grid" }, f.svg);
+    ys.forEach(function (v) {
+      s("line", { x1: f.m.l, x2: f.w - f.m.r, y1: fy(v), y2: fy(v) }, g);
+      s("text", { x: f.m.l - 6, y: fy(v) + 4, "text-anchor": "end" }, f.svg, fmt(v));
+    });
+  }
+  function anim(el, props, ms, delay) {
+    if (reduce || !el.animate) return;
+    el.animate(props, { duration: ms, delay: delay || 0, easing: "cubic-bezier(.2,.7,.2,1)", fill: "backwards" });
+  }
+  function drawLine(path, ms, delay) {
+    if (reduce) return;
+    var len = path.getTotalLength();
+    path.style.strokeDasharray = len; path.style.strokeDashoffset = len;
+    path.getBoundingClientRect();
+    path.style.transition = "stroke-dashoffset " + ms + "ms ease-out " + (delay || 0) + "ms";
+    requestAnimationFrame(function () { path.style.strokeDashoffset = 0; });
+  }
+
+  var charts = {};
+  charts.tail = function (play) {
+    var rows = S.tail_heldout.slice().sort(function (a, b) { return a.members - b.members; });
+    var f = frame("c-tail", 280, { l: 44, r: 16, t: 12, b: 36 });
+    var xs = rows.map(function (r) { return r.members; });
+    var fx = logs(xs[0], xs[xs.length - 1], f.m.l, f.w - f.m.r), fy = lin(0.6, 1.0, f.h - f.m.b, f.m.t);
+    ticksY(f, [0.6, 0.7, 0.8, 0.9, 1.0], fy, function (v) { return fmtPct(v, 0) + "%"; });
+    xs.forEach(function (x) { s("text", { x: fx(x), y: f.h - f.m.b + 16, "text-anchor": "middle" }, f.svg, x); });
+    s("text", { x: f.m.l + f.iw / 2, y: f.h - 4, "text-anchor": "middle" }, f.svg, "systems in the set (log scale)");
+    [["independence", "--s3"], ["copula", "--s4"], ["model", "--s2"]].forEach(function (c, i) {
+      var d = rows.map(function (r, j) { return (j ? "L" : "M") + fx(r.members) + " " + fy(1 - r[c[0]]); }).join(" ");
+      var p = s("path", { d: d, fill: "none", stroke: "var(" + c[1] + ")", "stroke-width": 2 }, f.svg);
+      if (play) drawLine(p, 1100, i === 0 ? 300 : 0);
+    });
+    rows.forEach(function (r, j) {
+      var c = s("circle", { cx: fx(r.members), cy: fy(1 - r.observed), r: 5, fill: "var(--s1)", stroke: "var(--surface)", "stroke-width": 2 }, f.svg);
+      hover(c, r.members + " systems: observed " + fmtPct(1 - r.observed) + "%, factor model " + fmtPct(1 - r.model) + "%, copula " +
+        fmtPct(1 - r.copula) + "%, independence " + fmtPct(1 - r.independence) + "%");
+      if (play) anim(c, [{ opacity: 0, transform: "scale(0.3)" }, { opacity: 1, transform: "scale(1)" }], 400, 900 + 120 * j);
+      c.style.transformOrigin = fx(r.members) + "px " + fy(1 - r.observed) + "px";
+    });
+  };
+  charts.frontier = function (play) {
+    var pts = S.frontier.slice().sort(function (a, b) { return a.usd - b.usd; });
+    var f = frame("c-frontier", 280, { l: 40, r: 16, t: 12, b: 36 });
+    var fx = logs(0.02, 1.5, f.m.l, f.w - f.m.r), fy = lin(0, 0.85, f.h - f.m.b, f.m.t);
+    ticksY(f, [0, 0.2, 0.4, 0.6, 0.8], fy, function (v) { return fmtPct(v, 0) + "%"; });
+    [0.03, 0.1, 0.3, 1].forEach(function (x) { s("text", { x: fx(x), y: f.h - f.m.b + 16, "text-anchor": "middle" }, f.svg, "$" + x); });
+    s("text", { x: f.m.l + f.iw / 2, y: f.h - 4, "text-anchor": "middle" }, f.svg, "dollars per task (log scale)");
+    var front = pts.filter(function (p) { return p.frontier; });
+    var path = s("path", { d: front.map(function (p, j) { return (j ? "L" : "M") + fx(p.usd) + " " + fy(p.accuracy); }).join(" "),
+      fill: "none", stroke: "var(--s1)", "stroke-width": 2 }, f.svg);
+    pts.forEach(function (p, j) {
+      var c = s("circle", { cx: fx(p.usd), cy: fy(p.accuracy), r: p.frontier ? 5.5 : 4, fill: p.frontier ? "var(--s1)" : "var(--muted)",
+        "fill-opacity": p.frontier ? 1 : 0.55, stroke: "var(--surface)", "stroke-width": 1.5 }, f.svg);
+      hover(c, p.system + ": " + fmtPct(p.accuracy) + "% at " + money(p.usd) + " per task" + (p.frontier ? " (frontier)" : ""));
+      if (play) anim(c, [{ opacity: 0 }, { opacity: 1 }], 300, 40 * j);
+      if (p.frontier) {  // labels left of points in the right half, alternating above and below
+        var right = fx(p.usd) > f.m.l + 0.55 * f.iw, k = front.indexOf(p);
+        s("text", { x: fx(p.usd) + (right ? -8 : 8), y: fy(p.accuracy) + (k % 2 ? -10 : 16), "font-size": 10,
+          "text-anchor": right ? "end" : "start" }, f.svg, p.system.replace(/-high$/, " (high)"));
+      }
+    });
+    if (play) drawLine(path, 900, 40 * pts.length * 0.6);
+  };
+  function forest(id, rows, opts, play) {
+    var rowH = rows[0].dot !== undefined ? 26 : 22, f = frame(id, rows.length * rowH + 50, { l: opts.left, r: 16, t: 8, b: 32 });
+    var fx = lin(opts.min, opts.max, f.m.l, f.w - f.m.r);
+    s("line", { "class": "zero", x1: fx(0), x2: fx(0), y1: f.m.t, y2: f.h - f.m.b }, f.svg);
+    opts.ticks.forEach(function (t) { s("text", { x: fx(t), y: f.h - f.m.b + 16, "text-anchor": "middle" }, f.svg, t); });
+    s("text", { x: f.m.l + f.iw / 2, y: f.h - 2, "text-anchor": "middle" }, f.svg, opts.xlabel);
+    rows.forEach(function (r, i) {
+      var y = f.m.t + i * rowH + rowH / 2;
+      s("text", { x: f.m.l - 8, y: y + 4, "text-anchor": "end", "font-size": 10.5 }, f.svg, r.label);
+      var x0 = fx(0), x1 = fx(r.v);
+      var bar = s("rect", { x: Math.min(x0, x1), y: y - 6, width: Math.max(1, Math.abs(x1 - x0)), height: 12, rx: 2,
+        fill: r.color, "fill-opacity": 0.85 }, f.svg);
+      s("line", { x1: fx(r.lo), x2: fx(r.hi), y1: y, y2: y, stroke: "var(--ink2)", "stroke-width": 1.2 }, f.svg);
+      hover(bar, r.label + ": " + r.text);
+      if (play) { bar.style.transformOrigin = x0 + "px " + y + "px"; anim(bar, [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], 700, 50 * i); }
+      if (r.dot !== undefined) {  // a second quantity on the same axis (depth: the change in failure slope)
+        s("line", { x1: fx(r.dotlo), x2: fx(r.dothi), y1: y + 7, y2: y + 7, stroke: "var(--s2)", "stroke-width": 1 }, f.svg);
+        var c = s("circle", { cx: fx(r.dot), cy: y + 7, r: 3.5, fill: "var(--s2)", stroke: "var(--surface)", "stroke-width": 1.5 }, f.svg);
+        hover(c, r.label + ": failure slope change " + r.dot.toFixed(2) + " (" + r.dotlo.toFixed(2) + " to " + r.dothi.toFixed(2) + ")");
+        if (play) anim(c, [{ opacity: 0 }, { opacity: 1 }], 300, 700 + 40 * i);
+      }
+    });
+    return f;
+  }
+  function settings(lo, hi) {
+    var i = 0; while (i < lo.length && lo[i] === hi[i]) i++;
+    var a = lo.slice(i).replace(/^[-_]+/, "") || "default", b = hi.slice(i).replace(/^[-_]+/, "") || "default";
+    return a + " → " + b;
+  }
+  charts.depth = function (play) {
+    var narrow = document.getElementById("c-depth").clientWidth < 560;
+    var rows = S.depth_pairs.map(function (r) {
+      return { label: r.model + ": " + settings(r.low, r.high), v: r["delta a"], lo: r["delta a lo"], hi: r["delta a hi"], color: "var(--s1)",
+        text: "ability +" + r["delta a"].toFixed(2) + " (" + r["delta a lo"].toFixed(2) + " to " + r["delta a hi"].toFixed(2) + "), accuracy " +
+          fmtPct(r["acc low"]) + "% → " + fmtPct(r["acc high"]) + "% on " + r.items + " items",
+        dot: r["delta beta"], dotlo: r["delta beta lo"], dothi: r["delta beta hi"] };
+    });
+    forest("c-depth", rows, { left: narrow ? 150 : 250, min: -3.5, max: 6.5, ticks: [-2, 0, 2, 4, 6],
+      xlabel: "change per pair: ability (blue bars) and failure slope (orange dots), logit scale" }, play);
+  };
+  charts.dw = function (play) {
+    var narrow = document.getElementById("c-dw").clientWidth < 560;
+    var rows = S.ah2.map(function (r) {
+      return { label: "anchor AH2: " + r.vendor + " (k = " + r.k + ")", v: r.difference, lo: r.lo, hi: r.hi, color: "var(--s2)",
+        text: "+" + fmtPct(r.difference) + " points (" + fmtPct(r.lo) + " to " + fmtPct(r.hi) + "), confirmatory" };
+    }).concat(S.depth_vs_width.map(function (r) {
+      return { label: r.model + ": " + settings(r.low, r.high), v: r.difference, lo: r["difference lo"], hi: r["difference hi"], color: "var(--s1)",
+        text: fmtPct(r.difference) + " points (" + fmtPct(r["difference lo"]) + " to " + fmtPct(r["difference hi"]) + "); deep " +
+          fmtPct(r["deep acc"]) + "% vs vote " + fmtPct(r["wide acc"]) + "% at " + r["deep / wide dollars"].toFixed(2) + "x the dollars, post hoc" };
+    }));
+    rows.forEach(function (r) { r.v *= 100; r.lo *= 100; r.hi *= 100; });
+    forest("c-dw", rows, { left: narrow ? 150 : 250, min: -10, max: 45, ticks: [0, 10, 20, 30, 40],
+      xlabel: "points: one deeper call minus the nearest-dollar vote" }, play);
+  };
+  charts.judge = function (play) {
+    var j = S.judges.filter(function (r) { return r.judge === "sol_low_judge" && r.items === "bbeh"; })[0];
+    var sol = S.width_table.filter(function (r) { return r.items === "bbeh" && r.arm === "sol_low" && r.k === 1; })[0];
+    var rows = [["best cheap pool arm", j.best_single, "var(--s1)"], ["Sol judge over the pools", j.judge_accuracy, "var(--s1)"],
+      ["coverage of the pools", j.coverage, "var(--muted)"], ["Sol answering alone", sol.accuracy, "var(--s2)"]];
+    var narrow = document.getElementById("c-judge").clientWidth < 420;
+    var f = frame("c-judge", rows.length * 34 + 40, { l: narrow ? 130 : 170, r: 50, t: 6, b: 30 });
+    var fx = lin(0, 0.8, f.m.l, f.w - f.m.r);
+    [0, 0.2, 0.4, 0.6, 0.8].forEach(function (t) { s("text", { x: fx(t), y: f.h - f.m.b + 16, "text-anchor": "middle" }, f.svg, fmtPct(t, 0) + "%"); });
+    rows.forEach(function (r, i) {
+      var y = f.m.t + i * 34 + 17;
+      s("text", { x: f.m.l - 8, y: y + 4, "text-anchor": "end" }, f.svg, r[0]);
+      var b = s("rect", { x: fx(0), y: y - 9, width: fx(r[1]) - fx(0), height: 18, rx: 2, fill: r[2] }, f.svg);
+      s("text", { x: fx(r[1]) + 6, y: y + 4 }, f.svg, fmtPct(r[1]) + "%");
+      hover(b, r[0] + ": " + fmtPct(r[1]) + "%");
+      if (play) { b.style.transformOrigin = fx(0) + "px " + y + "px"; anim(b, [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], 700, 120 * i); }
+    });
+  };
+  charts.map = function (play) {
+    var g = S.label_free_map, cols = [[0.5, 1], [0.5, 3], [2.0, 1], [2.0, 3]], rowsO = [0.7, 0.5, 0.3];
+    var pols = [["plurality gain", "plurality"], ["Dawid-Skene gain", "Dawid-Skene"], ["pooled Dawid-Skene, fixed labels gain", "fixed labels"]];
+    var host = document.getElementById("c-map"), w = Math.max(280, host.clientWidth);
+    var narrow = w < 520, panelW = narrow ? w - 70 : (w - 70) / 3, cell = panelW / 4, ch = 30;
+    var height = narrow ? 3 * (ch * 3 + 44) + 10 : ch * 3 + 60;
+    var f = frame("c-map", height, { l: 0, r: 0, t: 0, b: 0 });
+    var neg = css("--neg"), pos = css("--s1"), mid = css("--mid");
+    function mix(a, b, t) {
+      var pa = [1, 3, 5].map(function (i) { return parseInt(a.slice(i, i + 2), 16); }), pb = [1, 3, 5].map(function (i) { return parseInt(b.slice(i, i + 2), 16); });
+      return "rgb(" + pa.map(function (v, i) { return Math.round(v + (pb[i] - v) * t); }).join(",") + ")";
+    }
+    pols.forEach(function (p, k) {
+      var ox = narrow ? 64 : 64 + k * panelW, oy = narrow ? k * (ch * 3 + 44) : 0;
+      s("text", { x: ox + 2 * cell, y: oy + 14, "text-anchor": "middle", "font-weight": 600 }, f.svg, p[1]);
+      rowsO.forEach(function (o, i) {
+        if (k === 0 || narrow) s("text", { x: ox - 6, y: oy + 22 + i * ch + ch / 2 + 4, "text-anchor": "end" }, f.svg, "others " + o);
+        cols.forEach(function (c, j) {
+          var r = g.filter(function (x) { return x.others === o && x.sd_b === c[0] && x.repeats === c[1]; })[0];
+          var v = r[p[0]], t = Math.min(1, Math.abs(v) / 0.6);
+          var rect = s("rect", { x: ox + j * cell + 1, y: oy + 22 + i * ch + 1, width: cell - 2, height: ch - 2, rx: 2,
+            fill: v >= 0 ? mix(mid, pos, t) : mix(mid, neg, t) }, f.svg);
+          s("text", { x: ox + j * cell + cell / 2, y: oy + 22 + i * ch + ch / 2 + 4, "text-anchor": "middle",
+            fill: t > 0.6 ? "#ffffff" : "var(--ink)" }, f.svg, (v >= 0 ? "+" : "") + (100 * v).toFixed(0));
+          hover(rect, p[1] + ", others at " + o + ", " + (c[0] === 0.5 ? "low" : "high") + " shared difficulty, " + c[1] +
+            " call(s): " + (v >= 0 ? "+" : "") + (100 * v).toFixed(1) + " points over the best system");
+          if (play) anim(rect, [{ opacity: 0 }, { opacity: 1 }], 350, 60 * (i * 4 + j) + 150 * k);
+        });
+      });
+      cols.forEach(function (c, j) {
+        s("text", { x: ox + j * cell + cell / 2, y: oy + 22 + 3 * ch + 14, "text-anchor": "middle", "font-size": 9.5 }, f.svg,
+          (c[0] === 0.5 ? "low" : "high") + "/" + c[1]);
+      });
+    });
+  };
+
+  // draw everything at rest, then replay each chart's animation the first time it scrolls into view
+  function drawAll(play) { Object.keys(charts).forEach(function (k) { charts[k](play); }); }
+  drawAll(false);
+  var seen = {};
+  if (!reduce && "IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var k = e.target.id.replace("c-", "");
+        if (e.isIntersecting && !seen[k]) { seen[k] = true; charts[k](true); }
+      });
+    }, { threshold: 0.35 });
+    Object.keys(charts).forEach(function (k) { io.observe(document.getElementById("c-" + k)); });
+    var tlio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        tlio.disconnect();
+        var items = tl.querySelectorAll("li");
+        items.forEach(function (li, i) {
+          var bar = li.querySelector(".bar");
+          bar.style.width = "0";
+          setTimeout(function () { li.classList.add("lit"); bar.style.width = bar.dataset.w; }, 90 * i);
+          setTimeout(function () { li.classList.remove("lit"); }, 90 * i + 600);
+        });
+      });
+    }, { threshold: 0.2 });
+    tlio.observe(tl);
+  }
+  document.querySelectorAll(".replay").forEach(function (b) {
+    b.addEventListener("click", function () { charts[b.dataset.chart](true); });
+  });
+  var resizeTimer;
+  window.addEventListener("resize", function () { clearTimeout(resizeTimer); resizeTimer = setTimeout(function () { drawAll(false); }, 150); });
+
+  // ---- follow one item
+  (function () {
+    var it = S.one_item;
+    var right = it.calls.filter(function (c) { return c.correct > 0; }).length;
+    document.getElementById("item-intro").textContent = "Item " + it.item + " (" + it.task + "). Picked by a fixed rule: the " +
+      "first item, by id, where the cheap pools disagree, their vote is wrong, the judge is wrong and Sol answering alone is " +
+      "right. It shows how a judge is capped by what its pool offers. Grades are the runs' own; the read regraded against " +
+      "gold, and the rates on this page are the read's.";
+    var steps = document.getElementById("walk-steps");
+    function step(title, fill) { var d = h("div", { "class": "step" }, steps); h("div", { "class": "k" }, d, title); fill(d); return d; }
+    var poolUsd = it.calls.reduce(function (a, c) { return a + c.usd; }, 0);
+    var st = [
+      step("1 · Six cheap calls", function (d) {
+        it.calls.forEach(function (c) {
+          var r = h("div", { "class": "call" }, d);
+          h("span", {}, r, c.arm + " " + (c.call + 1)); h("span", { "class": "a" }, r, c.answer);
+          h("span", { "class": c.correct > 0 ? "ok" : "no" }, r, c.correct > 0 ? "✓" : "✗");
+        });
+        h("div", { "class": "note" }, d, right + " of 6 right · " + money(poolUsd) + " for the six calls");
+      }),
+      step("2 · Vote and consensus exit", function (d) {
+        h("div", { "class": "verdict" }, d, it.agree + " of 6 agree");
+        h("div", { "class": "note" }, d, "The exit rule answers by vote only when at least " + it.exit_rule + " of 6 calls agree. Here they do not, so the item escalates to the judge. The plurality answer would have been wrong.");
+      }),
+      step("3 · The judge picks", function (d) {
+        h("div", { "class": "verdict" }, d, "Sol low judge: " + it.judge.answer);
+        h("div", { "class": it.judge.correct > 0 ? "ok" : "no" }, d, it.judge.correct > 0 ? "✓ right" : "✗ wrong: no pool answer was right to pick");
+        h("div", { "class": "note" }, d, money(it.judge.usd) + " for the judge call · " + money(poolUsd + it.judge.usd) + " in all");
+      }),
+      step("4 · The judge model answering alone", function (d) {
+        h("div", { "class": "verdict" }, d, "Sol low, one call: " + it.sol.answer);
+        h("div", { "class": it.sol.correct > 0 ? "ok" : "no" }, d, it.sol.correct > 0 ? "✓ right" : "✗ wrong");
+        h("div", { "class": "note" }, d, money(it.sol.usd) + " for one call. Across the anchor's BBEH items the judge scored " + nm("judge.sol.bbeh.acc") +
+          "% and Sol alone " + nm("anchor.sol.bbeh") + "% (the read).");
+      })
+    ];
+    var at = st.length, timer = null;
+    function show(k) { at = k; st.forEach(function (d, i) { d.classList.toggle("off", i >= k); }); }
+    document.getElementById("walk-next").addEventListener("click", function () { clearInterval(timer); show(at >= st.length ? 1 : at + 1); });
+    document.getElementById("walk-reset").addEventListener("click", function () { clearInterval(timer); show(st.length); });
+    document.getElementById("walk-play").addEventListener("click", function () {
+      clearInterval(timer);
+      if (reduce) { show(st.length); return; }
+      show(1);
+      timer = setInterval(function () { if (at >= st.length) { clearInterval(timer); return; } show(at + 1); }, 1400);
+    });
+  })();
+
+  // ---- ledger
+  (function () {
+    var sel = document.getElementById("ledger-session"), t = document.getElementById("ledger-table");
+    var sessions = ["all sessions"].concat(S.runs.map(function (r) { return r.session; }).filter(function (v, i, a) { return a.indexOf(v) === i; }));
+    sessions.forEach(function (x) { h("option", { value: x }, sel, x); });
+    function render() {
+      var which = sel.value, rows = S.runs.filter(function (r) { return which === "all sessions" || r.session === which; });
+      t.innerHTML = "<thead><tr><th>run</th><th>session</th><th>date</th><th>outcome</th><th class='num'>spend</th><th>audits</th></tr></thead>";
+      var tb = h("tbody", {}, t), total = 0;
+      rows.forEach(function (r) {
+        total += r.spend;
+        var tr = h("tr", {}, tb);
+        h("td", {}, tr, r.run); h("td", {}, tr, r.session); h("td", {}, tr, r.date);
+        var o = h("td", {}, tr, r.state + (r.reason ? ": " + r.reason.slice(0, 70) + (r.reason.length > 70 ? "..." : "") : ""));
+        if (r.reason) o.title = r.reason;
+        h("td", { "class": "num" }, tr, money(r.spend)); h("td", {}, tr, r.audits || "");
+      });
+      var tr = h("tr", {}, tb); h("td", {}, tr, "total"); h("td", {}, tr, rows.length + " runs"); h("td", {}, tr, ""); h("td", {}, tr, "");
+      h("td", { "class": "num" }, tr, money(total)); h("td", {}, tr, "");
+    }
+    sel.addEventListener("change", render);
+    render();
+  })();
+
+  // ---- roadmap (research/v4/roadmap.md, rendered: headings, bold, bullets)
+  (function () {
+    var host = document.getElementById("roadmap"), lines = S.roadmap.split("\n"), stack = [];
+    function inline(text, el) {
+      text.split(/(\*\*[^*]+\*\*)/).forEach(function (part) {
+        if (/^\*\*.*\*\*$/.test(part)) h("b", {}, el, part.slice(2, -2)); else el.appendChild(document.createTextNode(part.replace(/`/g, "")));
+      });
+    }
+    function closeTo(depth) { while (stack.length > depth) stack.pop(); }
+    var para = null;
+    lines.forEach(function (line) {
+      if (/^# /.test(line)) return;
+      var m;
+      if ((m = /^## (.*)/.exec(line))) { closeTo(0); para = null; h("h3", {}, host, m[1]); return; }
+      if ((m = /^(\s*)(-|\d+\.) (.*)/.exec(line))) {
+        var depth = Math.floor(m[1].length / 2) + 1, tag = m[2] === "-" ? "ul" : "ol";
+        closeTo(depth);
+        if (stack.length < depth) { var parent = stack.length ? stack[stack.length - 1].lastChild : host; stack.push(h(tag, {}, parent)); }
+        var li = h("li", {}, stack[stack.length - 1]); inline(m[3], li); para = null; return;
+      }
+      if (/^\s*$/.test(line)) { closeTo(0); para = null; return; }
+      if (stack.length && /^\s+\S/.test(line)) { var last = stack[stack.length - 1].lastChild; inline(" " + line.trim(), last); return; }
+      if (!para) { closeTo(0); para = h("p", {}, host); } else { para.appendChild(document.createTextNode(" ")); }
+      inline(line.trim(), para);
+    });
+  })();
+})();
+</script>

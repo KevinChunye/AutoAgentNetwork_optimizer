@@ -1,0 +1,25 @@
+model,structure,measure,with_item,without_item,effect,lo,hi,n_with,n_without
+haiku_nothink,S1,stake,0.06753,0.06534,0.00219,-0.01446,0.019,102,98
+haiku_nothink,S1,confidence,0.68779,0.65282,0.03497,-0.04063,0.11042,82,84
+haiku_nothink,S1,p_pull,0.00223,-0.00336,0.0056,0.00038,0.01346,102,97
+haiku_nothink,S1,stake_pull,0.0139,0.00034,0.01357,-0.01161,0.03916,102,98
+haiku_nothink,S1,"stake, item agrees with the Kelly side",0.07195,0.07314,-0.00119,-0.0249,0.02163,58,44
+haiku_nothink,S1,"stake, item opposes the Kelly side",0.0617,0.05898,0.00272,-0.02061,0.02556,44,54
+haiku_nothink,S2,stake,0.04725,0.05262,-0.00537,-0.01768,0.00675,102,98
+haiku_nothink,S2,confidence,0.68779,0.65282,0.03497,-0.04063,0.11042,82,84
+haiku_nothink,S2,p_pull,0.00223,-0.00336,0.0056,0.00038,0.01346,102,97
+haiku_nothink,S2,stake_pull,0.01363,0.00191,0.01172,-0.00674,0.02939,102,98
+haiku_nothink,S2,"stake, item agrees with the Kelly side",0.05362,0.06073,-0.00711,-0.02425,0.00914,58,44
+haiku_nothink,S2,"stake, item opposes the Kelly side",0.03886,0.04602,-0.00715,-0.02374,0.00914,44,54
+haiku_nothink,S3,stake,0.11294,0.09642,0.01652,-0.006,0.03906,102,98
+haiku_nothink,S3,confidence,0.64207,0.63694,0.00513,-0.06871,0.08138,99,95
+haiku_nothink,S3,p_pull,0.00223,-0.00336,0.0056,0.00038,0.01346,102,97
+haiku_nothink,S3,stake_pull,0.02018,-0.01207,0.03225,-0.00473,0.07026,102,98
+haiku_nothink,S3,"stake, item agrees with the Kelly side",0.11675,0.09394,0.02281,-0.00621,0.0525,58,44
+haiku_nothink,S3,"stake, item opposes the Kelly side",0.10791,0.09844,0.00947,-0.02756,0.04663,44,54
+haiku_nothink,S4,stake,0.09531,0.08566,0.00965,-0.00991,0.03038,102,98
+haiku_nothink,S4,confidence,0.62483,0.62741,-0.00257,-0.07619,0.07456,102,98
+haiku_nothink,S4,p_pull,-0.00056,-0.00087,0.0003,-0.00327,0.00398,102,98
+haiku_nothink,S4,stake_pull,0.01662,-0.01135,0.02797,-0.00353,0.05966,102,98
+haiku_nothink,S4,"stake, item agrees with the Kelly side",0.09818,0.08274,0.01543,-0.00926,0.03941,58,44
+haiku_nothink,S4,"stake, item opposes the Kelly side",0.09154,0.08804,0.0035,-0.02994,0.03465,44,54

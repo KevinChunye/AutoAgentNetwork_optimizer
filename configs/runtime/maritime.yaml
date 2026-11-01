@@ -1,0 +1,12 @@
+# Used when an experiment sets `runtime: maritime`.
+# scripts/deploy_maritime.py prints the agent_map or pool block to paste here.
+base_url: https://api.maritime.sh
+api_key_env: MARITIME_API_KEY
+
+# One Maritime agent per network agent:
+agent_map: {}
+#   propose.0: <maritime agent id>
+
+# Or a few generic workers that can play any agent:
+pool: []
+#   - <maritime agent id>

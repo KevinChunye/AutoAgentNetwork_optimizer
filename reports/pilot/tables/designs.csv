@@ -1,0 +1,14 @@
+design,calls,source,status,items,n,error,error_lo,error_hi,cost_usd,vs_dense_points,vs_dense_lo,vs_dense_hi,role,meets_rule_24
+single Haiku,1,"p4_<cand>_single_held, live",run,held-out,40.0,0.425,0.275,0.575,0.00077,-2.5,-17.5,12.5625,descriptive,True
+single Sonnet (senior control),1 Sonnet,"p3_<cand>_single_sonnet, live, P3 items 20-59",run,P3 items 20-59,40.0,0.3,0.175,0.45,0.01402,5.0,-15.0,25.0,trigger: senior (rule 18),
+dense 6-6-6-1,19,P4 grid,offline,held-out (k6-6-6-1),40.0,0.4,0.25,0.55,0.01184,0.0,0.0,0.0,descriptive,False
+vote6,6,"offline: consensus m=6, theta=0",offline,held-out (exit rate 100%),40.0,0.475,0.325,0.625,0.00413,-7.5,-22.5,7.5,descriptive,False
+gated_3x6,6 or 19,"offline: consensus m=6, theta=5/6, else dense",offline,held-out (exit rate 32%),40.0,0.375,0.225,0.525,0.00971,2.5,0.0,7.5,descriptive,False
+best consensus policy,varies,"offline, chosen on the search half: m=3, theta=0.83, else k6-6-6-1",offline,held-out (exit rate 32%),40.0,0.425,0.275,0.575,0.00905,-2.5,-10.0,5.0,trigger: H5,False
+equimarginal endpoint,varies,"offline, path built on the search half",offline,held-out (k3-3-1-1),40.0,0.45,0.3,0.6,0.00539,-5.0,-17.5,7.5,descriptive,False
+joint pick (exhaustive),varies,"offline, chosen on the search half",offline,held-out (k3-3-1-1),40.0,0.45,0.3,0.6,0.00539,-5.0,-17.5,7.5,trigger: static pruning,False
+stage-by-stage pick,varies,"offline, chosen on the search half",offline,held-out (k6-6-1-1),40.0,0.45,0.3,0.6,0.00952,-5.0,-15.0,5.0,descriptive,False
+judge_cascade,6 or 7 (+ Sonnet),"p4b_<cand>_judge_cascade, live; not run in the pilot: its fixed routing (13 exit, 21 Haiku aggregator, 6 Sonnet of 40) puts its cost floor at 55% of dense, over rule 24's 50% (audit 25)",not run,,,,,,,,,,descriptive,
+"single Sonnet, held-out",1 Sonnet,"p4_<cand>_single_sonnet_held, live",run,held-out,40.0,0.275,0.15,0.425,0.01472,12.5,-5.0,30.0,descriptive,False
+vote or Sonnet,6 (+ 1 Sonnet),"offline, theta=0.83 chosen on the search half",offline,held-out (vote settles 32%),40.0,0.3,0.175,0.45,0.01499,10.0,-7.5,27.5,descriptive,False
+mixed_vote6,6 (3 Haiku + 3 Luna),not in the pilot (post-pilot option),not run,,,,,,,,,,descriptive,

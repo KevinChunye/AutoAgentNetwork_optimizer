@@ -1,0 +1,167 @@
+{
+ "rule": "analysis/pruning_cascade.py (docstring; deviations 29-31), research/v3/pruning/selection_rule.md",
+ "forecast": {
+  "policy": {
+   "first round": "haiku x2 + luna x2",
+   "units": [
+    "haiku_nothink:base:0",
+    "haiku_nothink:base:1",
+    "luna_none:base:0",
+    "luna_none:base:1"
+   ],
+   "escalation": "sol61_low:base:0",
+   "s": 6.0,
+   "reference": "sol61_low:base:0"
+  },
+  "table": [
+   {
+    "first round": "haiku x3",
+    "escalation": "sonnet",
+    "brier": 0.13198013651466223,
+    "dollars": 0.0027449007333332776,
+    "escalated": 0.5,
+    "reference brier": 0.12497066666666665,
+    "reference dollars": 0.0022253999999999998,
+    "sonnet brier": 0.12545783333333332,
+    "s fold 0": -1.0,
+    "s fold 1": 1.5
+   },
+   {
+    "first round": "haiku x3",
+    "escalation": "sol",
+    "brier": 0.13555760335473044,
+    "dollars": 0.0007020073999999443,
+    "escalated": 0.056666666666666664,
+    "reference brier": 0.12497066666666665,
+    "reference dollars": 0.0022253999999999998,
+    "sonnet brier": 0.12545783333333332,
+    "s fold 0": 0.5,
+    "s fold 1": 1.5
+   },
+   {
+    "first round": "haiku x5",
+    "escalation": "sonnet",
+    "brier": 0.13161740186908052,
+    "dollars": 0.0030864342833332547,
+    "escalated": 0.5,
+    "reference brier": 0.12497066666666665,
+    "reference dollars": 0.0022253999999999998,
+    "sonnet brier": 0.12545783333333332,
+    "s fold 0": -1.0,
+    "s fold 1": 4.0
+   },
+   {
+    "first round": "haiku x5",
+    "escalation": "sol",
+    "brier": 0.13331244855514277,
+    "dollars": 0.0011172276166665884,
+    "escalated": 0.09,
+    "reference brier": 0.12497066666666665,
+    "reference dollars": 0.0022253999999999998,
+    "sonnet brier": 0.12545783333333332,
+    "s fold 0": 0.5,
+    "s fold 1": 4.0
+   },
+   {
+    "first round": "luna x3",
+    "escalation": "sonnet",
+    "brier": 0.13502317487580798,
+    "dollars": 0.001082339799999998,
+    "escalated": 0.18333333333333332,
+    "reference brier": 0.12497066666666665,
+    "reference dollars": 0.0022253999999999998,
+    "sonnet brier": 0.12545783333333332,
+    "s fold 0": 6.0,
+    "s fold 1": 0.5
+   },
+   {
+    "first round": "luna x3",
+    "escalation": "sol",
+    "brier": 0.13467559154247463,
+    "dollars": 0.0006645247999999981,
+    "escalated": 0.18333333333333332,
+    "reference brier": 0.12497066666666665,
+    "reference dollars": 0.0022253999999999998,
+    "sonnet brier": 0.12545783333333332,
+    "s fold 0": 6.0,
+    "s fold 1": 0.5
+   },
+   {
+    "first round": "luna x5",
+    "escalation": "sonnet",
+    "brier": 0.13407896417912904,
+    "dollars": 0.0006258712666666631,
+    "escalated": 0.056666666666666664,
+    "reference brier": 0.12497066666666665,
+    "reference dollars": 0.0022253999999999998,
+    "sonnet brier": 0.12545783333333332,
+    "s fold 0": 6.0,
+    "s fold 1": 1.5
+   },
+   {
+    "first round": "luna x5",
+    "escalation": "sol",
+    "brier": 0.13290829751246236,
+    "dollars": 0.0005264695999999963,
+    "escalated": 0.056666666666666664,
+    "reference brier": 0.12497066666666665,
+    "reference dollars": 0.0022253999999999998,
+    "sonnet brier": 0.12545783333333332,
+    "s fold 0": 6.0,
+    "s fold 1": 1.5
+   },
+   {
+    "first round": "haiku x3 + luna x3",
+    "escalation": "sonnet",
+    "brier": 0.12785611745085496,
+    "dollars": 0.0014115955333332756,
+    "escalated": 0.12666666666666668,
+    "reference brier": 0.12497066666666665,
+    "reference dollars": 0.0022253999999999998,
+    "sonnet brier": 0.12545783333333332,
+    "s fold 0": 1.0,
+    "s fold 1": 6.0
+   },
+   {
+    "first round": "haiku x3 + luna x3",
+    "escalation": "sol",
+    "brier": 0.12902437066496128,
+    "dollars": 0.0009480855333332756,
+    "escalated": 0.06,
+    "reference brier": 0.12497066666666665,
+    "reference dollars": 0.0022253999999999998,
+    "sonnet brier": 0.12545783333333332,
+    "s fold 0": 2.0,
+    "s fold 1": 6.0
+   },
+   {
+    "first round": "haiku x2 + luna x2",
+    "escalation": "sonnet",
+    "brier": 0.1281883849293557,
+    "dollars": 0.0006116438499999564,
+    "escalated": 0.02,
+    "reference brier": 0.12497066666666665,
+    "reference dollars": 0.0022253999999999998,
+    "sonnet brier": 0.12545783333333332,
+    "s fold 0": 6.0,
+    "s fold 1": 6.0
+   },
+   {
+    "first round": "haiku x2 + luna x2",
+    "escalation": "sol",
+    "brier": 0.12818871826268902,
+    "dollars": 0.0005891971833332897,
+    "escalated": 0.02,
+    "reference brier": 0.12497066666666665,
+    "reference dollars": 0.0022253999999999998,
+    "sonnet brier": 0.12545783333333332,
+    "s fold 0": 6.0,
+    "s fold 1": 6.0
+   }
+  ]
+ },
+ "inputs": {
+  "e14_forecast_anth": "ed02956230b5608c44fa98b7f30c7f1a3b77a40bf79c0f03b634d12782632773",
+  "e14_forecast_open": "6de6951a0f8a8f331b610ba94bc6874b5671da2f6b1da25a3822e42723fa95dd"
+ }
+}

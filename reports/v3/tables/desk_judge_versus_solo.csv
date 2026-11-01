@@ -1,0 +1,5 @@
+model,structure,events,size_err_ratio,gap_closed,ratio_lo,ratio_hi,log_growth_diff,diff_lo,diff_hi
+haiku_nothink,S1,1000,1.0,0.0,1.0,1.0,0.0,0.0,0.0
+haiku_nothink,S2,1000,1.05639,-0.17919,1.03924,1.07279,-0.0016,-0.00359,0.0004
+haiku_nothink,S3,1000,0.73265,0.84951,0.71851,0.74599,0.00344,0.0014,0.00549
+haiku_nothink,S4,200,0.84176,0.49465,0.80121,0.88183,0.00551,0.00163,0.00953

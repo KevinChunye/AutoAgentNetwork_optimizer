@@ -1,0 +1,67 @@
+# Session M1 optional timing probe (research/v4/measurement.md). Written by hand; one prereg for the six configs.
+kind: panel
+name: m1_probe_anth_c4
+task_kind: bbeh
+tasks: data/external/bbeh_all.jsonl
+items: research/v4/measurement/probe_items.txt
+sources:
+- ref: haiku_nothink
+  calls: 2
+  first_call: 12
+  max_tokens: 2048
+- ref: haiku_low
+  calls: 2
+  first_call: 12
+  max_tokens: 4096
+- ref: haiku_high
+  calls: 2
+  first_call: 12
+  max_tokens: 4096
+- ref: sonnet_nothink
+  calls: 2
+  first_call: 12
+  max_tokens: 2048
+- ref: sonnet_high
+  calls: 2
+  first_call: 12
+  max_tokens: 4096
+  items: research/v4/measurement/probe_items_5.txt
+- ref: opus_med
+  calls: 2
+  first_call: 12
+  max_tokens: 4096
+  items: research/v4/measurement/probe_items_5.txt
+timing: true
+max_usd: 2.5
+chunk_size: 10
+max_concurrency: 4
+expect:
+  min_calls: 20
+  max_unparsed_rate: null
+  max_truncation_rate: null
+  usd_per_call:
+    haiku_nothink: 0.0005
+    haiku_low: 0.0015
+    haiku_high: 0.003
+    sonnet_nothink: 0.008
+    sonnet_high: 0.04
+    opus_med: 0.02
+  max_cost_ratio: 2.0
+prereg:
+  question: 'Session M1 optional timing probe: a measurement, not a test (no accuracy is read). How long do the API arms take
+    to the first token, to the first answer token, and how fast do they decode, measured by streaming (timing: true), against
+    the backfill''s estimates from totals (research/v4/measurement/backfill.md)? 10 unsealed BBEH items (the anchor''s second
+    scan items, research/v4/measurement/probe_items.txt), 2 fresh calls per arm (Sonnet high and Opus medium on the first
+    5 items, by cost; ceilings 2,048 without thinking and 4,096 with it, so a few thinking calls may be cut: a cut call still
+    gives TTFT and decode speed) (call indices 10-13, never cached) at concurrency 1 and at 4; first, one 1-token call per
+    endpoint (3 items) to time the network path alone.'
+  prediction: Measured decode speed within 25% of the backfill's estimate for every arm (Haiku about 220-240 tokens/s, Sonnet
+    120-140, Opus about 105, Luna 90-115); Sol low and medium about 33 tokens/s if the backfill's slow rate is real, or several
+    times higher if it reflected hidden reasoning before the first chunk. Network-path time (1-token calls) 0.3-1.5 s. TTFT
+    p50 within 1 s of the backfill's overhead for arms without thinking. Concurrency 4 adds under 20% to TTFT.
+  kill: Stop if any arm's measured cost per call is above 2x its guard, if a stream fails (StreamCut) on 2 calls, or if the
+    governor projects a vendor past its cap; never more than $3 in all.
+  decision: Measured TTFT, TTFAT and decode speed replace the estimated columns of the latency card (research/v4/measurement/latency_card.md)
+    for these arms, the measured-minus-estimated gap is reported, and the configuration map's TTFAT budgets use measured TTFAT
+    where it differs from the estimate by more than 25%. If Sol's measured decode speed is several times the estimate, the
+    backfill's Sol rows are relabelled (reasoning time, not decode speed).

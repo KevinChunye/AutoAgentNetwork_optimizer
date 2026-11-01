@@ -1,0 +1,12 @@
+name: single_sonnet
+description: >
+  One Sonnet 5.5 call per task: the "one senior" baseline. At list price it costs about half the 19-call Haiku network per task.
+default_model: sonnet_nothink
+default_max_tokens: 3200
+stages:
+  - name: solve
+    width: 1
+    system: |
+      Solve the problem. Be concise. End with a final line of the form "ANSWER: <answer>".
+    instruction: |
+      Solve the task above.

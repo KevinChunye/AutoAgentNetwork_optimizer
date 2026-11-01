@@ -1,0 +1,30 @@
+# Market town m2_haiku: prereg copied from research/market/plan.md by scripts/make_market_configs.py; edit the plan and the script, not this file.
+kind: market
+trader: llm
+rounds: 8
+max_tokens: 200
+temperature: 1.0
+name: m2_haiku
+condition: haiku
+prereg:
+  question: How efficient and how convergent is an all-Haiku market over 5 periods (4 sessions, seeds 11-14), against ZI-C
+    on the same protocol (90.4%) and against Struski et al.'s GPT Small (0.79-0.91 by round)?
+  prediction: Mean session efficiency 75-95%; period-5 mean trade price within $0.15 of P* (1.85-2.15), averaged over sessions;
+    Smith's alpha lower in period 5 than in period 1, averaged over sessions.
+  kill: 'A session''s actual spend over 1.5x its re-projection after M1 (section 5), or a session with zero trades in every
+    period: stop and audit. The run also stops itself after 3 periods in a row without a trade, or at over 10% unparsed or
+    over 5% truncated replies (checked after every round). If the market''s actual spend so far plus this run''s re-projection
+    passes $8, the run does not start.'
+  decision: 'Mean efficiency at least 85.4% (ZI-C - 5): LLM markets are sane; propose a firm-vs-market follow-up to Kevin.
+    Below 80.4% (ZI-C - 10): headline ''LLM traders are worse than budget-constrained random traders'', diagnose (no trades
+    vs extramarginal trades vs anchoring) from turns.csv. In between: report as near ZI-C, no proposal. M2''s sessions also
+    give the 6 placebo gaps for M4. M4 and then M3 run in every case unless a kill or the $8 stop fires (M3 is dropped first).'
+seeds: [11, 12, 13, 14]
+periods: 5
+model: haiku_nothink
+max_usd: 0.25
+expect:
+  min_turns: 40
+  max_unparsed_rate: 0.1
+  max_truncation_rate: 0.05
+  stop_after_zero_trade_periods: 3

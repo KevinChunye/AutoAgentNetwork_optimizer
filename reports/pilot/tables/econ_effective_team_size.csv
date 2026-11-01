@@ -1,0 +1,5 @@
+stage,agents,accuracy,error_correlation,effective_team_size
+propose,6,0.446,0.432,1.9
+critique,6,0.575,0.82,1.177
+refine,6,0.602,0.886,1.105
+aggregate,1,0.625,,

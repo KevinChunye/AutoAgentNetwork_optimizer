@@ -1,0 +1,13 @@
+design,account,tasks,calls_per_task,worst_x_safety_per_task_usd,picks,option,worst_x_safety_usd
+b_dense_600,anthropic,600,19.0,0.08338,,B,50.03
+b_single_600,anthropic,600,1.0,0.00186,,B,1.12
+b_sonnet_600,anthropic,600,1.0,0.03719,,B,22.32
+b_cascade_600,anthropic,600,7.0,0.1222,,B,73.32
+c_grid_200,anthropic,200,105.0,0.39857,,C,79.71
+c_single_200,anthropic,200,1.0,0.00186,,C,0.37
+c_noise_20,anthropic,20,38.0,0.16668,,C,3.33
+c_mixed_vote6_200,anthropic,200,3.0,0.00559,,C,1.12
+c_mixed_vote6_200,openai,200,3.0,0.01336,,C,2.67
+b_picks_600_low,anthropic,600,,0.01115,k6-6-1-1 k6-6-3-1 k6-1-1-1,B,6.69
+b_picks_600_high,anthropic,600,,0.15752,k3-6-3-1 k1-6-6-1 k3-6-6-1,B,94.51
+b_picks_600,anthropic,600,,0.0198,k3-3-1-1 k6-6-1-1,B,11.88

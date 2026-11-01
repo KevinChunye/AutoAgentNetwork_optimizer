@@ -1,0 +1,8 @@
+                     calls  worst_case_usd  worst_case_x_safety
+account model                                                  
+openai  gpt-6-luna      60          0.6314               0.7261
+        gpt-6.1-sol    120         33.6132              38.6551
+phase 'scienceclaw': total $310, run cap $310.00, account caps {'anthropic': 275.0, 'openai': 100.0}
+  anthropic: room $88.34 of new estimated spend; this config's worst case $0.00
+  openai: room $45.77 of new estimated spend; this config's worst case $34.24
+cleared

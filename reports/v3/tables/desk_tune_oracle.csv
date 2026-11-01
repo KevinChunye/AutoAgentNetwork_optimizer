@@ -1,0 +1,4 @@
+benchmark,log_growth,size_err_true,ruin_rate_resampled
+stay out,0.0,0.22287,0.0
+1 Kelly at true p,0.01668,0.0,0.0085
+0.5 Kelly at true p,0.0133,0.11144,0.0

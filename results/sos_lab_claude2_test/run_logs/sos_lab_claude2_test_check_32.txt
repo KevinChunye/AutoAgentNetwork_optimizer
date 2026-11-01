@@ -1,0 +1,8 @@
+                             calls  worst_case_usd  worst_case_x_safety
+account   model                                                        
+anthropic claude-haiku-5-5     160          1.6521               1.9000
+          claude-sonnet-5-5    320         88.3681             101.6233
+phase 'scienceclaw': total $310, run cap $310.00, account caps {'anthropic': 275.0, 'openai': 100.0}
+  anthropic: room $124.19 of new estimated spend; this config's worst case $90.02
+  openai: room $58.61 of new estimated spend; this config's worst case $0.00
+cleared

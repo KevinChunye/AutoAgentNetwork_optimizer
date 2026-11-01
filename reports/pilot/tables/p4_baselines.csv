@@ -1,0 +1,3 @@
+baseline,n,heldout_error,cost_usd,minus_dense_acc,lo,hi
+single agent,40,0.425,0.0008,-0.025,-0.175,0.1256
+vote over 6 propose answers,40,0.475,0.0041,,,

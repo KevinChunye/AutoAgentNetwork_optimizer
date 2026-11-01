@@ -1,0 +1,28 @@
+# Market town m1_smoke: prereg copied from research/market/plan.md by scripts/make_market_configs.py; edit the plan and the script, not this file.
+kind: market
+trader: llm
+rounds: 8
+max_tokens: 200
+temperature: 1.0
+name: m1_smoke
+condition: haiku_smoke
+prereg:
+  question: Does an all-Haiku (haiku_nothink) market run cleanly for 2 periods at R = 8 on the Smith schedule - replies parse,
+    nothing truncates, few orders are rejected, and trades happen?
+  prediction: Unparsed replies under 5% of turns; no reply truncated at max_tokens 200; rejected orders under 10% of orders
+    (BID, ASK, ACCEPT); at least 3 trades in each of the 2 periods.
+  kill: 'Unparsed over 10% or truncation over 5% (the run stops itself, checked after every round): fix the prompt or parser
+    (free, with a fake-model test), commit, and rerun M1 under a new seed before anything else. Spend over 1.5x the worst-case
+    estimate, or no trade in either period: stop and audit.'
+  decision: 'No kill: log the real-to-estimated prompt-token ratio, cost per turn and turns per period, re-project every later
+    session, apply the $8 cumulative market stop (M3 is dropped first if M1-M4 would pass $8), then go to M2. A missed prediction
+    that is not a kill (for example rejected orders at 10-25%) is logged and audited, and M2 runs if the auditor says GO.'
+seeds: [1]
+periods: 2
+model: haiku_nothink
+max_usd: 0.5
+expect:
+  min_turns: 40
+  max_unparsed_rate: 0.1
+  max_truncation_rate: 0.05
+  stop_after_zero_trade_periods: 2

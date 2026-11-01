@@ -1,0 +1,8 @@
+                       worst_case_usd  worst_case_x_safety
+account model                                             
+openai  adaptive_pool            99.0               113.85
+phase 'scienceclaw': total $310, run cap $310.00, account caps {'anthropic': 275.0, 'openai': 100.0}
+  anthropic: room $96.09 of new estimated spend; this config's worst case $0.00
+  openai: room $53.52 of new estimated spend; this config's worst case $99.00
+NOT CLEARED to run:
+- worst case does not fit: openai: spent $33.43; this call could pass the $100 hard cap (safety x1.15). Split the run (--task-offset/--task-limit) or ask Kevin

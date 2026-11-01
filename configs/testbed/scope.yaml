@@ -1,0 +1,5 @@
+# Stage-1 scope (autoagentnet/testbed/grid.py reads it). Pre-registered drop order when the pilot's re-estimate of
+# stage 1 is above $45 (research/v4/testbed/prereg.md, section 7): first drop W3 (all sizes and budgets), then the
+# real-kernel run; if still above $55, stop and hand back. A change here is committed with a line in research/log.md.
+drop_precisions: []
+kernel_run: true

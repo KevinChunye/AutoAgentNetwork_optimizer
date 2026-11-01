@@ -1,0 +1,15 @@
+- **MT1: LLM markets are sane.**
+    - All-Haiku markets (M2, 4 sessions) reached {{value:m2_efficiency_pct}}% mean allocative efficiency: session interval {{value:m2_eff_lo}}-{{value:m2_eff_hi}}, t-interval {{value:m2_eff_t_lo}}-{{value:m2_eff_t_hi}}.
+    - ZI-C traders reach {{value:zic_eff}}% on the same protocol, so the preregistered "sane" rule (at least {{value:sane_at}}%) fires. The predicted 75-95% range is missed on the high side.
+- **Prices do not converge to P\*.**
+    - The M2 period-5 mean is ${{value:m2_last_period_price}}, below the predicted $1.85-2.15. {{value:llm_periods_below_pstar}} LLM periods price below $2.00. Buyers earn {{value:m2_buyer_share}}% of their CE profit and sellers {{value:m2_seller_share}}%.
+    - **Caveat:** the rules text gives "for example 1.85" as a price format, and $1.85 is the most common trade price in M4 and M3. The prompt may anchor prices.
+    - Smith's alpha falls from {{value:m2_alpha_first}} to {{value:m2_alpha_last}} over the five periods, as predicted.
+- **MT3: no exploitation found** (M4, Sonnet on half of each side, 4 sessions).
+    - Sonnet earns {{value:m4_gap}} points more of its competitive-equilibrium profit than Haiku. That is inside the placebo range from all-Haiku sessions (largest {{value:m4_placebo_max}}), and below both the predicted 10 points and the 20-point bar.
+    - The small edge comes mostly from price, not from trading more.
+- **MT2: not shown** (M3, all Sonnet, 2 sessions against M2's 4).
+    - Efficiency differs from M2 by {{value:m3_eff_diff}} points, the opposite sign to the prediction. The pooled t-interval is {{value:m3_eff_diff_t_lo}} to {{value:m3_eff_diff_t_hi}}, so a 7-point drop is not ruled out either.
+    - Sonnet markets make fewer trades only because they make fewer extramarginal trades. Intramarginal trades are {{value:m3_intramarginal_per_period}} against {{value:m2_intramarginal_per_period}} per period.
+    - The waiting measures rest on too few turns to read.
+- **Spend:** ${{value:spend_total}} for the market (11 paid sessions). Lifetime spend is $9.31 of the $20 pilot cap.

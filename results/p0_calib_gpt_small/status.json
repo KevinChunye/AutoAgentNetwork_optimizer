@@ -1,0 +1,35 @@
+{
+  "run_id": "p0_calib_gpt_small-1792329986",
+  "state": "completed",
+  "reason": "",
+  "checkpoints": [
+    "committed and pushed"
+  ],
+  "tasks_done": 5,
+  "budget": {
+    "spent_by_account": {
+      "anthropic": 0.0,
+      "openai": 0.0069
+    },
+    "hard_caps_usd": {
+      "anthropic": 100.0,
+      "openai": 100.0
+    },
+    "phase": "pilot",
+    "phase_total_usd": 20.0,
+    "spent_total_usd": 0.0069,
+    "run_spent_usd": 0.0036,
+    "run_cap_usd": 0.25,
+    "safety_multiplier": 1.15
+  },
+  "rate_limits": {
+    "gpt_small": {
+      "limit-requests": "5000",
+      "limit-tokens": "2000000",
+      "remaining-requests": "4996",
+      "remaining-tokens": "1999651",
+      "reset-requests": "48ms",
+      "reset-tokens": "10ms"
+    }
+  }
+}

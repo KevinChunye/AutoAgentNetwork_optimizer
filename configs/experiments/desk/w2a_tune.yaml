@@ -1,0 +1,37 @@
+# W2-A tuning block (seed block 1, research/v3/plan_w2.md): all four structures with Haiku on tuning
+# sequence 1 (200 events). It decides nothing by outcome: it checks every role's reply format and freezes
+# the analysis before the sealed block. The smoke test's 20 trader calls come from the cache.
+kind: desk
+name: w2a_tune
+seeds: [1]
+events: 200
+structures: [S1, S2, S3, S4]
+twin: true
+model: haiku_nothink
+max_tokens: 800
+temperature: 1.0
+kelly_fraction: 0.5
+max_usd: 0.9
+chunk_events: 50
+max_concurrency: 8
+expect:
+  min_calls: 100
+  max_unparsed_rate: 0.05
+  max_truncation_rate: 0.05
+  max_spend_usd: 0.789
+prereg:
+  question: On tuning sequence 1 (seed block 1), do all four structures and the twin produce readable replies from
+    every role, and does the solo trader pass the preregistered tuning checks (bet rate 20-95%, at most 10% of bets
+    all-in, at most 50% of events with |p - q| < 0.02, anchoring slope on the price noise at most 0.8, at most 2%
+    flipped probabilities per role)?
+  prediction: At most 2% of each role's replies unparsed and none truncated; every tuning check passes (bet rate
+    50-90%, all-in bets under 5%, |p - q| < 0.02 on under 20% of events, anchoring slope 0.1-0.5). Outcomes on this
+    block decide nothing about the structures (lockbox).
+  kill: More than 5% of any single role's replies unparsed or truncated stops the run; actual spend above its kill
+    line (1.5x its projection from the smoke test) stops it.
+  decision: 'If every check passes, the sealed block runs with the same prompts and code. If one fails, the prompt
+    of the failing role gets one revision aimed at it, research/v3/plan_w2.md records the change and the new hashes,
+    and the tuning block reruns on tuning sequence 2; a second failure goes to the auditor before any sealed run.
+    Two rules are read here too: S4 runs on all five sealed sequences only if its belief error on tuning is no larger
+    than S1''s (otherwise on sequence 101 only, as a descriptive arm); and if S1''s overbet rate on tuning is under
+    10%, rule 1 is reported as correcting underbetting.'

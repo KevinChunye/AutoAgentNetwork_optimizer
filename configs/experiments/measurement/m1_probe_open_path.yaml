@@ -1,0 +1,47 @@
+# Session M1 optional timing probe (research/v4/measurement.md). Written by hand; one prereg for the six configs.
+kind: panel
+name: m1_probe_open_path
+task_kind: bbeh
+tasks: data/external/bbeh_all.jsonl
+items: research/v4/measurement/probe_path_items.txt
+sources:
+- ref: luna_none
+  calls: 1
+  first_call: 20
+  max_tokens: 1
+- ref: luna_low_ev
+  calls: 1
+  first_call: 20
+  max_tokens: 1
+- ref: sol61_low
+  calls: 1
+  first_call: 20
+  max_tokens: 1
+- ref: sol61_med
+  calls: 1
+  first_call: 20
+  max_tokens: 1
+timing: true
+max_usd: 0.5
+chunk_size: 3
+max_concurrency: 1
+expect:
+  min_calls: 20
+  max_unparsed_rate: null
+  max_truncation_rate: null
+prereg:
+  question: 'Session M1 optional timing probe: a measurement, not a test (no accuracy is read). How long do the API arms take
+    to the first token, to the first answer token, and how fast do they decode, measured by streaming (timing: true), against
+    the backfill''s estimates from totals (research/v4/measurement/backfill.md)? 10 unsealed BBEH items (the anchor''s second
+    scan items, research/v4/measurement/probe_items.txt), 2 fresh calls per arm (call indices 10-13, never cached) at concurrency
+    1 and at 4; first, one 1-token call per endpoint (3 items) to time the network path alone.'
+  prediction: Measured decode speed within 25% of the backfill's estimate for every arm (Haiku about 220-240 tokens/s, Sonnet
+    120-140, Opus about 105, Luna 90-115); Sol low and medium about 33 tokens/s if the backfill's slow rate is real, or several
+    times higher if it reflected hidden reasoning before the first chunk. Network-path time (1-token calls) 0.3-1.5 s. TTFT
+    p50 within 1 s of the backfill's overhead for arms without thinking. Concurrency 4 adds under 20% to TTFT.
+  kill: Stop if any arm's measured cost per call is above 2x its guard, if a stream fails (StreamCut) on 2 calls, or if the
+    governor projects a vendor past its cap; never more than $3 in all.
+  decision: Measured TTFT, TTFAT and decode speed replace the estimated columns of the latency card (research/v4/measurement/latency_card.md)
+    for these arms, the measured-minus-estimated gap is reported, and the configuration map's TTFAT budgets use measured TTFAT
+    where it differs from the estimate by more than 25%. If Sol's measured decode speed is several times the estimate, the
+    backfill's Sol rows are relabelled (reasoning time, not decode speed).

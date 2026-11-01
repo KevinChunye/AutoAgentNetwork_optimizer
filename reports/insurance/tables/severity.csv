@@ -1,0 +1,4 @@
+context,commissions,share_with_money,mean_exposure,median_exposure,p95_exposure,max_exposure
+airline,293,0.6245733788395904,503.40955631399316,200.0,2613.0,4431.0
+retail,382,0.9738219895287958,1889.9307591623037,1183.01,5923.56,8276.23
+telecom,583,0.0,0.0,0.0,0.0,0.0

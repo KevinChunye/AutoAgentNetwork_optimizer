@@ -1,0 +1,31 @@
+# Written by scripts/make_evidence_configs.py (evidence plan, step 0.13). Do not edit by hand.
+kind: panel
+name: e23_reasoning_forecast_open
+task_kind: forecast
+tasks: data/external/evidence/forecast.jsonl
+items: research/v3/evidence/sealed/forecast_sealed.txt
+sources:
+- ref: luna_med
+  calls: 2
+  max_tokens: 8000
+max_usd: 4.0
+chunk_size: 25
+max_concurrency: 8
+expect:
+  min_calls: 20
+  max_unparsed_rate: 0.05
+  max_truncation_rate: 0.05
+  usd_per_call: {}
+  max_cost_ratio: 1.5
+prereg:
+  question: 'Step 2.3 (openai, forecast): more reasoning: luna_med (thinking or reasoning at medium) twice per item
+    on the Phase 2 items.'
+  prediction: 'H12 (expl): thinking on raises accuracy more than it lowers rho; rho and accuracy differences (on
+    minus off) with intervals. No Phase 2 test is confirmatory: H11, H15 and H16 moved to exploratory in session
+    E2''s power re-run (research/v3/evidence/power.md, under 0.70 power in the base scenario); all are reported
+    with intervals and one-sided p-values. The analysis runs in the next session (plan steps 2.6-2.10).'
+  kill: Stop and audit if a source parses under 95% or truncates over 5% of its live calls (after 20), costs over
+    1.5x the probe per call, the governor projects a vendor past its cap, or (ForecastBench) over 10% of market
+    questions lack the freeze price.
+  decision: Reasoning decorrelates errors -> it enters the independence-per-dollar ranking as a lever; otherwise
+    it is reported as an accuracy purchase only.

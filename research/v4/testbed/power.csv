@@ -1,0 +1,21 @@
+test,role,world,draws,rate,mean_estimate,mean_halfwidth_or_mae
+T1 primary: the W4 deficit survives 6 votes on the hard third,power,default,100,0.94,0.0457483930211203,0.026580854879750714
+T1 primary: the W4 deficit survives 6 votes on the hard third,false_positive,no_w4_loss,100,0.04,-5.6626874808693065e-05,0.026010828742450736
+T1 secondary: shared W4 shock (1 - disattenuated r) > 0,power,default,100,0.37,0.01937406332230078,0.021973349351372854
+T1 secondary: shared W4 shock (1 - disattenuated r) > 0,false_positive,pure_shift,100,0.01,0.0001844793699925398,0.021350121002170742
+T1 secondary: shared W4 shock (1 - disattenuated r) > 0,false_positive,diversify,100,0.03,1.3169872548769246e-05,0.021567020386463666
+T1 secondary: W4 loss concentrated on the hard third,power,default,100,0.34,0.014661769207223754,0.019364251495508415
+T1 secondary: W4 loss concentrated on the hard third,false_positive,flat_shift,100,0.05,0.003337924701561065,0.01820453783163851
+"T1 literal: 6 x W4 vote < 1 x BF16, hard third (counts if gap persists)",power,strong,100,1.0,-0.10694980104071013,0.02256936127223901
+"T1 literal: 6 x W4 vote < 1 x BF16, hard third (counts if gap persists)",false_positive,default,100,0.0,0.03233547597183962,0.02475835376034656
+T2 primary: 4 x W4 vote vs 1 x BF16 (two-sided),power,default,100,1.0,0.054857055402509944,0.010841789103152737
+T2 primary: 4 x W4 vote vs 1 x BF16 (two-sided),false_positive,no_w4_loss,100,1.0,0.08804244464850526,0.010237985919804096
+T3 primary: deep single vs cost-matched wide vote (two-sided),power,default,100,1.0,0.05724605737623591,0.009482972809363156
+"T4 primary: judge eta easy - hard within config, benchmark and right candidates > 0 (99%)",power,default,100,1.0,0.2755560983337494,0.12344535536777686
+"T4 primary: judge eta easy - hard within config, benchmark and right candidates > 0 (99%)",false_positive,flat_judge,100,0.0,0.0011646338565225462,0.0710934677017504
+"T4 primary: judge eta easy - hard within config, benchmark and right candidates > 0 (99%)",false_positive,config_judge,100,0.02,-0.0004979434154831001,0.09892451820363128
+"T4 primary: judge eta easy - hard within config, benchmark and right candidates > 0 (99%)",false_positive,bench_judge,100,0.0,0.00043254382485820433,0.07028274168645636
+T5 primary: factor MAE < bar x baseline MAE,power,default,40,0.65,0.87908151377267,0.01897225602370693
+T5 primary: factor MAE < bar x baseline MAE,false_positive,misspecified,100,0.0,0.9379031864739379,0.024750449413778713
+T5 primary: factor MAE < bar x baseline MAE,false_positive,misspecified_k5,100,0.04,0.9231436334333333,0.0204902827813652
+T5 primary (5 answer classes),power,default_k5,40,0.575,0.8914023302723354,0.018889674138732486

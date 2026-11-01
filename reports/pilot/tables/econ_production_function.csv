@@ -1,0 +1,7 @@
+term,accuracy_points,lo,hi,cost_usd_per_task,points_per_cent,reading
+doubling propose,3.0759,0.3041,5.7862,0.0015,20.7739,
+doubling critique,1.2689,-0.1855,2.7051,0.0009,14.4248,
+doubling refine,1.4293,0.4296,2.4294,0.0009,15.7348,
+propose x critique,0.8879,-0.3355,2.1706,0.0,,not resolved
+propose x refine,-0.3483,-1.4453,0.7184,-0.0001,,not resolved
+critique x refine,-0.4824,-1.3508,0.3334,-0.0,,not resolved

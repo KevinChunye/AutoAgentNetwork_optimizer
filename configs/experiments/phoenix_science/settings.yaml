@@ -1,0 +1,46 @@
+# Frozen settings of the PHOENIX science-table study (research/phoenix_science/prereg.md,
+# docs/PHOENIX_SCIENCE_ADDENDUM.md, reports/phoenix_science/ceiling.md). Read by
+#   python -m autoagentnet.phoenix science-matrix ... --settings configs/experiments/phoenix_science/settings.yaml
+#   python -m autoagentnet.phoenix science-calibration-configs ... --settings <this file>
+# rows: N per dataset (A3); data under data/external/phoenix_science, checkpoints under
+# data/external/phoenix_science_checkpoints (both rebuilt deterministically by `prepare --rows 60000` and `checkpoint`).
+rows: {covtype: 60000, miniboone: 60000, higgs: 60000}
+# Pool: three models unless the one-call sonnet_low smoke fails (then an amendment sets the OpenAI-only pool).
+models: [luna_low_ev, sol61_low, sonnet_low]
+limits:            # per recovery branch (plan values for calls and tools; time limits from A3)
+  max_calls: 8
+  max_tools: 24
+  cpu_budget_s: 600
+  wall_s: 3600
+  tool_timeout_s: 90
+calibration_limits:
+  cpu_budget_s: 7200
+  wall_s: 7200
+  tool_timeout_s: 90
+prereg:
+  question: >-
+    After a member is shut down and one model withdrawn (F1), does PHOENIX full recovery give a better held-out
+    balanced accuracy than fixed takeover and than LLM-chosen recovery at the same $0.20 budget, and at what cost?
+    (research/phoenix_science/prereg.md)
+  prediction: >-
+    full - fixed test points: mean 0 to +2, interval including 0 (not resolved); full - llm dollars negative;
+    full - fixed dollars positive; F0 - F1 near 0 for fixed.
+  kill: >-
+    Stop and audit on test-label exposure, provenance or hash violation, unknown model charge, governor refusal or a
+    failed pilot go/no-go; no retries; pilot cases are never evidence.
+  decision: >-
+    Pooled 95% paired bootstrap over the 15 evidence cases: lower bound > 0 -> full beats X; upper bound < 0 -> worse;
+    else not resolved. Report every contrast, per dataset and by withdrawn model.
+calibration_prereg:
+  question: >-
+    Development-only action quality, completion and cost of each pool model on the science tables (3 families x 10
+    tasks on training-internal folds); not a held-out result.
+  prediction: >-
+    Each model completes most design tasks; sol61_low and sonnet_low reach higher validation quality than
+    luna_low_ev; costs follow list prices.
+  kill: >-
+    Stop on data leakage, transport uncertainty, inaccessible model, governor refusal or a failed calibration-pilot
+    go/no-go (tasks 0, 10, 20 per model).
+  decision: >-
+    Freeze the observed statistics including failures and zeros; combine the three tables; never insert test outcomes
+    or the smoke tables.

@@ -1,0 +1,28 @@
+name: vote6
+description: >
+  Self-consistency: six independent solvers and a free majority vote. The baseline the
+  literature says debate-style networks often fail to beat (Choi et al. 2025). Its six
+  propose calls are identical to dense_3x6's, so on the same tasks it costs nothing extra.
+default_model: haiku
+default_max_tokens: 3200
+default_temperature: 0.0
+stages:
+  - name: propose
+    width: 6
+    max_tokens: 3200
+    system: |
+      You are one member of a team solving a problem. Work independently and be concise.
+      End with a final line of the form "ANSWER: <answer>".
+    instruction: |
+      Your approach: {perspective}
+      Solve the task above.
+    perspectives:
+      - Work step by step from the given facts.
+      - Write the key equations before computing anything.
+      - Estimate the answer roughly first, then compute it exactly.
+      - Work backwards from what the question asks for.
+      - Track units and edge cases as you go.
+      - Restate the problem in simpler terms, then solve it.
+  - name: vote
+    kind: vote
+    width: 1

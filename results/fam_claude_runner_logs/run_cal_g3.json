@@ -1,0 +1,22 @@
+                         worst_case_usd  worst_case_x_safety
+account   model                                             
+anthropic adaptive_pool         15.6335              17.9785
+phase 'scienceclaw': total $310, run cap $310.00, account caps {'anthropic': 275.0, 'openai': 100.0}
+  anthropic: room $148.41 of new estimated spend; this config's worst case $15.63
+  openai: room $58.61 of new estimated spend; this config's worst case $0.00
+cleared
+{
+  "batch": "fam_claude_cal_batch_g3",
+  "branches_total": 3,
+  "branches_reported": 3,
+  "status": "completed",
+  "status_counts": {
+    "running": 3
+  },
+  "batch_run_spent_usd": 0.029376,
+  "code": {
+    "commit": "4c2e1d0",
+    "dirty": false,
+    "dirty_paths": []
+  }
+}

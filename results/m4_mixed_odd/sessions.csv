@@ -1,0 +1,3 @@
+seed,turns,orders,rejected,unparsed,truncated,cost_usd,trades,surplus,extramarginal,periods,efficiency,trade_ratio,rejected_rate,unparsed_rate,truncated_rate,zero_trade_periods,mean_price,last_period_mean_price,periods_planned,complete
+31,528,190,6,0,0,0.340602975,29,36.5,3,5,0.9733333333333334,0.9666666666666668,0.031578947368421,0.0,0.0,0,1.85896551724138,1.84,5,True
+33,539,175,8,0,0,0.33390526,29,37.0,2,5,0.9866666666666667,0.9666666666666667,0.045714285714285714,0.0,0.0,0,1.7758620689655173,1.6833333333333333,5,True

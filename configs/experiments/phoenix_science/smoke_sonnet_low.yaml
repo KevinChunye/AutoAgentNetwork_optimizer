@@ -1,0 +1,54 @@
+kind: phoenix
+name: phoenix_smoke_sonnet_low
+mode: calibrate
+prereg:
+  question: Does one real sonnet_low call through the governed registry return schema-valid
+    executable PHOENIX pipeline JSON, so the planned three-model pool (luna_low_ev,
+    sol61_low, sonnet_low) is usable?
+  prediction: One call, one parsed pipeline, one executed validation result, no truncation,
+    state pushed.
+  kill: Any access, transport, schema, execution, budget or synchronization failure
+    stops it; no retry, no substitution. Then the study switches to the OpenAI-only
+    pool (luna_low_ev, sol61_low; F1 withdraws sol61_low), recorded as an amendment
+    before any study call.
+  decision: 'Pass: keep the three-model pool. Fail: OpenAI-only pool. Integration
+    evidence only, no science.'
+frozen_hashes:
+  implementation: d1bc66900cfb8f3e79a413cf73aea37a25b73db5655e339de81f08f467266266
+  runtime_dependencies: a5e3b90b79e6b4ac2c885179b9676df0025ff6b69681e7d9b93a68882dc78711
+  providers: 273a4cb620ccdadb979bb689938b3bfd13b779225f2c271b5649ef8e7e760e5a
+  pricing: d7827d7fe867b228393412b1aa85cb8e89ca74a9aad1f63ba39101335c563ed0
+  budget: 4c7f34ccda0b85c0fa2e310ab1e172a02b484d4627913b7b2567af0b31314982
+  calibration_0: 897a147b754ab57a56fda885c9c131be595dea5177f39851f17888073bc89dc1
+  templates: 82f3f2788b068c6cf0b032d083c981c861b223b218d23fcf88e3c59780d54cac
+policy: full
+fault: healthy
+withdrawn_model: sonnet_low
+shutdown_member: A
+models:
+- luna_low_ev
+- sol61_low
+planner_model: luna_low_ev
+api_budget_usd: 0.06
+cpu_budget_s: 120.0
+max_calls: 1
+max_tools: 24
+wall_s: 1200.0
+tool_timeout_s: 30.0
+max_tokens: 4096
+max_input_tokens: 6000
+proposal_rounds: 3
+seed: 101
+task_offset: 0
+calibration_model: sonnet_low
+calibration_data:
+- data/phoenix_smoke/calibration_fixture.npz
+max_usd: 0.08
+providers: configs/providers.yaml
+pricing: configs/pricing.yaml
+budget: configs/budget.yaml
+ledger: state/ledger.jsonl
+cache: state/phoenix_smoke_cache
+require_ledger: true
+git_checkpoint: true
+out_dir: results

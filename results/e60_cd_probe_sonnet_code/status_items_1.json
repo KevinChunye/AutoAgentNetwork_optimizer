@@ -1,0 +1,242 @@
+{
+  "run_id": "e60_cd_probe_sonnet_code-1793084262",
+  "state": "completed",
+  "reason": "",
+  "vendor": "anthropic",
+  "task_kind": "code",
+  "items": [
+    1,
+    2
+  ],
+  "sources": [
+    {
+      "ref": "sonnet_nothink",
+      "calls": 1,
+      "first_call": 0,
+      "prompt": "base",
+      "max_tokens": 8192,
+      "items": null,
+      "checks": null
+    },
+    {
+      "ref": "sonnet_low",
+      "calls": 1,
+      "first_call": 0,
+      "prompt": "base",
+      "max_tokens": 16384,
+      "items": null,
+      "checks": null
+    },
+    {
+      "ref": "sonnet_med",
+      "calls": 1,
+      "first_call": 0,
+      "prompt": "base",
+      "max_tokens": 32768,
+      "items": null,
+      "checks": null
+    },
+    {
+      "ref": "sonnet_high",
+      "calls": 1,
+      "first_call": 0,
+      "prompt": "base",
+      "max_tokens": 32768,
+      "items": null,
+      "checks": null
+    },
+    {
+      "ref": "sonnet_xhigh",
+      "calls": 1,
+      "first_call": 0,
+      "prompt": "base",
+      "max_tokens": 65536,
+      "items": null,
+      "checks": null
+    },
+    {
+      "ref": "sonnet_max",
+      "calls": 1,
+      "first_call": 0,
+      "prompt": "base",
+      "max_tokens": 65536,
+      "items": null,
+      "checks": null
+    }
+  ],
+  "template_hash": "39a6a37dd61080da",
+  "code": {
+    "commit": "2b25f04",
+    "dirty": false,
+    "dirty_paths": []
+  },
+  "panel_files": [],
+  "checkpoints": [
+    "committed and pushed"
+  ],
+  "calls": 6,
+  "live_calls": 6,
+  "by_source": {
+    "sonnet_high:base": {
+      "calls": 1,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.01764,
+      "live": 1,
+      "refused": 0
+    },
+    "sonnet_low:base": {
+      "calls": 1,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.01822,
+      "live": 1,
+      "refused": 0
+    },
+    "sonnet_max:base": {
+      "calls": 1,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.19288,
+      "live": 1,
+      "refused": 0
+    },
+    "sonnet_med:base": {
+      "calls": 1,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.02171,
+      "live": 1,
+      "refused": 0
+    },
+    "sonnet_nothink:base": {
+      "calls": 1,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.02562,
+      "live": 1,
+      "refused": 0
+    },
+    "sonnet_xhigh:base": {
+      "calls": 1,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.04155,
+      "live": 1,
+      "refused": 0
+    }
+  },
+  "model_versions": [
+    "claude-sonnet-5-5"
+  ],
+  "budget": {
+    "spent_by_account": {
+      "anthropic": 43.7701,
+      "openai": 26.0321
+    },
+    "hard_caps_usd": {
+      "anthropic": 125.0,
+      "openai": 100.0
+    },
+    "phase": "evidence",
+    "phase_total_usd": 150.0,
+    "account_caps_usd": {
+      "anthropic": 125.0,
+      "openai": 50.0
+    },
+    "room_by_account_usd": {
+      "anthropic": 60.6326,
+      "openai": 17.4462
+    },
+    "spent_total_usd": 69.8022,
+    "run_spent_usd": 0.3176,
+    "run_cap_usd": 4.0,
+    "safety_multiplier": 1.15
+  },
+  "rate_limits": {
+    "sonnet_nothink": {
+      "input-tokens-limit": "10000000",
+      "input-tokens-remaining": "9999000",
+      "input-tokens-reset": "2026-10-27T06:57:46Z",
+      "output-tokens-limit": "2000000",
+      "output-tokens-remaining": "1999000",
+      "output-tokens-reset": "2026-10-27T06:58:03Z",
+      "requests-limit": "10000",
+      "requests-remaining": "9997",
+      "requests-reset": "2026-10-27T06:57:45Z",
+      "tokens-limit": "12000000",
+      "tokens-remaining": "11998000",
+      "tokens-reset": "2026-10-27T06:57:46Z"
+    },
+    "sonnet_low": {
+      "input-tokens-limit": "10000000",
+      "input-tokens-remaining": "10000000",
+      "input-tokens-reset": "2026-10-27T06:57:45Z",
+      "output-tokens-limit": "2000000",
+      "output-tokens-remaining": "2000000",
+      "output-tokens-reset": "2026-10-27T06:57:45Z",
+      "requests-limit": "10000",
+      "requests-remaining": "9998",
+      "requests-reset": "2026-10-27T06:57:45Z",
+      "tokens-limit": "12000000",
+      "tokens-remaining": "12000000",
+      "tokens-reset": "2026-10-27T06:57:45Z"
+    },
+    "sonnet_med": {
+      "input-tokens-limit": "10000000",
+      "input-tokens-remaining": "9999000",
+      "input-tokens-reset": "2026-10-27T06:57:45Z",
+      "output-tokens-limit": "2000000",
+      "output-tokens-remaining": "2000000",
+      "output-tokens-reset": "2026-10-27T06:57:45Z",
+      "requests-limit": "10000",
+      "requests-remaining": "9996",
+      "requests-reset": "2026-10-27T06:57:45Z",
+      "tokens-limit": "12000000",
+      "tokens-remaining": "11999000",
+      "tokens-reset": "2026-10-27T06:57:45Z"
+    },
+    "sonnet_high": {
+      "input-tokens-limit": "10000000",
+      "input-tokens-remaining": "10000000",
+      "input-tokens-reset": "2026-10-27T06:57:45Z",
+      "output-tokens-limit": "2000000",
+      "output-tokens-remaining": "2000000",
+      "output-tokens-reset": "2026-10-27T06:57:45Z",
+      "requests-limit": "10000",
+      "requests-remaining": "9999",
+      "requests-reset": "2026-10-27T06:57:45Z",
+      "tokens-limit": "12000000",
+      "tokens-remaining": "12000000",
+      "tokens-reset": "2026-10-27T06:57:45Z"
+    },
+    "sonnet_xhigh": {
+      "input-tokens-limit": "10000000",
+      "input-tokens-remaining": "10000000",
+      "input-tokens-reset": "2026-10-27T06:57:45Z",
+      "output-tokens-limit": "2000000",
+      "output-tokens-remaining": "2000000",
+      "output-tokens-reset": "2026-10-27T06:57:45Z",
+      "requests-limit": "10000",
+      "requests-remaining": "9997",
+      "requests-reset": "2026-10-27T06:57:45Z",
+      "tokens-limit": "12000000",
+      "tokens-remaining": "12000000",
+      "tokens-reset": "2026-10-27T06:57:45Z"
+    },
+    "sonnet_max": {
+      "input-tokens-limit": "10000000",
+      "input-tokens-remaining": "9999000",
+      "input-tokens-reset": "2026-10-27T06:57:45Z",
+      "output-tokens-limit": "2000000",
+      "output-tokens-remaining": "2000000",
+      "output-tokens-reset": "2026-10-27T06:57:45Z",
+      "requests-limit": "10000",
+      "requests-remaining": "9997",
+      "requests-reset": "2026-10-27T06:57:45Z",
+      "tokens-limit": "12000000",
+      "tokens-remaining": "11999000",
+      "tokens-reset": "2026-10-27T06:57:45Z"
+    }
+  }
+}

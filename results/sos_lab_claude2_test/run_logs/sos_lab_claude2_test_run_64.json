@@ -1,0 +1,176 @@
+                             calls  worst_case_usd  worst_case_x_safety
+account   model                                                        
+anthropic claude-haiku-5-5     160          1.6549               1.9031
+          claude-sonnet-5-5    320         88.4764             101.7478
+phase 'scienceclaw': total $310, run cap $310.00, account caps {'anthropic': 275.0, 'openai': 100.0}
+  anthropic: room $118.63 of new estimated spend; this config's worst case $90.13
+  openai: room $58.61 of new estimated spend; this config's worst case $0.00
+cleared
+{
+  "run_id": "sos_lab_claude2_test-1793498373",
+  "state": "completed",
+  "reason": "",
+  "vendor": "anthropic",
+  "task_kind": "mcq",
+  "items": [
+    64,
+    96
+  ],
+  "receivers": [
+    "A",
+    "B",
+    "C"
+  ],
+  "first_answers_only": false,
+  "branches": true,
+  "full_review": true,
+  "template_hash": "de548af887a29a58",
+  "code": {
+    "commit": "8c24b3e",
+    "dirty": false,
+    "dirty_paths": []
+  },
+  "checkpoints": [
+    "committed and pushed",
+    "committed and pushed",
+    "committed and pushed",
+    "committed and pushed"
+  ],
+  "calls": 480,
+  "live_calls": 480,
+  "new_spend_usd": 3.9067,
+  "logical_cost_usd": 3.9067,
+  "by_source": {
+    "A:branch": {
+      "calls": 96,
+      "parsed": 0.98958,
+      "truncated": 0.01042,
+      "usd": 0.10544,
+      "live": 96
+    },
+    "A:full": {
+      "calls": 32,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.03695,
+      "live": 32
+    },
+    "A:initial": {
+      "calls": 32,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.03789,
+      "live": 32
+    },
+    "B:branch": {
+      "calls": 96,
+      "parsed": 0.97917,
+      "truncated": 0.0,
+      "usd": 1.07187,
+      "live": 96
+    },
+    "B:full": {
+      "calls": 32,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.3633,
+      "live": 32
+    },
+    "B:initial": {
+      "calls": 32,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.32946,
+      "live": 32
+    },
+    "C:branch": {
+      "calls": 96,
+      "parsed": 0.97917,
+      "truncated": 0.0,
+      "usd": 1.23358,
+      "live": 96
+    },
+    "C:full": {
+      "calls": 32,
+      "parsed": 0.96875,
+      "truncated": 0.0,
+      "usd": 0.42158,
+      "live": 32
+    },
+    "C:initial": {
+      "calls": 32,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.30662,
+      "live": 32
+    }
+  },
+  "budget": {
+    "spent_by_account": {
+      "anthropic": 125.7739,
+      "openai": 28.3459
+    },
+    "hard_caps_usd": {
+      "anthropic": 275.0,
+      "openai": 100.0
+    },
+    "phase": "scienceclaw",
+    "phase_total_usd": 310.0,
+    "account_caps_usd": {
+      "anthropic": 275.0,
+      "openai": 100.0
+    },
+    "room_by_account_usd": {
+      "anthropic": 113.3283,
+      "openai": 58.6106
+    },
+    "spent_total_usd": 154.1481,
+    "run_spent_usd": 3.9067,
+    "run_cap_usd": 310.0,
+    "safety_multiplier": 1.15
+  },
+  "rate_limits": {
+    "haiku_low": {
+      "input-tokens-limit": "10000000",
+      "input-tokens-remaining": "9998000",
+      "input-tokens-reset": "2026-11-01T02:06:49Z",
+      "output-tokens-limit": "2000000",
+      "output-tokens-remaining": "1999000",
+      "output-tokens-reset": "2026-11-01T02:06:53Z",
+      "requests-limit": "13000",
+      "requests-remaining": "12999",
+      "requests-reset": "2026-11-01T02:06:49Z",
+      "tokens-limit": "12000000",
+      "tokens-remaining": "11997000",
+      "tokens-reset": "2026-11-01T02:06:49Z"
+    },
+    "sonnet_low": {
+      "input-tokens-limit": "10000000",
+      "input-tokens-remaining": "9998000",
+      "input-tokens-reset": "2026-11-01T02:06:51Z",
+      "output-tokens-limit": "2000000",
+      "output-tokens-remaining": "1999000",
+      "output-tokens-reset": "2026-11-01T02:06:55Z",
+      "requests-limit": "13000",
+      "requests-remaining": "12999",
+      "requests-reset": "2026-11-01T02:06:50Z",
+      "tokens-limit": "12000000",
+      "tokens-remaining": "11997000",
+      "tokens-reset": "2026-11-01T02:06:51Z"
+    },
+    "sonnet_med": {
+      "input-tokens-limit": "10000000",
+      "input-tokens-remaining": "9998000",
+      "input-tokens-reset": "2026-11-01T02:06:51Z",
+      "output-tokens-limit": "2000000",
+      "output-tokens-remaining": "2000000",
+      "output-tokens-reset": "2026-11-01T02:06:51Z",
+      "requests-limit": "13000",
+      "requests-remaining": "12999",
+      "requests-reset": "2026-11-01T02:06:51Z",
+      "tokens-limit": "12000000",
+      "tokens-remaining": "11998000",
+      "tokens-reset": "2026-11-01T02:06:51Z"
+    }
+  }
+}

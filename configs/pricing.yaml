@@ -1,0 +1,24 @@
+# USD per 1M tokens, keyed by the model ID sent to the API.
+# A model with no entry cannot be called (UnknownPrice), so no run spends money it cannot count.
+#
+# Anthropic: list prices as of 2026-10. Cache writes (5-minute TTL) cost 1.25x input.
+# OpenAI: list prices from Kevin's price table (2026-10-22). cache_read is the cached-input
+#   price; cache_write is the 30-minute prompt-cache write (12-hour writes cost twice as much
+#   and are never requested).
+# active_params_b (billions of parameters used per token) enables FLOP estimates; it is only
+#   published for open-weight models.
+
+claude-haiku-5-5:  {input: 0.10, output: 0.50,  cache_write: 0.125, cache_read: 0.01}
+claude-sonnet-5-5: {input: 2.00, output: 10.00, cache_write: 2.50,  cache_read: 0.10}
+claude-opus-5-5:   {input: 4.00, output: 20.00, cache_write: 5.00,  cache_read: 0.20}
+
+gpt-6-astra:       {input: 10.00, output: 50.00, cache_write: 12.50, cache_read: 1.00}
+gpt-6.1-sol:       {input: 2.00,  output: 10.00, cache_write: 2.50,  cache_read: 0.10}
+gpt-6-sol:         {input: 2.00,  output: 10.00, cache_write: 2.50,  cache_read: 0.20}
+gpt-6-luna:        {input: 0.10,  output: 0.50,  cache_write: 0.125, cache_read: 0.01}
+gpt-5.6-sol:       {input: 4.00,  output: 20.00, cache_write: 5.00,  cache_read: 0.40}
+gpt-5.6-terra:     {input: 2.00,  output: 12.00, cache_write: 2.50,  cache_read: 0.20}
+gpt-5.6-luna:      {input: 0.20,  output: 1.20,  cache_write: 0.25,  cache_read: 0.02}
+
+# Open-weight models: the price depends on the host; fill in before use.
+# openai/gpt-oss-120b: {input: <host price>, output: <host price>, active_params_b: 5.1}

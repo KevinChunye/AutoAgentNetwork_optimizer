@@ -1,0 +1,130 @@
+                     calls  worst_case_usd  worst_case_x_safety
+account model                                                  
+openai  gpt-6-luna      40          0.4216               0.4848
+        gpt-6.1-sol     80         22.4341              25.7992
+phase 'scienceclaw': total $310, run cap $310.00, account caps {'anthropic': 275.0, 'openai': 100.0}
+  anthropic: room $79.07 of new estimated spend; this config's worst case $0.00
+  openai: room $36.50 of new estimated spend; this config's worst case $22.86
+cleared
+{
+  "run_id": "sos_lab_gpt_test-1793524083",
+  "state": "completed",
+  "reason": "",
+  "vendor": "openai",
+  "task_kind": "mcq",
+  "items": [
+    112,
+    120
+  ],
+  "receivers": [
+    "A",
+    "B",
+    "C"
+  ],
+  "first_answers_only": false,
+  "branches": true,
+  "full_review": true,
+  "template_hash": "de548af887a29a58",
+  "code": {
+    "commit": "0def1a4",
+    "dirty": false,
+    "dirty_paths": []
+  },
+  "checkpoints": [
+    "committed and pushed"
+  ],
+  "calls": 120,
+  "live_calls": 120,
+  "new_spend_usd": 0.45094,
+  "logical_cost_usd": 0.45094,
+  "by_source": {
+    "A:branch": {
+      "calls": 24,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.00932,
+      "live": 24
+    },
+    "A:full": {
+      "calls": 8,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.00311,
+      "live": 8
+    },
+    "A:initial": {
+      "calls": 8,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.00276,
+      "live": 8
+    },
+    "B:branch": {
+      "calls": 24,
+      "parsed": 0.95833,
+      "truncated": 0.0,
+      "usd": 0.12526,
+      "live": 24
+    },
+    "B:full": {
+      "calls": 8,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.04653,
+      "live": 8
+    },
+    "B:initial": {
+      "calls": 8,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.04321,
+      "live": 8
+    },
+    "C:branch": {
+      "calls": 24,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.14123,
+      "live": 24
+    },
+    "C:full": {
+      "calls": 8,
+      "parsed": 0.875,
+      "truncated": 0.0,
+      "usd": 0.03456,
+      "live": 8
+    },
+    "C:initial": {
+      "calls": 8,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.04498,
+      "live": 8
+    }
+  },
+  "budget": {
+    "spent_by_account": {
+      "anthropic": 140.0392,
+      "openai": 50.9048
+    },
+    "hard_caps_usd": {
+      "anthropic": 275.0,
+      "openai": 100.0
+    },
+    "phase": "scienceclaw",
+    "phase_total_usd": 310.0,
+    "account_caps_usd": {
+      "anthropic": 275.0,
+      "openai": 100.0
+    },
+    "room_by_account_usd": {
+      "anthropic": 78.6212,
+      "openai": 36.0517
+    },
+    "spent_total_usd": 190.944,
+    "run_spent_usd": 0.4509,
+    "run_cap_usd": 310.0,
+    "safety_multiplier": 1.15
+  },
+  "rate_limits": {}
+}

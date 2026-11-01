@@ -1,0 +1,64 @@
+# Written by scripts/make_evidence_configs.py (evidence plan, step 0.13). Do not edit by hand.
+kind: panel
+name: e13_bbeh_anth
+task_kind: bbeh
+tasks: data/external/evidence/bbeh.jsonl
+items: research/v3/evidence/sealed/bbeh_sealed.txt
+sources:
+- ref: haiku_nothink
+  calls: 5
+  max_tokens: 4000
+- ref: sonnet_nothink
+  calls: 1
+  max_tokens: 4000
+- ref: sonnet_nothink
+  calls: 1
+  max_tokens: 4000
+  first_call: 1
+  items: research/v3/evidence/sealed/bbeh_second_call.txt
+max_usd: 4.0
+chunk_size: 25
+max_concurrency: 8
+expect:
+  min_calls: 20
+  max_unparsed_rate: 0.05
+  max_truncation_rate: 0.05
+  usd_per_call:
+    haiku_nothink: 0.0008
+    sonnet_nothink: 0.0136
+  max_cost_ratio: 1.5
+prereg:
+  question: 'Step 1.3 (anthropic half of the panel): how correlated are a price-matched two-vendor panel''s errors
+    on 300 sealed BBEH items (75 per task), and does a frozen confidence correction hold? The Phase 1 panel per
+    item: haiku_nothink x5 and luna_none x5 (thinking and reasoning off, equal list price), sonnet_nothink x1 and
+    sol61_low x1 (equal list price; Sol at its lowest setting, low), each mid-size model with a second call on 100
+    sealed items used only for its own repeat correlation.'
+  prediction: 'H4 (expl since session E2''s power re-run; Kevin, session E2): the calibration gap of Haiku''s 5-call
+    plurality share minus the gap of a mixed 5-call share (Haiku calls 0-2 + Luna 0-1, and Haiku 0-1 + Luna 0-2,
+    averaged) is above 0, paired over items; Luna''s 5-call and the 12-call gaps reported. H5 (conf): the two-feature
+    correction frozen from the 80 cached items (research/v3/evidence/cached.md: logit p = -3.5513 + 4.0495 share
+    + 1.9921 Sonnet agrees, applied to the Haiku 5-call plurality) holds: TOST intercept within +-0.6 and slope
+    within 0.5-1.5, task-stratified bootstrap; also reported at +-0.4 / 0.6-1.4; per-task gaps reported. H6 (conf):
+    a two-fold cross-fitted correction of the 12-call plurality''s correctness on the whole panel (shares of Haiku
+    and of Luna agreeing with it; Sonnet agrees; Sol agrees) beats one on the Haiku share alone, Brier gain > 0.
+    H7 (conf, accuracy leg only since session E2): the cascade 3 Haiku + 3 Luna (calls 0-2), escalating to Sonnet
+    unless at least 4 of 6 agree with their plurality, is non-inferior to Sonnet alone at -8 points; its cost ratio
+    is reported with a 95% interval beside the cached Haiku-only cascade (0.52), not tested. Exploratory: the frontier
+    of accuracy vs cost for k = 3, 4, 5 of 6, Haiku-only and Luna-only 3-of-5 rules. H1 (sanity check, outside Holm):
+    Haiku-Haiku and Luna-Luna log error odds ratios each exceed Haiku-Luna''s. H2 (expl): latent r of same-vendor
+    cross-tier pairs vs cross-vendor same-tier pairs. H3 (expl): n_eff of 5 Haiku + 5 Luna vs 10 Haiku. Phase 2
+    also reads these calls: H15 (expl since session E2''s power re-run): at lambda 3, answer-escalate-abstain earns
+    more net dollars per item with corrected than with naive confidence (cross-fitted thresholds), on these 300
+    items: the cheap system is the plurality of Haiku and Luna calls 0-2, escalation pays for Sonnet''s call 0 (analysis/evidence_phase2.py).
+    Confirmatory tests use one-sided item (or question) bootstrap p-values, 2,000 draws, with Holm at 5% within
+    the Phase 1 family H5, H6, H7 (Kevin''s decision B6, then session E2''s power re-run moved H4 to exploratory).
+    Margins: H5 intercept +-0.6 log-odds and slope 0.5-1.5 (also reported at the plan''s +-0.4 / 0.6-1.4); H7 non-inferiority
+    at -8 points, accuracy only. H8 is exploratory. The BBEH block (G2a) and the ForecastBench block (G2b) are each
+    read once, by analysis/evidence_phase1.py --block.'
+  kill: 'Stop and audit if a source parses under 95% or truncates over 5% of its live calls (after 20), costs over
+    1.5x the probe per call, the governor projects a vendor past its cap, or (ForecastBench) over 10% of market
+    questions lack the freeze price. Any stop rule: stop, audit, report to Kevin.'
+  decision: 'At G2a: the vendor comparison is read from H2 and the pair table (H1 is a sanity check). H4 is exploratory
+    (power 0.53): an interval above 0 favours mixing vendors within the meter''s cheap calls; one that includes
+    0 is unresolved, and the correction carries the ''k of n'' overconfidence. H5 fails -> Phase 2 refits per task.
+    H7 passes -> the cascade becomes the project baseline and the H13 panel, with its measured cost ratio.'

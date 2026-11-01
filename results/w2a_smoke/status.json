@@ -1,0 +1,64 @@
+{
+  "run_id": "w2a_smoke-1792476216",
+  "state": "stopped",
+  "reason": "expectation missed: 40.0% of trader replies unparsed (limit 5%); 40.0% of trader replies truncated (limit 5%)",
+  "seeds": [
+    1
+  ],
+  "events": [
+    0,
+    20
+  ],
+  "structures": [
+    "S1"
+  ],
+  "model": "haiku_nothink",
+  "template_hashes": {
+    "rules": "58f509f1e8a50966",
+    "trader": "6740d198954a88e0",
+    "risk": "f3ee42d42f456cf0",
+    "member": "9e0a2f039a51f702",
+    "member2_way": "1a18a892b3984051",
+    "member3_way": "e6fb22b8e34b2fc4",
+    "member4_way": "42f4f213523ec279",
+    "member5_way": "94de7771f84a2912",
+    "member6_way": "6c2ab6526fccb57d"
+  },
+  "checkpoints": [
+    "committed and pushed",
+    "nothing new to checkpoint"
+  ],
+  "live_calls": 20,
+  "budget": {
+    "spent_by_account": {
+      "anthropic": 9.6561,
+      "openai": 0.0069
+    },
+    "hard_caps_usd": {
+      "anthropic": 100.0,
+      "openai": 100.0
+    },
+    "phase": "pilot",
+    "phase_total_usd": 20.0,
+    "spent_total_usd": 9.663,
+    "run_spent_usd": 0.0037,
+    "run_cap_usd": 0.5,
+    "safety_multiplier": 1.15
+  },
+  "rate_limits": {
+    "haiku_nothink": {
+      "input-tokens-limit": "10000000",
+      "input-tokens-remaining": "10000000",
+      "input-tokens-reset": "2026-10-20T06:03:47Z",
+      "output-tokens-limit": "2000000",
+      "output-tokens-remaining": "2000000",
+      "output-tokens-reset": "2026-10-20T06:03:49Z",
+      "requests-limit": "10000",
+      "requests-remaining": "9999",
+      "requests-reset": "2026-10-20T06:03:39Z",
+      "tokens-limit": "12000000",
+      "tokens-remaining": "12000000",
+      "tokens-reset": "2026-10-20T06:03:47Z"
+    }
+  }
+}

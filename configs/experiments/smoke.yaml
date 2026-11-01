@@ -1,0 +1,14 @@
+# Offline smoke test: fake model, no keys, no cost. A fake-model run is a dry run:
+# it writes nothing to state/ or results/ and makes no git commits.
+#   aan run configs/experiments/smoke.yaml
+name: smoke
+network: configs/networks/dense_3x6.yaml
+tasks: data/tasks/sample.jsonl
+model_override: fake
+configs:                       # agents kept per stage; the dense network always runs too
+  - [3, 3, 3, 1]
+  - [2, 2, 2, 1]
+  - [1, 1, 1, 1]
+  - [6, 2, 2, 1]
+  - {keep: [6, 6, 6, 1], fan_in: [null, 2, 2, 2]}   # edge pruning: each agent reads 2 upstream outputs
+chunk_size: 4

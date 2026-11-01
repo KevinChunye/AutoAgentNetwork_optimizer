@@ -1,0 +1,11 @@
+read,frozen,written,outputs,reproduced,exit,seconds,math_verify_timeouts
+Phase 1 G2a,a78e128,bc5e884,1,identical,0,55,
+Phase 1 G2b,c0264d8,d93b59c,1,identical,0,13,
+Phase 2,7cfec4f,653d07a,1,identical,0,17,
+Forecast selection,6e79e77,84cbcf9,1,identical,0,2,
+Forecast lockbox,84cbcf9,1a5f001,1,identical,0,2,
+Anchor block 1,831b2e6,40f4854,1,read.md: 3 committed lines differ (3 reproduced); first: `| sol61_low:base | math | 279 | 0.627 | 0.638 | 1.0 | 16 | 9 |` -> `| sol61_low:base | math | 279 | 0.627 | 0.638 | 0.0 | 16 | 9 |`; `1 math rows hit a timeout: arxivmath-0826-39 sol61_low:base call 0. Confirmatory decisions` -> `No math row hit a timeout.`,0,264,0
+Anchor block 2,b651158,37b615b,1,identical,0,89,0
+Anchor block 3,f160a31,6252e0b,1,identical,0,35,
+Atlas,9cb3d81,343f50e,13,identical,0,502,
+Atlas frozen model,95ada93,a398a46,1,identical,0,2,

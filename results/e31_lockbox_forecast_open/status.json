@@ -1,0 +1,151 @@
+{
+  "run_id": "e31_lockbox_forecast_open-1792700715",
+  "state": "completed",
+  "reason": "",
+  "vendor": "openai",
+  "task_kind": "forecast",
+  "items": [
+    195,
+    200
+  ],
+  "sources": [
+    {
+      "ref": "luna_none",
+      "calls": 5,
+      "first_call": 0,
+      "prompt": "base",
+      "max_tokens": 1500,
+      "items": null
+    },
+    {
+      "ref": "sol61_low",
+      "calls": 1,
+      "first_call": 0,
+      "prompt": "base",
+      "max_tokens": 8000,
+      "items": null
+    },
+    {
+      "ref": "luna_none",
+      "calls": 1,
+      "first_call": 0,
+      "prompt": "careful",
+      "max_tokens": 1500,
+      "items": null
+    },
+    {
+      "ref": "luna_none",
+      "calls": 1,
+      "first_call": 0,
+      "prompt": "contrarian",
+      "max_tokens": 1500,
+      "items": null
+    },
+    {
+      "ref": "luna_none",
+      "calls": 1,
+      "first_call": 0,
+      "prompt": "quick",
+      "max_tokens": 1500,
+      "items": null
+    }
+  ],
+  "template_hash": "918df73fdf01cefc",
+  "code": {
+    "commit": "cb9df61",
+    "dirty": false
+  },
+  "checkpoints": [
+    "committed and pushed"
+  ],
+  "calls": 45,
+  "live_calls": 45,
+  "by_source": {
+    "luna_none:base": {
+      "calls": 25,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.00207,
+      "live": 25,
+      "refused": 0
+    },
+    "luna_none:careful": {
+      "calls": 5,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.00045,
+      "live": 5,
+      "refused": 0
+    },
+    "luna_none:contrarian": {
+      "calls": 5,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.00051,
+      "live": 5,
+      "refused": 0
+    },
+    "luna_none:quick": {
+      "calls": 5,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.0004,
+      "live": 5,
+      "refused": 0
+    },
+    "sol61_low:base": {
+      "calls": 5,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.01055,
+      "live": 5,
+      "refused": 0
+    }
+  },
+  "model_versions": [
+    "gpt-6-luna",
+    "gpt-6.1-sol"
+  ],
+  "budget": {
+    "spent_by_account": {
+      "anthropic": 21.9796,
+      "openai": 4.5039
+    },
+    "hard_caps_usd": {
+      "anthropic": 100.0,
+      "openai": 100.0
+    },
+    "phase": "evidence",
+    "phase_total_usd": 150.0,
+    "account_caps_usd": {
+      "anthropic": 100.0,
+      "openai": 50.0
+    },
+    "room_by_account_usd": {
+      "anthropic": 64.9769,
+      "openai": 38.9743
+    },
+    "spent_total_usd": 26.4836,
+    "run_spent_usd": 0.014,
+    "run_cap_usd": 4.0,
+    "safety_multiplier": 1.15
+  },
+  "rate_limits": {
+    "luna_none": {
+      "limit-requests": "5000",
+      "limit-tokens": "2000000",
+      "remaining-requests": "4999",
+      "remaining-tokens": "1999423",
+      "reset-requests": "12ms",
+      "reset-tokens": "17ms"
+    },
+    "sol61_low": {
+      "limit-requests": "5000",
+      "limit-tokens": "1000000",
+      "remaining-requests": "4999",
+      "remaining-tokens": "999715",
+      "reset-requests": "12ms",
+      "reset-tokens": "17ms"
+    }
+  }
+}

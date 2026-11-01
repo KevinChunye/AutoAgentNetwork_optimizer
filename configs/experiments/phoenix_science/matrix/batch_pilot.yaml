@@ -1,0 +1,27 @@
+kind: phoenix_batch
+name: sci_batch_pilot
+prereg:
+  question: After a member is shut down and one model withdrawn (F1), does PHOENIX
+    full recovery give a better held-out balanced accuracy than fixed takeover and
+    than LLM-chosen recovery at the same $0.20 budget, and at what cost? (research/phoenix_science/prereg.md)
+  prediction: 'full - fixed test points: mean 0 to +2, interval including 0 (not resolved);
+    full - llm dollars negative; full - fixed dollars positive; F0 - F1 near 0 for
+    fixed.'
+  kill: Stop and audit on test-label exposure, provenance or hash violation, unknown
+    model charge, governor refusal or a failed pilot go/no-go; no retries; pilot cases
+    are never evidence.
+  decision: 'Pooled 95% paired bootstrap over the 15 evidence cases: lower bound >
+    0 -> full beats X; upper bound < 0 -> worse; else not resolved. Report every contrast,
+    per dataset and by withdrawn model.'
+branches:
+- configs/experiments/phoenix_science/matrix/sci_E1_covtype_T2_103_fixed_F1_20.yaml
+- configs/experiments/phoenix_science/matrix/sci_E1_covtype_T2_103_llm_F1_20.yaml
+- configs/experiments/phoenix_science/matrix/sci_E1_covtype_T2_103_full_F1_20.yaml
+- configs/experiments/phoenix_science/matrix/sci_E1_higgs_T1_102_fixed_F1_20.yaml
+- configs/experiments/phoenix_science/matrix/sci_E1_higgs_T1_102_llm_F1_20.yaml
+- configs/experiments/phoenix_science/matrix/sci_E1_higgs_T1_102_full_F1_20.yaml
+- configs/experiments/phoenix_science/matrix/sci_E1_miniboone_T2_103_fixed_F1_20.yaml
+- configs/experiments/phoenix_science/matrix/sci_E1_miniboone_T2_103_llm_F1_20.yaml
+- configs/experiments/phoenix_science/matrix/sci_E1_miniboone_T2_103_full_F1_20.yaml
+concurrency: 4
+out_dir: results

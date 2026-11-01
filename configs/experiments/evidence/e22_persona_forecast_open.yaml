@@ -1,0 +1,45 @@
+# Written by scripts/make_evidence_configs.py (evidence plan, step 0.13). Do not edit by hand.
+kind: panel
+name: e22_persona_forecast_open
+task_kind: forecast
+tasks: data/external/evidence/forecast.jsonl
+items: research/v3/evidence/sealed/forecast_sealed.txt
+sources:
+- ref: luna_none
+  calls: 1
+  max_tokens: 1500
+  prompt: careful
+- ref: luna_none
+  calls: 1
+  max_tokens: 1500
+  prompt: contrarian
+- ref: luna_none
+  calls: 1
+  max_tokens: 1500
+  prompt: quick
+max_usd: 4.0
+chunk_size: 25
+max_concurrency: 8
+expect:
+  min_calls: 20
+  max_unparsed_rate: 0.05
+  max_truncation_rate: 0.05
+  usd_per_call:
+    luna_none: 0.00012
+  max_cost_ratio: 1.5
+prereg:
+  question: 'Step 2.2 (openai, forecast): prompt variety: luna_none once under each of three persona prompts (careful
+    checker, contrarian, quick estimator) on the Phase 2 items (200 BBEH, 50 per task; the 200 sealed ForecastBench
+    questions).'
+  prediction: 'H11 (expl since session E2''s power re-run): another vendor buys more independence per dollar than
+    a different prompt: the vendor arm''s n_eff gain per dollar (adding Luna calls to Haiku, from Phase 1) minus
+    the prompt arm''s (adding Haiku persona calls) is above 0, on the same items; reasoning and resampling arms
+    reported, not ranked. No Phase 2 test is confirmatory: H11, H15 and H16 moved to exploratory in session E2''s
+    power re-run (research/v3/evidence/power.md, under 0.70 power in the base scenario); all are reported with intervals
+    and one-sided p-values. The analysis runs in the next session (plan steps 2.6-2.10).'
+  kill: Stop and audit if a source parses under 95% or truncates over 5% of its live calls (after 20), costs over
+    1.5x the probe per call, the governor projects a vendor past its cap, or (ForecastBench) over 10% of market
+    questions lack the freeze price.
+  decision: 'H11 is exploratory (power 0.45 in the base scenario): an interval above 0 favours buying independence
+    across vendors; an interval that includes 0 is reported as unresolved, not as evidence for persona panels (audit
+    48).'

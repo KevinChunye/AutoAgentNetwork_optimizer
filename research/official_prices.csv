@@ -1,0 +1,5 @@
+model,source,fetched,input_usd_per_mtok,cache_write_usd_per_mtok,cache_read_usd_per_mtok,output_usd_per_mtok,note
+claude-haiku-5-5,https://platform.claude.com/docs/en/about-claude/pricing,2026-10-18,0.10,0.125,0.01,0.50,prompts up to 100K tokens; 5-minute cache write
+gpt-6-luna,https://developers.openai.com/api/docs/pricing,2026-10-18,0.10,0.125,0.01,0.50,Standard tier; short context (<= 272K input tokens)
+gpt-5.6-luna,https://developers.openai.com/api/docs/pricing,2026-10-18,0.20,0.25,0.02,1.20,Standard tier; short context; not used in the pilot
+claude-sonnet-5-5,https://platform.claude.com/docs/en/about-claude/pricing,2026-10-18,2.00,2.50,0.10,10.00,the P3 senior control and the judge_cascade judge; no long-context tier (research/lit/prices_sonnet55.md)

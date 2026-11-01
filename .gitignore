@@ -1,0 +1,44 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+.env
+runs/
+
+# benchmark data that may not be redistributed
+data/external/
+
+# testbed: answer texts and sidecars stay on the GPU node (large); the response tables are committed
+results/testbed/**/*.texts.parquet
+
+# LaTeX build files of the paper draft (main.pdf is committed)
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.blg
+paper/*.bbl
+
+# PHOENIX science runs (results/sci_*, family arms results/fam_*): fitted models, transformed features, data copies and tool scratch stay
+# local (large); statuses, events, calls, plans, frozen.json and capability tables are committed
+results/sci_*/artifacts/
+results/sci_*/tool_work/
+results/sci_*/search.npz
+results/sci_*/task_*/
+results/sci_*/call_cache/
+results/fam_*/artifacts/
+results/fam_*/tool_work/
+results/fam_*/search.npz
+results/fam_*/task_*/
+results/fam_*/call_cache/
+
+# git worktrees of background agents
+.claude/worktrees/
+# offline (fake-model) dry runs
+results/fake_*/
+
+# Public release: benchmark question text is rebuilt locally (scripts/build_handoff.py), never committed;
+# assistant configuration stays out of the public tree.
+data/handoff/*.jsonl
+.claude/
+CLAUDE.md

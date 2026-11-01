@@ -1,0 +1,16 @@
+receiver,ref,action,calls,refused,share
+A,haiku_low,consult:B,144,0,0.0
+A,haiku_low,consult:C,144,0,0.0
+A,haiku_low,full,144,0,0.0
+A,haiku_low,initial,144,0,0.0
+A,haiku_low,reflect,144,0,0.0
+B,sonnet_low,consult:A,144,0,0.0
+B,sonnet_low,consult:C,144,0,0.0
+B,sonnet_low,full,144,2,0.013888888888888888
+B,sonnet_low,initial,144,0,0.0
+B,sonnet_low,reflect,144,4,0.027777777777777776
+C,sonnet_med,consult:A,144,1,0.006944444444444444
+C,sonnet_med,consult:B,144,3,0.020833333333333332
+C,sonnet_med,full,144,2,0.013888888888888888
+C,sonnet_med,initial,144,0,0.0
+C,sonnet_med,reflect,144,4,0.027777777777777776

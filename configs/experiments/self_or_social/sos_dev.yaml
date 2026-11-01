@@ -1,0 +1,35 @@
+# Self-or-social pruning, calibration (dev) branch table. Slices: --task-offset/--task-limit, sized by aan estimate (RUNBOOK.md).
+# A 2-item smoke is the same file with --task-limit 2 (its calls are then reused by slice 0).
+kind: self_or_social
+name: sos_dev
+tasks: data/external/bbeh_all.jsonl
+items: research/self_or_social/sealed/dev.txt
+team:
+- {id: A, ref: haiku_nothink, call: 0, max_tokens: 4000}
+- {id: B, ref: haiku_low, call: 0, max_tokens: 12288}
+- {id: C, ref: haiku_high, call: 0, max_tokens: 18432}
+reuse_first: [results/e51_haiku_bbeh/calls.csv]   # the E5 anchor's paid first answers (call 0 of each ref)
+branches: true
+full_review: false
+parser: v2
+disjoint_from: [research/self_or_social/sealed/test.txt]
+max_usd: 4.0
+chunk_size: 10
+max_concurrency: 12
+expect:
+  min_calls: 20
+  max_unparsed_rate: 0.10
+  max_truncation_rate: 0.10
+  usd_per_call: {haiku_nothink: 0.0005, haiku_low: 0.0012, haiku_high: 0.0018}
+  max_cost_ratio: 2.0
+prereg:
+  question: 'Calibration of self-or-social pruning (research/self_or_social/prereg.md). On the 200 dev items, for the
+    team A haiku_nothink / B haiku_low / C haiku_high whose first answers the E5 anchor already paid for, what does
+    each revision do: reflect alone, and consult each teammate (6 directed edges), all reading the same first answers?'
+  prediction: 'About $0.006 of new spend per item (9 revision calls; first answers reused), about $1.2 for the 200 items;
+    under 5% unparsed and truncated. Directed gains differ by edge (J -> i is not i -> J).'
+  kill: 'Stop if a member and phase leaves over 10% of its live calls unparsed or truncated (after 20), costs over 2x its
+    guard per call, the governor refuses, or the ledger shows spend above 1.5x the estimate: stop, audit, report.'
+  decision: 'The dev table alone freezes the policy and every control (analysis/self_or_social.py freeze, rule in its
+    docstring), committed as research/self_or_social/frozen.json before any test call. If no revision beats stop on dev
+    for any receiver and state, the frozen policy is plain voting and the test reads that as the negative result.'

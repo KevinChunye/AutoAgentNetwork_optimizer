@@ -1,0 +1,35 @@
+name: mixed_vote6
+description: Three Haiku 5.5 and three GPT-6 Luna solvers (same list price) and a free vote. Different
+  vendors make different mistakes, so the team's effective size should beat six copies of one model. Agents
+  0, 2, 4 are the same calls as Haiku runs of vote6 / dense_3x6; agents 1, 3, 5 the same as Luna runs,
+  so this can be scored offline once both exist.
+default_model: haiku
+default_max_tokens: 3200
+default_temperature: 0.0
+stages:
+- name: propose
+  width: 6
+  max_tokens: 3200
+  system: 'You are one member of a team solving a problem. Work independently and be concise.
+
+    End with a final line of the form "ANSWER: <answer>".
+
+    '
+  instruction: 'Your approach: {perspective}
+
+    Solve the task above.
+
+    '
+  perspectives:
+  - Work step by step from the given facts.
+  - Write the key equations before computing anything.
+  - Estimate the answer roughly first, then compute it exactly.
+  - Work backwards from what the question asks for.
+  - Track units and edge cases as you go.
+  - Restate the problem in simpler terms, then solve it.
+  agent_models:
+  - haiku_nothink
+  - luna_low
+- name: vote
+  kind: vote
+  width: 1

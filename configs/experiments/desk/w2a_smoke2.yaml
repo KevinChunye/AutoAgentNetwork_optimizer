@@ -1,0 +1,30 @@
+# W2-A smoke test 2 (research/v3/plan_w2.md), after smoke test 1 truncated 8 of 20 replies at 400 tokens: the solo trader (S1) with Haiku on the first 20 events of
+# tuning sequence 1. It checks the reply format and measures the cost per call before the full design.
+kind: desk
+name: w2a_smoke2
+seeds: [1]
+events: 200
+event_offset: 0
+event_limit: 20
+structures: [S1]
+model: haiku_nothink
+max_tokens: 800
+temperature: 1.0
+kelly_fraction: 0.5
+max_usd: 0.5
+chunk_events: 50
+max_concurrency: 8
+expect:
+  min_calls: 10
+  max_unparsed_rate: 0.05
+  max_truncation_rate: 0.05
+  max_spend_usd: 0.0075
+prereg:
+  question: With brief working allowed and an 800-token cap, do Haiku traders end with the four answer lines (probability,
+    side, stake) on events 0-19 of tuning sequence 1, and what does one desk call cost?
+  prediction: At most 1 of 20 replies unparsed or truncated; about $0.00025 per call ($0.005 for 20).
+  kill: More than 5% unparsed or truncated stops the run; actual spend above $0.0075 (1.5x the $0.005 projection)
+    stops it.
+  decision: 'Decision rule 3 of research/v3/plan_w2.md: at most 5% unparsed or truncated and at most $0.0005 per
+    call continues to w2a_tune, with each later run''s kill line set to 1.5x its planned calls times the measured
+    cost per call; otherwise re-size the plan again before any further run.'

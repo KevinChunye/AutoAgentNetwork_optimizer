@@ -1,0 +1,35 @@
+{
+  "run_id": "p0_calib_luna_low-1792329960",
+  "state": "completed",
+  "reason": "",
+  "checkpoints": [
+    "committed and pushed"
+  ],
+  "tasks_done": 5,
+  "budget": {
+    "spent_by_account": {
+      "anthropic": 0.0,
+      "openai": 0.0032
+    },
+    "hard_caps_usd": {
+      "anthropic": 100.0,
+      "openai": 100.0
+    },
+    "phase": "pilot",
+    "phase_total_usd": 20.0,
+    "spent_total_usd": 0.0032,
+    "run_spent_usd": 0.0032,
+    "run_cap_usd": 0.25,
+    "safety_multiplier": 1.15
+  },
+  "rate_limits": {
+    "luna_low": {
+      "limit-requests": "5000",
+      "limit-tokens": "2000000",
+      "remaining-requests": "4996",
+      "remaining-tokens": "1999650",
+      "reset-requests": "48ms",
+      "reset-tokens": "10ms"
+    }
+  }
+}

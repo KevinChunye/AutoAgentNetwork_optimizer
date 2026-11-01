@@ -1,0 +1,5 @@
+model,fetched,input_usd_per_mtok,cache_write_usd_per_mtok,cache_read_usd_per_mtok,output_usd_per_mtok,ours_input,ours_cache_write,ours_cache_read,ours_output,ours_at_or_above_official
+claude-haiku-5-5,2026-10-18,0.1,0.125,0.01,0.5,0.1,0.125,0.01,0.5,True
+gpt-6-luna,2026-10-18,0.1,0.125,0.01,0.5,0.2,0.2,0.02,1.2,True
+gpt-5.6-luna,2026-10-18,0.2,0.25,0.02,1.2,0.2,0.2,0.02,1.2,False
+claude-sonnet-5-5,2026-10-18,2.0,2.5,0.1,10.0,2.0,2.5,0.1,10.0,True

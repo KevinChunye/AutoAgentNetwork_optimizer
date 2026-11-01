@@ -1,0 +1,54 @@
+{
+  "items": 8,
+  "rules": {
+    "1_failed_share": true,
+    "2_cost_per_item": true,
+    "3_end_to_end": true,
+    "4_completed_and_pushed": true,
+    "5_projection_fits_room": true
+  },
+  "notes": [],
+  "failed_rates": [
+    {
+      "ref": "luna_low_ev",
+      "phase2": "initial",
+      "calls": 8,
+      "failed": 0.0
+    },
+    {
+      "ref": "luna_low_ev",
+      "phase2": "revision",
+      "calls": 32,
+      "failed": 0.0
+    },
+    {
+      "ref": "sol61_low",
+      "phase2": "initial",
+      "calls": 8,
+      "failed": 0.0
+    },
+    {
+      "ref": "sol61_low",
+      "phase2": "revision",
+      "calls": 32,
+      "failed": 0.0
+    },
+    {
+      "ref": "sol61_med",
+      "phase2": "initial",
+      "calls": 8,
+      "failed": 0.0
+    },
+    {
+      "ref": "sol61_med",
+      "phase2": "revision",
+      "calls": 32,
+      "failed": 0.0
+    }
+  ],
+  "live_usd": 0.2301,
+  "usd_per_item": 0.02876,
+  "projected_usd": 10.77,
+  "room_usd": 58.33,
+  "go": true
+}

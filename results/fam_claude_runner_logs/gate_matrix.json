@@ -1,0 +1,162 @@
+{
+  "gate": "matrix",
+  "branches": [
+    {
+      "branch": "fam_claude_E1_covtype_T2_103_fixed_F1_100_d1",
+      "policy": "fixed",
+      "status": "no_positive_feasible_plan",
+      "error_type": null,
+      "unknown_cost": false,
+      "spent": 0.006067175,
+      "budget": 1.0,
+      "frozen": true,
+      "calls": 8,
+      "invalid": 0
+    },
+    {
+      "branch": "fam_claude_E1_covtype_T2_103_llm_F1_100_d1",
+      "policy": "llm",
+      "status": "completed",
+      "error_type": null,
+      "unknown_cost": false,
+      "spent": 0.20748,
+      "budget": 1.0,
+      "frozen": true,
+      "calls": 7,
+      "invalid": 0
+    },
+    {
+      "branch": "fam_claude_E1_covtype_T2_103_full_F1_100_d1",
+      "policy": "full",
+      "status": "no_positive_feasible_plan",
+      "error_type": null,
+      "unknown_cost": false,
+      "spent": 0.07581299999999999,
+      "budget": 1.0,
+      "frozen": true,
+      "calls": 2,
+      "invalid": 0
+    },
+    {
+      "branch": "fam_claude_E1_higgs_T1_102_fixed_F1_100_d1",
+      "policy": "fixed",
+      "status": "no_positive_feasible_plan",
+      "error_type": null,
+      "unknown_cost": false,
+      "spent": 0.006355425,
+      "budget": 1.0,
+      "frozen": true,
+      "calls": 8,
+      "invalid": 0
+    },
+    {
+      "branch": "fam_claude_E1_higgs_T1_102_llm_F1_100_d1",
+      "policy": "llm",
+      "status": "limits_reached",
+      "error_type": null,
+      "unknown_cost": false,
+      "spent": 0.25466,
+      "budget": 1.0,
+      "frozen": true,
+      "calls": 8,
+      "invalid": 0
+    },
+    {
+      "branch": "fam_claude_E1_higgs_T1_102_full_F1_100_d1",
+      "policy": "full",
+      "status": "no_positive_feasible_plan",
+      "error_type": null,
+      "unknown_cost": false,
+      "spent": 0.150346,
+      "budget": 1.0,
+      "frozen": true,
+      "calls": 4,
+      "invalid": 0
+    },
+    {
+      "branch": "fam_claude_E1_miniboone_T2_103_fixed_F1_100_d1",
+      "policy": "fixed",
+      "status": "no_positive_feasible_plan",
+      "error_type": null,
+      "unknown_cost": false,
+      "spent": 0.0973285,
+      "budget": 1.0,
+      "frozen": true,
+      "calls": 8,
+      "invalid": 0
+    },
+    {
+      "branch": "fam_claude_E1_miniboone_T2_103_llm_F1_100_d1",
+      "policy": "llm",
+      "status": "limits_reached",
+      "error_type": null,
+      "unknown_cost": false,
+      "spent": 0.24183,
+      "budget": 1.0,
+      "frozen": true,
+      "calls": 8,
+      "invalid": 1
+    },
+    {
+      "branch": "fam_claude_E1_miniboone_T2_103_full_F1_100_d1",
+      "policy": "full",
+      "status": "no_positive_feasible_plan",
+      "error_type": null,
+      "unknown_cost": false,
+      "spent": 0.113257,
+      "budget": 1.0,
+      "frozen": true,
+      "calls": 3,
+      "invalid": 0
+    }
+  ],
+  "calls_by_model": [
+    {
+      "model": "haiku_low",
+      "purpose": "design",
+      "calls": 16,
+      "truncated": 0,
+      "refused": 0
+    },
+    {
+      "model": "opus_med",
+      "purpose": "design",
+      "calls": 1,
+      "truncated": 0,
+      "refused": 0
+    },
+    {
+      "model": "opus_med",
+      "purpose": "propose",
+      "calls": 8,
+      "truncated": 0,
+      "refused": 0
+    },
+    {
+      "model": "opus_med",
+      "purpose": "recover",
+      "calls": 23,
+      "truncated": 0,
+      "refused": 0
+    },
+    {
+      "model": "sonnet_low",
+      "purpose": "design",
+      "calls": 8,
+      "truncated": 0,
+      "refused": 0
+    }
+  ],
+  "bad_calls": 1,
+  "calls": 56,
+  "checks": {
+    "terminal_status": true,
+    "no_error": true,
+    "no_unknown_charge": true,
+    "within_budget": true,
+    "frozen": true,
+    "bad_share_ok": true,
+    "state_pushed": true
+  },
+  "go": true
+}

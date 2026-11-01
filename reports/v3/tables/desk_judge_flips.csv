@@ -1,0 +1,8 @@
+model,role,replies,flipped,share,passes,belief_error
+haiku_nothink,member2,200,0,0.0,True,0.00632
+haiku_nothink,member3,200,0,0.0,True,0.00818
+haiku_nothink,member4,200,0,0.0,True,0.01352
+haiku_nothink,member5,200,0,0.0,True,0.02942
+haiku_nothink,member6,200,0,0.0,True,0.00907
+haiku_nothink,trader,996,1,0.001,True,0.00492
+haiku_nothink,twin,521,0,0.0,True,0.00495

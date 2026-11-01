@@ -1,0 +1,4 @@
+dataset,raw_rows,dropped_rows,clean_rows,features,classes,class_counts,source
+covtype,581012,0,581012,54,7,"[211840, 283301, 35754, 2747, 9493, 17367, 20510]",{'loader': 'sklearn.datasets.fetch_covtype'}
+miniboone,130064,468,129596,50,2,"[93108, 36488]","{'loader': 'sklearn.datasets.fetch_openml', 'openml_id': 41150, 'openml_name': 'MiniBooNE', 'openml_version': '1', 'target': 'signal'}"
+higgs,98050,1,98049,28,2,"[46223, 51826]","{'loader': 'sklearn.datasets.fetch_openml', 'openml_id': 23512, 'openml_name': 'higgs', 'openml_version': '2', 'target': 'class'}"

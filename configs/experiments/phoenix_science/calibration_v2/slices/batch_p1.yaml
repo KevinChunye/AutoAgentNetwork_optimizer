@@ -1,0 +1,18 @@
+kind: phoenix_batch
+name: sci_cal2_batch_p1
+prereg:
+  question: Development-only action quality, completion and cost of each pool model
+    on the science tables (3 families x 10 tasks on training-internal folds); not
+    a held-out result.
+  prediction: Each model completes most design tasks; sol61_low and sonnet_low reach
+    higher validation quality than luna_low_ev; costs follow list prices.
+  kill: Stop on data leakage, transport uncertainty, inaccessible model, governor
+    refusal or a failed calibration-pilot go/no-go (tasks 0, 10, 20 per model).
+  decision: Freeze the observed statistics including failures and zeros; combine the
+    three tables; never insert test outcomes or the smoke tables.
+branches:
+- configs/experiments/phoenix_science/calibration_v2/slices/sci_cal2_luna_low_ev_p1.yaml
+- configs/experiments/phoenix_science/calibration_v2/slices/sci_cal2_sol61_low_p1.yaml
+- configs/experiments/phoenix_science/calibration_v2/slices/sci_cal2_sonnet_low_p1.yaml
+concurrency: 3
+out_dir: results

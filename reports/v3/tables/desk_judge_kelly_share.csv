@@ -1,0 +1,5 @@
+model,structure,decisions,median_stake_over_kelly,slope_on_kelly
+haiku_nothink,S1,790,0.26334,0.20615
+haiku_nothink,S2,789,0.26277,0.14503
+haiku_nothink,S3,790,0.49783,0.44996
+haiku_nothink,S4,157,0.4406,0.34492

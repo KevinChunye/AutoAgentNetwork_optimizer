@@ -1,0 +1,45 @@
+# Agent insurance: underwriting assumptions for analysis/insurance.py.
+# Everything here is an input that no benchmark measures. The report shows how the price moves
+# when each one moves (sensitivity table), so none of them is hidden inside a result.
+
+loss:
+  lgd: 0.25                  # share of a wrong write's dollar exposure actually lost after reversals
+  commission_floor_usd: 25   # remediation cost of a wrong write with no money attached
+  omission_usd: 12           # a needed action not taken: a human finishes the job
+  communication_usd: 8       # state right, customer told something wrong
+  expense_ratio: 0.25        # insurer expenses as a share of gross premium
+  cost_of_capital: 0.10      # required annual return on capital held against the tail
+
+# Benchmark tasks are chosen to be hard, so benchmark default rates are not deployment rates.
+# The benchmark gives relativities (model vs model, context vs context) and the dependence
+# structure; the level comes from the insured's own monitored traces (experience rating).
+# `level` scales every benchmark rate: 1.0 = benchmark difficulty.
+levels:
+  benchmark: 1.0
+  hardened: 0.1
+  production: 0.01           # base case: about 2 to 4 wrong writes per 1,000 episodes
+  mature: 0.001
+
+book:
+  insureds: 40
+  episodes_per_year: 20000   # one mid-size customer-service deployment
+  contexts: [airline, retail]
+
+shocks:
+  rate_per_year: 1.0         # model-wide incidents per model per year (bad release, new jailbreak)
+  multiplier: 3.0            # Armilla's example: accuracy 95% -> 85% is 3x the error rate
+  months: 1
+
+controls:
+  approval_usd: 500          # writes touching more than this need a human click
+  approval_catch: 0.8        # share of wrong high-value writes the human catches
+
+terms:
+  deductible: 50
+  limit: 10000
+
+sim:
+  n_sims: 20000
+  level: 0.995               # Solvency II one-year standard
+  insured_cv: 0.30
+  seed: 0

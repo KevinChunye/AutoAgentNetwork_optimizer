@@ -1,0 +1,69 @@
+kind: phoenix
+name: sci_cal3_sonnet_low
+mode: calibrate
+prereg:
+  question: Development-only action quality, completion and cost of each pool model
+    on the science tables (3 families x 10 tasks on training-internal folds); not
+    a held-out result.
+  prediction: Each model completes most design tasks; sol61_low and sonnet_low reach
+    higher validation quality than luna_low_ev; costs follow list prices.
+  kill: Stop on data leakage, transport uncertainty, inaccessible model, governor
+    refusal or a failed calibration-pilot go/no-go (tasks 0, 10, 20 per model).
+  decision: Freeze the observed statistics including failures and zeros; combine the
+    three tables; never insert test outcomes or the smoke tables.
+frozen_hashes:
+  implementation: 10dfaf37e1c5153bb02686ce2783158246ae6f0469698d22136e0a33ac198af4
+  runtime_dependencies: a5e3b90b79e6b4ac2c885179b9676df0025ff6b69681e7d9b93a68882dc78711
+  providers: 273a4cb620ccdadb979bb689938b3bfd13b779225f2c271b5649ef8e7e760e5a
+  pricing: d7827d7fe867b228393412b1aa85cb8e89ca74a9aad1f63ba39101335c563ed0
+  budget: 4c7f34ccda0b85c0fa2e310ab1e172a02b484d4627913b7b2567af0b31314982
+  calibration_0: 804ae4e9aab61eb7460f73664d158be16372d0da9fc30d39899dcbf41befa4be
+  calibration_1: 36c80e7864ffa994b05ecab99794a344ce04255041c5351fb0665e67ac905003
+  calibration_2: 9ad8a1442c81ab351a89ff2ba8292dd2a3c47262bb75165d3306ef31697b55f8
+  calibration_3: 8b335f0ba3bf331cf18def159d856f005eeecd93490cf67b79b2a104db99eea8
+  calibration_4: 836540b5040d89c253361653ddb944ac1f8b113a7392a55ac41707831b15fc33
+  calibration_5: 4fd1c7ea11d832db690ca0a8071e0679ffc1061fd99c3389bdec1aabe85334d9
+  calibration_6: cfe9e912bb9d0498b77d273d5a778ec5c92c55957507af29510ba619965ae023
+  calibration_7: 2e182b8e97d9669075c9183685b5398684f01950169485fd6742239dc41e821b
+  calibration_8: c87e4e0abd643638a59e8b6368f6d647e512ba4b57287f6d2b2320f9efcb7b0c
+  templates: 82f3f2788b068c6cf0b032d083c981c861b223b218d23fcf88e3c59780d54cac
+policy: full
+fault: F1
+withdrawn_model: sonnet_low
+shutdown_member: A
+models:
+- luna_low_ev
+- sol61_low
+- sonnet_low
+planner_model: luna_low_ev
+api_budget_usd: 3.0
+cpu_budget_s: 7200.0
+max_calls: 30
+max_tools: 1000
+wall_s: 7200.0
+tool_timeout_s: 90.0
+max_tokens: 4096
+max_input_tokens: 6000
+proposal_rounds: 3
+seed: 101
+task_offset: 26
+calibration_model: sonnet_low
+calibration_data:
+- data/external/phoenix_science/covtype/calibration_1.npz
+- data/external/phoenix_science/covtype/calibration_2.npz
+- data/external/phoenix_science/covtype/calibration_3.npz
+- data/external/phoenix_science/miniboone/calibration_1.npz
+- data/external/phoenix_science/miniboone/calibration_2.npz
+- data/external/phoenix_science/miniboone/calibration_3.npz
+- data/external/phoenix_science/higgs/calibration_1.npz
+- data/external/phoenix_science/higgs/calibration_2.npz
+- data/external/phoenix_science/higgs/calibration_3.npz
+providers: configs/providers.yaml
+pricing: configs/pricing.yaml
+budget: configs/budget.yaml
+ledger: state/ledger.jsonl
+cache: state/cache
+require_ledger: true
+git_checkpoint: true
+out_dir: results
+task_limit: 4

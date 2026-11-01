@@ -1,0 +1,9 @@
+{
+  "replicates": 132,
+  "proposer_wrong_rate": 0.5467171717171717,
+  "all_wrong_observed": 0.21212121212121213,
+  "all_wrong_if_independent": 0.026703998109117645,
+  "monoculture_factor": 7.94342522248707,
+  "all_right_observed": 0.17424242424242425,
+  "proposer_icc": 0.42492508553392716
+}

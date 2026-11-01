@@ -1,0 +1,373 @@
+<title>Market Town Replay</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a trading-floor console. Header with the session picker and summary; a three-zone floor
+   (buyers | book + current turn + price path | sellers) that stacks on phones; a transport bar for stepping. */
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --ink: #18212c;
+  --muted: #5a6676;
+  --line: #d9dfe7;
+  --bid: #1f5fad;
+  --bid-soft: #e3edf9;
+  --ask: #b8461a;
+  --ask-soft: #fbe9e1;
+  --trade: #0d7a6f;
+  --trade-soft: #def3ef;
+  --warn: #9a6a00;
+  --senior: #6b3fa0;
+  --senior-soft: #efe8f8;
+  --font-display: "Barlow Semi Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1319; --surface: #151c25; --ink: #e5eaf0; --muted: #94a1b1; --line: #263140;
+    --bid: #6ea9f2; --bid-soft: #172a42; --ask: #f08b54; --ask-soft: #3a2116; --trade: #3cc6b2; --trade-soft: #12302c;
+    --warn: #e0b54a; --senior: #b892ea; --senior-soft: #2a2140; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1319; --surface: #151c25; --ink: #e5eaf0; --muted: #94a1b1; --line: #263140;
+  --bid: #6ea9f2; --bid-soft: #172a42; --ask: #f08b54; --ask-soft: #3a2116; --trade: #3cc6b2; --trade-soft: #12302c;
+  --warn: #e0b54a; --senior: #b892ea; --senior-soft: #2a2140; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.45; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 18px 40px;
+        padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+        display: grid; gap: 16px; }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: 1.9rem; letter-spacing: 0.01em; margin: 0; text-wrap: balance; }
+.lede { color: var(--muted); margin: 2px 0 0; max-width: 70ch; }
+.label { font-family: var(--font-display); font-weight: 600; font-size: 0.78rem; letter-spacing: 0.08em;
+         text-transform: uppercase; color: var(--muted); }
+.mono, .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+header.top { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: end; justify-content: space-between; }
+.picker { display: grid; gap: 4px; min-width: 0; }
+select, button { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line);
+                 border-radius: 6px; padding: 7px 10px; }
+select:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--bid); outline-offset: 2px; }
+button { cursor: pointer; font-family: var(--font-display); font-weight: 600; min-width: 40px; }
+button:hover { border-color: var(--muted); }
+button.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); min-width: 84px; }
+.summary { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.stat { display: grid; }
+.stat .v { font-family: var(--font-mono); font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.floor { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; min-width: 0; }
+.side h2 { margin: 0 0 8px; font-family: var(--font-display); font-size: 1.05rem; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.side.buyers h2 { color: var(--bid); }
+.side.sellers h2 { color: var(--ask); }
+.traders { display: grid; gap: 4px; }
+.trader { display: grid; grid-template-columns: 2.4em 1fr auto; gap: 6px; align-items: center; padding: 4px 6px;
+          border-radius: 5px; border: 1px solid transparent; font-size: 0.86rem; }
+.trader .id { font-family: var(--font-mono); font-weight: 600; }
+.trader .lim { font-family: var(--font-mono); color: var(--muted); }
+.trader .pf { font-family: var(--font-mono); font-size: 0.8rem; text-align: right; }
+.trader.done { opacity: 0.45; }
+.trader.extra .id { text-decoration: underline dotted var(--muted); text-underline-offset: 3px; }
+.trader.now { border-color: var(--ink); background: var(--bg); opacity: 1; }
+.tag { font-family: var(--font-display); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em; padding: 0 5px;
+       border-radius: 4px; margin-left: 4px; vertical-align: 1px; }
+.tag.sonnet { color: var(--senior); background: var(--senior-soft); }
+.tag.haiku { color: var(--muted); border: 1px solid var(--line); }
+.center { display: grid; gap: 14px; min-width: 0; }
+.book { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; }
+.quote { border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; }
+.quote.bid { background: var(--bid-soft); color: var(--bid); }
+.quote.ask { background: var(--ask-soft); color: var(--ask); text-align: right; }
+.quote .px { font-family: var(--font-mono); font-size: 1.9rem; font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.quote .who { font-family: var(--font-mono); font-size: 0.8rem; }
+.spread { text-align: center; display: grid; gap: 2px; }
+.spread .v { font-family: var(--font-mono); font-size: 1rem; }
+.turn { display: grid; gap: 6px; }
+.turn .head { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.pill { font-family: var(--font-display); font-weight: 600; font-size: 0.82rem; padding: 2px 8px; border-radius: 999px;
+        border: 1px solid var(--line); white-space: nowrap; }
+.pill.trade { color: var(--trade); background: var(--trade-soft); border-color: transparent; }
+.pill.posted { color: var(--ink); }
+.pill.rejected { color: var(--warn); border-color: var(--warn); }
+.pill.pass, .pill.unparsed { color: var(--muted); }
+.pill.BID { color: var(--bid); background: var(--bid-soft); border-color: transparent; }
+.pill.ASK { color: var(--ask); background: var(--ask-soft); border-color: transparent; }
+.pill.ACCEPT { color: var(--trade); background: var(--trade-soft); border-color: transparent; }
+blockquote { margin: 0; padding: 8px 12px; border-left: 3px solid var(--line); color: var(--ink); font-style: italic; }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--muted); font-family: var(--font-mono); font-size: 10px; }
+.meters { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.meter { display: grid; gap: 4px; }
+.bar { height: 8px; border-radius: 4px; background: var(--bg); border: 1px solid var(--line); overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--trade); }
+.log { display: grid; gap: 2px; font-size: 0.84rem; max-height: 16.5em; overflow-y: auto; }
+.log .row { display: grid; grid-template-columns: 4.2em 2.6em 4.2em 3.6em minmax(0, 1fr); gap: 6px; padding: 2px 4px; border-radius: 4px; }
+.log .row.cur { background: var(--bg); }
+.log .row .r { color: var(--muted); font-family: var(--font-mono); }
+.log .row .txt { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.transport { position: sticky; bottom: env(safe-area-inset-bottom, 0px); z-index: 5; background: var(--surface);
+             border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+             display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; }
+.transport input[type=range] { flex: 1 1 220px; min-width: 0; accent-color: var(--ink); }
+.transport .where { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--muted); font-size: 0.82rem; }
+.legend i { display: inline-block; width: 14px; height: 3px; vertical-align: middle; margin-right: 5px; }
+footer { color: var(--muted); font-size: 0.82rem; max-width: 90ch; }
+@media (max-width: 900px) {
+  .floor { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .center { grid-column: 1 / -1; order: -1; }
+}
+@media (max-width: 520px) {
+  .floor { grid-template-columns: minmax(0, 1fr); }
+  .chart text { font-size: 19px; }
+  .quote .px { font-size: 1.5rem; }
+  .log .row { grid-template-columns: 3.6em 2.4em 3.8em minmax(0, 1fr); }
+  .log .row .oc { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Market Town Replay</h1>
+      <p class="lede">LLM traders in a continuous double auction for one good, 11 buyers against 11 sellers. Step through a session turn by turn: the book, each trader's one-line reason, the trades and how much of the possible gain from trade the market captured. Competitive price P* = $2.00, Q* = 6 units, maximum surplus $7.50 per period (Smith 1962, Test 1).</p>
+    </div>
+    <div class="picker">
+      <label class="label" for="session">Session</label>
+      <select id="session"></select>
+    </div>
+  </header>
+
+  <div class="summary" id="summary"></div>
+
+  <section class="floor">
+    <div class="panel side buyers"><h2>Buyers <span class="label">value · profit</span></h2><div class="traders" id="buyers"></div></div>
+    <div class="center">
+      <div class="panel">
+        <div class="book">
+          <div class="quote bid"><span class="label">Best bid</span><span class="px" id="bid">—</span><span class="who" id="bidwho"></span></div>
+          <div class="spread"><span class="label">Spread</span><span class="v" id="spread">—</span></div>
+          <div class="quote ask"><span class="label">Best ask</span><span class="px" id="ask">—</span><span class="who" id="askwho"></span></div>
+        </div>
+      </div>
+      <div class="panel turn" id="turn"></div>
+      <div class="panel meters" id="meters"></div>
+      <div class="panel chart">
+        <div class="legend"><span><i style="background:var(--bid)"></i>best bid</span><span><i style="background:var(--ask)"></i>best ask</span><span><i style="background:var(--trade);height:8px;width:8px;border-radius:50%"></i>trade</span><span><i style="background:var(--ink)"></i>P* $2.00</span></div>
+        <div id="chart"></div>
+      </div>
+      <div class="panel"><div class="label" style="margin-bottom:6px">Recent turns</div><div class="log" id="log"></div></div>
+    </div>
+    <div class="panel side sellers"><h2>Sellers <span class="label">cost · profit</span></h2><div class="traders" id="sellers"></div></div>
+  </section>
+
+  <div class="transport" role="group" aria-label="Replay controls">
+    <button id="prevPeriod" title="Previous period">|◀</button>
+    <button id="back" title="Step back (left arrow)">◀</button>
+    <button id="play" class="primary" title="Play or pause (space)">Play</button>
+    <button id="fwd" title="Step forward (right arrow)">▶</button>
+    <button id="nextPeriod" title="Next period">▶|</button>
+    <select id="speed" aria-label="Speed"><option value="2">2 turns/s</option><option value="6" selected>6 turns/s</option><option value="20">20 turns/s</option></select>
+    <input type="range" id="scrub" min="0" max="1" value="0" aria-label="Turn">
+    <span class="where" id="where"></span>
+  </div>
+
+  <footer>Each turn, one trader who has not traded yet in the period acts: BID or ASK (a quote must improve the book), ACCEPT the standing quote, or PASS. A crossing quote trades at the standing quote's price; both quotes then clear. Buyers cannot pay above their value and sellers cannot sell below their cost. Underlined ids are extramarginal traders (rank 7-11), who should not trade at P*; a trade by one of them lowers efficiency. Efficiency = realized surplus (buyer value - seller cost, summed over trades) / $7.50 per period. Data: results/*/turns.csv on branch market_town of AutoAgentNetwork.</footer>
+</div>
+
+<script>
+const DATA = /*DATA*/null;
+const $ = (id) => document.getElementById(id);
+const money = (v) => (v === null || v === undefined) ? "—" : "$" + Number(v).toFixed(2);
+const S = DATA.schedule;
+let session = null, tick = 0, timer = null, prep = null;
+
+function prepare(s) {
+  // per turn: index, period, and the trades it made; per trader: profit events
+  const trades = [];
+  const periodStart = {};
+  s.turns.forEach((t, i) => {
+    const [period, , trader, , , outcome, , , price, other] = t;
+    if (!(period in periodStart)) periodStart[period] = i;
+    if (outcome === "trade") {
+      const a = s.traders[trader], b = s.traders[other];
+      const buyer = a.role === "buyer" ? trader : other, seller = a.role === "buyer" ? other : trader;
+      const v = s.traders[buyer].limit, c = s.traders[seller].limit;
+      trades.push({ i, period, price, buyer, seller, surplus: v - c, bp: v - price, sp: price - c,
+                    extra: s.traders[buyer].rank > S.q_star || s.traders[seller].rank > S.q_star });
+    }
+  });
+  return { trades, periodStart };
+}
+
+function optionLabel(s) {
+  return `${s.condition} · seed ${s.seed} · ${(100 * s.efficiency).toFixed(1)}% · ${s.trades} trades`;
+}
+
+function buildPicker() {
+  const sel = $("session");
+  const groups = {};
+  DATA.sessions.forEach((s, i) => { (groups[s.condition] = groups[s.condition] || []).push([s, i]); });
+  Object.entries(groups).forEach(([cond, list]) => {
+    const og = document.createElement("optgroup"); og.label = cond;
+    list.forEach(([s, i]) => { const o = document.createElement("option"); o.value = i; o.textContent = optionLabel(s); og.appendChild(o); });
+    sel.appendChild(og);
+  });
+  sel.addEventListener("change", () => load(Number(sel.value), null));
+}
+
+function load(index, startTick) {
+  stop();
+  session = DATA.sessions[index];
+  prep = prepare(session);
+  $("session").value = index;
+  $("scrub").max = session.turns.length;
+  const firstP2 = prep.periodStart[2];
+  tick = startTick !== null ? startTick : Math.min(session.turns.length, (firstP2 || 40) + 12);
+  render();
+}
+
+function render() {
+  const s = session, n = s.turns.length;
+  const cur = tick > 0 ? s.turns[tick - 1] : null;
+  const period = cur ? cur[0] : 1;
+  const round = cur ? cur[1] : 1;
+  // book after the current turn (empty before the first turn and right after a period starts)
+  const bid = cur ? cur[6] : null, ask = cur ? cur[7] : null;
+  const owner = (px, side) => {
+    if (px === null) return "";
+    for (let j = tick - 1; j >= 0 && s.turns[j][0] === period; j--) {
+      const t = s.turns[j];
+      if (t[5] === "trade") break;
+      if (t[5] === "posted" && t[3] === side && t[4] === px) return t[2];
+    }
+    return "";
+  };
+  $("bid").textContent = money(bid); $("ask").textContent = money(ask);
+  const bw = owner(bid, "BID"), aw = owner(ask, "ASK");
+  $("bidwho").textContent = bw ? `${bw} · value ${money(s.traders[bw].limit)}` : "";
+  $("askwho").textContent = aw ? `${aw} · cost ${money(s.traders[aw].limit)}` : "";
+  $("spread").textContent = (bid !== null && ask !== null) ? money(ask - bid) : "—";
+
+  const done = prep.trades.filter(t => t.i < tick);
+  const profit = {}; Object.keys(s.traders).forEach(k => profit[k] = 0);
+  const tradedNow = new Set();
+  done.forEach(t => { profit[t.buyer] += t.bp; profit[t.seller] += t.sp;
+                      if (t.period === period) { tradedNow.add(t.buyer); tradedNow.add(t.seller); } });
+  const actor = cur ? cur[2] : null;
+  const row = (id) => {
+    const tr = s.traders[id];
+    const cls = ["trader", tradedNow.has(id) ? "done" : "", tr.rank > S.q_star ? "extra" : "", id === actor ? "now" : ""].join(" ");
+    const tag = tr.model === "Sonnet" ? '<span class="tag sonnet">SONNET</span>' : '<span class="tag haiku">HAIKU</span>';
+    return `<div class="${cls}"><span class="id">${id}</span><span class="lim">${money(tr.limit)}${tag}</span><span class="pf">${profit[id] ? (profit[id] > 0 ? "+" : "") + profit[id].toFixed(2) : "0.00"}</span></div>`;
+  };
+  const ids = Object.keys(s.traders).sort((a, b) => s.traders[a].rank - s.traders[b].rank);
+  $("buyers").innerHTML = ids.filter(k => s.traders[k].role === "buyer").map(row).join("");
+  $("sellers").innerHTML = ids.filter(k => s.traders[k].role === "seller").map(row).join("");
+
+  // current turn
+  if (cur) {
+    const [p, r, who, action, price, outcome, , , tprice, other, reason] = cur;
+    const tr = s.traders[who];
+    const oc = outcome.startsWith("rejected") ? "rejected" : outcome;
+    const ocText = outcome === "trade" ? `trade at ${money(tprice)} with ${other}` : outcome.replace("rejected:", "rejected: ").replace("not_better", "does not improve the book").replace("no_quote", "nothing to accept");
+    $("turn").innerHTML = `<div class="head"><span class="label">Period ${p} · round ${r} · turn ${tick} of ${n}</span></div>
+      <div class="head"><strong class="mono">${who}</strong><span>${tr.role}, ${tr.role === "buyer" ? "value" : "cost"} ${money(tr.limit)}</span>${tr.model === "Sonnet" ? '<span class="tag sonnet">SONNET</span>' : '<span class="tag haiku">HAIKU</span>'}
+      <span class="pill ${action}">${action}${price !== null ? " " + money(price) : ""}</span><span class="pill ${oc}">${ocText}</span></div>
+      <blockquote>${reason ? escapeHtml(reason) : "(no reason given)"}</blockquote>`;
+  } else {
+    $("turn").innerHTML = `<span class="label">Before the first turn</span><p style="margin:0">Press Play or step forward to start the session.</p>`;
+  }
+
+  // efficiency meters
+  const inPeriod = done.filter(t => t.period === period);
+  const pSurplus = inPeriod.reduce((a, t) => a + t.surplus, 0);
+  const sSurplus = done.reduce((a, t) => a + t.surplus, 0);
+  const sEff = sSurplus / (S.max_surplus * period);
+  const prices = inPeriod.map(t => t.price);
+  const alpha = prices.length ? 100 * Math.sqrt(prices.reduce((a, x) => a + (x - S.p_star) ** 2, 0) / prices.length) / S.p_star : null;
+  const meter = (label, value, frac, note) => `<div class="meter"><span class="label">${label}</span><span class="num">${value}</span><div class="bar"><span style="width:${Math.max(0, Math.min(100, 100 * frac)).toFixed(1)}%"></span></div><span class="label" style="text-transform:none;letter-spacing:0">${note}</span></div>`;
+  $("meters").innerHTML =
+    meter(`Period ${period} efficiency`, `${(100 * pSurplus / S.max_surplus).toFixed(1)}%`, pSurplus / S.max_surplus, `${money(pSurplus)} of ${money(S.max_surplus)} · ${inPeriod.length} trades, ${inPeriod.filter(t => t.extra).length} extramarginal`) +
+    meter("Session so far", `${(100 * sEff).toFixed(1)}%`, sEff, `final ${(100 * s.efficiency).toFixed(1)}% over ${s.periods} periods`) +
+    `<div class="meter"><span class="label">Smith's alpha, period ${period}</span><span class="num">${alpha === null ? "—" : alpha.toFixed(1)}</span><span class="label" style="text-transform:none;letter-spacing:0">RMS distance of trade prices from P*, % of P*</span></div>`;
+
+  drawChart();
+  // log
+  const from = Math.max(0, tick - 40);
+  $("log").innerHTML = s.turns.slice(from, tick).map((t, k) => {
+    const idx = from + k + 1;
+    return `<div class="row${idx === tick ? " cur" : ""}"><span class="r">${t[0]}.${t[1]}</span><span class="mono">${t[2]}</span><span class="pill ${t[3]}">${t[3] === "UNPARSED" ? "?" : t[3]}</span><span class="mono oc">${t[5] === "trade" ? money(t[8]) : t[4] !== null ? money(t[4]) : ""}</span><span class="txt">${escapeHtml(t[10] || "")}</span></div>`;
+  }).reverse().join("");
+  $("scrub").value = tick;
+  $("where").textContent = `period ${period}, round ${round} · turn ${tick}/${n}`;
+  $("summary").innerHTML = [["Condition", s.condition], ["Seed", s.seed], ["Trades", s.trades], ["Efficiency", (100 * s.efficiency).toFixed(1) + "%"], ["Cost", "$" + s.cost_usd.toFixed(3)]]
+    .map(([k, v]) => `<div class="stat"><span class="label">${k}</span><span class="v">${v}</span></div>`).join("");
+}
+
+function drawChart() {
+  const s = session, n = s.turns.length, W = 720, H = 230, L = 34, R = 8, T = 10, B = 22;
+  const yMin = 0.5, yMax = 3.5;
+  const x = (i) => L + (W - L - R) * i / Math.max(1, n);
+  const y = (v) => T + (H - T - B) * (1 - (Math.min(yMax, Math.max(yMin, v)) - yMin) / (yMax - yMin));
+  let g = "";
+  for (let v = 1; v <= 3; v += 0.5) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L - 4}" y="${y(v) + 3}" text-anchor="end">${v.toFixed(2)}</text>`;
+  Object.entries(prep.periodStart).forEach(([p, i]) => {
+    g += `<line x1="${x(i)}" x2="${x(i)}" y1="${T}" y2="${H - B}" stroke="var(--line)" stroke-dasharray="3 3"/><text x="${x(i) + 3}" y="${H - 8}">P${p}</text>`;
+  });
+  g += `<line x1="${L}" x2="${W - R}" y1="${y(S.p_star)}" y2="${y(S.p_star)}" stroke="var(--ink)" stroke-width="1.2"/>`;
+  const path = (col) => {
+    let d = "", open = false;
+    s.turns.forEach((t, i) => {
+      if (i >= tick) return;
+      const v = t[col];
+      if (v === null || (i > 0 && s.turns[i - 1][0] !== t[0])) { open = false; }
+      if (v !== null) { d += `${open ? "L" : "M"}${x(i + 1).toFixed(1)},${y(v).toFixed(1)}`; open = true; }
+    });
+    return d;
+  };
+  g += `<path d="${path(6)}" fill="none" stroke="var(--bid)" stroke-width="1.3" opacity="0.8"/>`;
+  g += `<path d="${path(7)}" fill="none" stroke="var(--ask)" stroke-width="1.3" opacity="0.8"/>`;
+  prep.trades.filter(t => t.i < tick).forEach(t => {
+    g += `<circle cx="${x(t.i + 1)}" cy="${y(t.price)}" r="4" fill="var(--trade)" stroke="var(--surface)" stroke-width="1"><title>${t.buyer} buys from ${t.seller} at ${money(t.price)}</title></circle>`;
+  });
+  g += `<line x1="${x(tick)}" x2="${x(tick)}" y1="${T}" y2="${H - B}" stroke="var(--muted)" stroke-width="1"/>`;
+  $("chart").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Best bid, best ask and trade prices by turn against P*">${g}</svg>`;
+}
+
+function escapeHtml(t) { return String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function go(t) { tick = Math.max(0, Math.min(session.turns.length, t)); render(); }
+function stop() { if (timer) { clearInterval(timer); timer = null; } $("play").textContent = "Play"; }
+function play() {
+  if (timer) return stop();
+  if (tick >= session.turns.length) tick = 0;
+  $("play").textContent = "Pause";
+  timer = setInterval(() => { if (tick >= session.turns.length) return stop(); go(tick + 1); }, 1000 / Number($("speed").value));
+}
+function jumpPeriod(dir) {
+  const starts = Object.values(prep.periodStart).concat([session.turns.length]);
+  if (dir > 0) go(starts.find(i => i > tick) ?? session.turns.length);
+  else go([...starts].reverse().find(i => i < tick - 1) ?? 0);
+}
+$("play").addEventListener("click", play);
+$("fwd").addEventListener("click", () => { stop(); go(tick + 1); });
+$("back").addEventListener("click", () => { stop(); go(tick - 1); });
+$("nextPeriod").addEventListener("click", () => { stop(); jumpPeriod(1); });
+$("prevPeriod").addEventListener("click", () => { stop(); jumpPeriod(-1); });
+$("scrub").addEventListener("input", (e) => { stop(); go(Number(e.target.value)); });
+$("speed").addEventListener("change", () => { if (timer) { stop(); play(); } });
+document.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "SELECT" || e.target.tagName === "INPUT") return;
+  if (e.key === "ArrowRight") { stop(); go(tick + 1); }
+  else if (e.key === "ArrowLeft") { stop(); go(tick - 1); }
+  else if (e.key === " ") { e.preventDefault(); play(); }
+});
+
+buildPicker();
+const preferred = DATA.sessions.findIndex(s => s.config.startsWith("m4"));
+load(preferred >= 0 ? preferred : Math.max(0, DATA.sessions.findIndex(s => s.config === "m2_haiku")), null);
+</script>

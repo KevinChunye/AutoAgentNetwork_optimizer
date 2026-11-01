@@ -1,0 +1,9 @@
+family,items,shared_chars,item_chars_median,instruction_share
+bbeh,3696,107,1971.0,0.05149183098147951
+math,93,136,1197.0,0.10202550637659415
+forecast,4131,244,1532.0,0.1373873873873874
+code,242,284,1404.5,0.1681966389714321
+"pilot network: propose (task only, before upstream messages)",3696,188,1971.0,0.08707735062528948
+"pilot network: critique (task only, before upstream messages)",3696,224,1971.0,0.1020501138952164
+"pilot network: refine (task only, before upstream messages)",3696,237,1971.0,0.10733695652173914
+"pilot network: aggregate (task only, before upstream messages)",3696,216,1971.0,0.09876543209876543

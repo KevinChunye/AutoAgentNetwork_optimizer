@@ -1,0 +1,7 @@
+model,measure,pairs,with_item,without_item,effect,lo,hi
+haiku_nothink,stake,518,0.05539,0.06762,-0.01223,-0.01578,-0.00847
+haiku_nothink,confidence,380,0.71422,0.71494,-0.00073,-0.00582,0.00396
+haiku_nothink,stake_pull,518,0.00868,0.00586,0.00282,-0.00088,0.00656
+haiku_nothink,p_pull,518,0.00096,0.0,0.00095,-0.00133,0.00377
+haiku_nothink,"stake, item agrees with the Kelly side",278,0.06016,0.06853,-0.00837,-0.01301,-0.00394
+haiku_nothink,"stake, item opposes the Kelly side",240,0.04987,0.06657,-0.01671,-0.02243,-0.01081

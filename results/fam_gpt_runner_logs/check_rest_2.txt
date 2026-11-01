@@ -1,0 +1,7 @@
+                       worst_case_usd  worst_case_x_safety
+account model                                             
+openai  adaptive_pool            25.0                28.75
+phase 'scienceclaw': total $310, run cap $310.00, account caps {'anthropic': 275.0, 'openai': 100.0}
+  anthropic: room $94.68 of new estimated spend; this config's worst case $0.00
+  openai: room $52.11 of new estimated spend; this config's worst case $25.00
+cleared

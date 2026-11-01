@@ -1,0 +1,6 @@
+condition,sessions,cost_usd,per_session
+M1 Haiku smoke,1,0.0142,0.0142
+M2 all Haiku,4,0.1443,0.0361
+M4 mixed,4,1.2465,0.3116
+M3 all Sonnet,2,1.1973,0.5987
+total,11,2.6022,

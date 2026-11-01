@@ -1,0 +1,1 @@
+{"branches": 108, "gate_cases": ["covtype_T2_103", "miniboone_T2_103", "higgs_T1_102"], "batch_manifests": {"gate": "configs/experiments/phoenix_science/family/claude/matrix/batch_gate.yaml", "rest": "configs/experiments/phoenix_science/family/claude/matrix/batch_rest.yaml"}}

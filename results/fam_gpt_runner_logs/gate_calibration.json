@@ -1,0 +1,40 @@
+{
+  "gate": "calibration",
+  "models": [
+    {
+      "model": "luna_low_ev",
+      "status": "running",
+      "error_type": null,
+      "done": 12,
+      "pending": null,
+      "calls": 12,
+      "truncated": 0,
+      "refused": 0,
+      "spent": 0.0022
+    },
+    {
+      "model": "sol61_low",
+      "status": "running",
+      "error_type": null,
+      "done": 12,
+      "pending": null,
+      "calls": 12,
+      "truncated": 0,
+      "refused": 0,
+      "spent": 0.0266
+    },
+    {
+      "model": "sol61_med",
+      "status": "running",
+      "error_type": null,
+      "done": 12,
+      "pending": null,
+      "calls": 12,
+      "truncated": 0,
+      "refused": 0,
+      "spent": 0.0329
+    }
+  ],
+  "state_pushed": true,
+  "go": true
+}

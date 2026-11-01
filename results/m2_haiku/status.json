@@ -1,0 +1,49 @@
+{
+  "run_id": "m2_haiku-1792452322",
+  "state": "completed",
+  "reason": "",
+  "seeds": [
+    14
+  ],
+  "checkpoints": [
+    "nothing new to checkpoint",
+    "nothing new to checkpoint",
+    "committed and pushed",
+    "committed and pushed",
+    "committed and pushed"
+  ],
+  "sessions_done": 1,
+  "live_calls": 224,
+  "budget": {
+    "spent_by_account": {
+      "anthropic": 6.8614,
+      "openai": 0.0069
+    },
+    "hard_caps_usd": {
+      "anthropic": 100.0,
+      "openai": 100.0
+    },
+    "phase": "pilot",
+    "phase_total_usd": 20.0,
+    "spent_total_usd": 6.8683,
+    "run_spent_usd": 0.0161,
+    "run_cap_usd": 0.25,
+    "safety_multiplier": 1.15
+  },
+  "rate_limits": {
+    "haiku_nothink": {
+      "input-tokens-limit": "10000000",
+      "input-tokens-remaining": "10000000",
+      "input-tokens-reset": "2026-10-19T23:30:00Z",
+      "output-tokens-limit": "2000000",
+      "output-tokens-remaining": "2000000",
+      "output-tokens-reset": "2026-10-19T23:30:01Z",
+      "requests-limit": "10000",
+      "requests-remaining": "9999",
+      "requests-reset": "2026-10-19T23:30:00Z",
+      "tokens-limit": "12000000",
+      "tokens-remaining": "12000000",
+      "tokens-reset": "2026-10-19T23:30:00Z"
+    }
+  }
+}

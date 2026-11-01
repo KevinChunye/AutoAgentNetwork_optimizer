@@ -1,0 +1,42 @@
+# W2-A sealed judging block (seed block 2, research/v3/plan_w2.md): S1, S2 and S3 plus the twin with Haiku
+# on judging sequences 102-105 (4 x 200 events). S4 runs on sequence 101 only (w2a_judge_101), as the
+# tuning rule decided (its belief error on tuning, 0.0090, was above S1's, 0.0054). Judged once, with
+# sequence 101, by analysis/desk.py.
+kind: desk
+name: w2a_judge_102_105
+seeds: [102, 103, 104, 105]
+events: 200
+structures: [S1, S2, S3]
+twin: true
+model: haiku_nothink
+max_tokens: 800
+temperature: 1.0
+kelly_fraction: 0.5
+max_usd: 1.5
+chunk_events: 50
+max_concurrency: 8
+expect:
+  min_calls: 100
+  max_unparsed_rate: 0.05
+  max_truncation_rate: 0.05
+  max_spend_usd: 1.057
+prereg:
+  question: On the sealed seed block (sequences 101-105, 1,000 events; S4 on sequence 101 only, by the tuning rule),
+    which desk structure corrects the solo trader's sizing error against Kelly at the true probability without lowering
+    log growth, and does a no-information news item raise the solo trader's stake on the same event?
+  prediction: 'S1: ECE 0.08-0.20, overconfident at both tails; belief error 0.06-0.15; false-conviction rate 20-35%;
+    mean stake when betting 0.05-0.30; at least half of overbets on the wrong side; stake-confidence correlation
+    under 0.3; anchoring slope 0.1-0.5. Sizing error ratio to S1: S3 0.6-1.0, S4 0.6-1.0, S2 0.8-1.2; at most one
+    structure meets rule 1; every structure''s log growth between 0 and 0.0156 per event; resampled ruin under 2%
+    for S2-S4. Paired salience on S1: stake 0 to +0.02, stake_pull 0 to +0.03, p_pull 0 to +0.05. About $0.23 per
+    sequence.'
+  kill: More than 5% of any single role's replies unparsed or truncated, or actual spend above the run's kill line
+    (1.5x its projection from the smoke test), stops the run and goes to audit.
+  decision: 'Rule 1: a structure is the recommended desk design if (a) its sizing error against Kelly at the true
+    p is at most 2/3 of S1''s, (b) the lower end of the 95% interval of its log growth minus S1''s is above -0.005
+    per event, and (c) its sizing error is below staying out''s and its log growth above 0; the lowest sizing error
+    wins if several qualify; if none, S1 stands. Rule 2 (paired twin calls on S1): 2a a stake effect with a 95%
+    interval above 0 is consistent with the item raising conviction, and below 0 with the item lowering it (a prediction
+    7 miss); 2b a stake_pull effect with an interval above 0 is consistent with the item pulling the stake toward
+    its side, and below 0 with it pushing the stake away. Each structure line also reports the share of the S1-to-half-Kelly
+    gap it closes (descriptive). Judged once on both sealed runs with analysis/desk.py.'

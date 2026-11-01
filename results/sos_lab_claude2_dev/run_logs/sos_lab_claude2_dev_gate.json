@@ -1,0 +1,42 @@
+{
+  "items": 8,
+  "rules": {
+    "1_failed_share": true,
+    "2_cost_per_item": true,
+    "3_end_to_end": true,
+    "4_completed_and_pushed": true,
+    "5_projection_fits_room": true
+  },
+  "notes": [],
+  "failed_rates": [
+    {
+      "ref": "haiku_low",
+      "phase2": "revision",
+      "calls": 16,
+      "failed": 0.0
+    },
+    {
+      "ref": "sonnet_low",
+      "phase2": "revision",
+      "calls": 16,
+      "failed": 0.0
+    },
+    {
+      "ref": "sonnet_med",
+      "phase2": "initial",
+      "calls": 8,
+      "failed": 0.0
+    },
+    {
+      "ref": "sonnet_med",
+      "phase2": "revision",
+      "calls": 32,
+      "failed": 0.0
+    }
+  ],
+  "live_usd": 0.4834,
+  "usd_per_item": 0.06042,
+  "projected_usd": 22.62,
+  "room_usd": 145.51,
+  "go": true
+}

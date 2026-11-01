@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autoagentnet"
+version = "0.1.0"
+description = "AutoAgentNetwork: what does organizing AI agents actually buy? Budgeted, preregistered measurement of multi-LLM teams"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Kevin Haochuan Wang"}]
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2.7", "pyyaml>=6", "pandas>=2.2", "httpx>=0.27"]
+
+[project.optional-dependencies]
+phoenix = ["scikit-learn==1.9.1", "numpy>=1.26", "joblib>=1.4"]
+anthropic = ["anthropic>=0.40"]
+openai = ["openai>=1.40"]
+serve = ["fastapi>=0.110", "uvicorn>=0.29"]
+tasks = ["math-verify[antlr4_13_2]>=0.9"]  # math-equivalence grader
+analysis = ["matplotlib>=3.8", "numpy>=1.26", "markdown>=3.5", "pyarrow>=15", "scipy>=1.11", "statsmodels>=0.14"]  # figures, report, parquet downloads
+dev = ["autoagentnet[anthropic,openai,serve,tasks,analysis]", "pytest>=8"]
+
+[project.scripts]
+aan = "autoagentnet.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["autoagentnet*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]  # so tests can import the analysis/ scripts

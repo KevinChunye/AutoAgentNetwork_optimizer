@@ -1,0 +1,2 @@
+config_id,agents,error,recon_error,cost_usd,total_tokens,output_tokens,visible_output_tokens,critical_path_s,peak_context_tokens,flops,truncation_rate,unparsed_rate,runs,hidden_token_ratio,speedup,token_compression,cost_compression
+k1,1.0,0.4,0.4,0.00030334,723.0,577.6,204.4,2.9529983517999883,145.4,,0.4,0.4,5,2.8258317025440314,1.0,1.0,1.0

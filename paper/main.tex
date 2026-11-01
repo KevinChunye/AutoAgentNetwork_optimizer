@@ -1,0 +1,444 @@
+\documentclass{article}
+% Draft (session W1, revised after audit W1-1). Every number is a \nm{key} macro from numbers.tex, written by
+% scripts/build_numbers.py from committed files; \nmst{key} gives its status. Build instructions: paper/README.md.
+% The working title "Depth before width" is withdrawn until session E6's CD2 is read (audit W1-1).
+\usepackage[preprint]{neurips_2025}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{amsmath,amsfonts}
+\usepackage{graphicx}
+\usepackage{microtype}
+\input{numbers.tex}
+
+\newcommand{\status}[1]{{\upshape\textsc{\small #1}}}
+\newcommand{\pending}[1]{\textcolor{gray}{[pending: #1]}}
+
+\title{Shared failure and the price of verification in multi-LLM systems}
+
+\author{AutoAgentNetwork project (draft for internal review; authors to be confirmed)}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+A system built from language-model calls can spend a fixed budget in three ways: more calls whose answers are combined
+(\emph{width}), more reasoning or a stronger model per call (\emph{depth}), or a check that picks among answers
+(\emph{verification}). We fit a factor model of item difficulty, system ability and a failure slope to
+\nm{atlas.public.systems} public systems on \nm{atlas.public.items} items (SWE-bench Verified, MathArena, LiveBench) and
+read it beside small preregistered API studies on sealed items. Failures are mostly shared: item difficulty accounts for
+\nm{p6.swe.est} (item-bootstrap interval \nm{p6.swe.ilo}--\nm{p6.swe.ihi}) of the latent variation in success on
+SWE-bench Verified and \nm{p6.ma.est} on MathArena. Given the same calibration data as a one-factor copula, the model
+predicts how often all \nm{p8.swe.members} held-out SWE-bench systems fail a held-out task (\nm{p8.swe.model}\%
+predicted, \nm{p8.swe.obs}\% observed), where the copula underprices it (\nm{p8.swe.copula}\%); on small math sets both
+underprice. Across \nm{p2.pairs} public pairs of one model at two adjacent reasoning settings, one step up raises ability
+by \nm{p2.all.da.pooled} logits and leaves the failure slope unchanged (\nm{p2.all.db.pooled},
+\nm{p2.all.db.lo}--\nm{p2.all.db.hi}): the higher setting still fails the items that are hard for everyone. On fresh
+sealed items, raising a cheap model's reasoning one step beat repeating its no-reasoning call at the nearest measured
+dollars (confirmatory; \nm{ah2.haiku.diff} and \nm{ah2.luna.diff} points, the deeper call costing
+\nm{ah2.haiku.ratio}$\times$ and \nm{ah2.luna.ratio}$\times$ as much); on public pairs such a step pays where a model
+starts low and about nothing at the top of its range, so depth against width beyond the first step is open. Label-free
+selection among systems, given the same number of calls, did not beat the best system's own vote. Public-data results are
+post hoc, and every number carries its status.
+\end{abstract}
+
+\section{Introduction}
+
+Suppose an agent system has a fixed budget per task. It can ask a cheap model several times and vote, ask a
+stronger or longer-reasoning model once, or ask several models and let a judge choose. Which should it buy first?
+The answer depends on one quantity: how much the systems' failures are \emph{shared}. If every system fails the same
+hard items, extra calls fail with them, and only a system that moves the hard items helps.
+
+\paragraph{Three claims, tested rather than assumed.} (i) Failures are dominated by shared item difficulty, so width is
+capped by the items everyone fails. (ii) Reasoning moves a system along that same difficulty axis, so depth may be the
+cheaper first purchase. (iii) Picking among agents needs a signal stronger than agreement. On our data, (i) holds on
+code and math, with a factor model that prices the shared tail on code; (ii) holds as a description of what reasoning
+does, and as a purchase only for the first effort step of cheap models, which a preregistered test supports; beyond it
+the question is open and is the subject of a separate preregistered study (Section~\ref{sec:api}); (iii) holds for
+agreement-based selection, while our one judge test was capped by its candidate pools and cannot speak to judges.
+
+\paragraph{Contributions.}
+\begin{itemize}
+\item \textbf{The Atlas}: one factor model fitted to \nm{atlas.swe.systems} SWE-bench Verified submissions,
+\nm{atlas.ma.systems} MathArena configurations over \nm{atlas.ma.sets} competitions and \nm{atlas.lb.systems} LiveBench
+models, with intervals for every systematic share and held-out tests of what it predicts about sets of systems:
+coverage, the all-wrong tail and vote accuracy.
+\item \textbf{Depth on public data}: \nm{p2.pairs} pairs of one model at two adjacent reasoning settings, pooled with
+random effects, and a dollar-matched comparison of one deeper call against a wider vote (post hoc).
+\item \textbf{Preregistered API studies}: a Phase~1 case where one reasoning call wins, and an anchor study on
+\nm{anchor.items.all} sealed items with two confirmatory tests (AH2: the first effort step against the nearest-dollar
+vote; AH3: the factor model's vote prediction), read once with frozen code.
+\item \textbf{Process}: sealed items, single reads, preregistered stop rules and \nm{audits.count} independent audits,
+for \nm{spend.total} of API spend in total. Every number in this paper is generated from a committed file and carries a
+status (Appendix~\ref{app:numbers}).
+\end{itemize}
+
+\section{Definitions}
+\label{sec:defs}
+
+We define each term in words first.
+\textbf{Width}: more calls of the same setting, or of different systems, combined by a rule (a plurality vote) or a
+selector. \textbf{Depth}: more reasoning per call (a higher effort or thinking budget) or a stronger tier.
+\textbf{Verification}: choosing among candidate answers, by a judge model, a self-check, execution, or a label-free
+rule such as Dawid--Skene~\cite{dawid1979}.
+
+\paragraph{The factor model.} System $s$ answers item $i$ correctly with probability
+$P_{si} = \sigma(a_s - \beta_s b_i)$, $\sigma(x) = 1/(1+e^{-x})$. The \emph{ability} $a_s$ is how good the system is
+overall; the \emph{difficulty} $b_i$ is how hard the item is for everyone, the shared part of failure (scaled to mean 0
+and standard deviation 1); the \emph{failure slope} $\beta_s$ is how sharply the system's success falls with
+difficulty. Level L0 fixes $\beta_s = 1$. A \emph{family shock} $u_{f(s),i}$ adds a shared draw for systems of one
+vendor; \emph{call luck} is what remains, identified only from repeated calls. Fits are penalised logistic
+regressions (ridge \nm{design.ridge}), so items every system gets right or wrong keep finite difficulties.
+
+\paragraph{Derived quantities.} The \emph{systematic share} $\mathrm{var}(b)/(\mathrm{var}(b)+\pi^2/3)$ is the share of
+latent variation in success that items share ($\pi^2/3$ is the variance of the logistic call-level noise).
+\emph{Coverage} of a set of systems is the share of items at least one member gets right: the ceiling of any rule that
+returns one member's answer, as \citet{chen2026cofailure} also show; the \emph{all-wrong rate} is one minus coverage.
+The \emph{vote ceiling} of one system is the share of items whose most common answer is right, the limit of infinitely
+many repeats. \emph{Selection efficiency} $\eta = (\text{selected} - \text{best single})/(\text{coverage} - \text{best
+single})$ is the share of the room above the best member that a selector reaches. A \emph{consensus inversion} is a
+label-free rule rating a weaker system above the best one. \emph{Calibration by dilution}: adding near-random votes
+shrinks a panel's calibration gap without improving its ranking (F13 in our findings ledger).
+
+\paragraph{Statuses.} \status{confirmatory}: a preregistered test in a Holm family, read once on sealed items.
+\status{preregistered-descriptive}: a preregistered quantity, read once, no pass/fail. \status{exploratory}: on sealed
+items, not preregistered as a test. \status{post hoc}: chosen after the data were read, or on data not sealed for it;
+all public-data analyses are post hoc in this sense, as are numbers computed after a read. Post hoc results are many and
+uncorrected for multiplicity; we read them as descriptions, not tests.
+
+\section{The Atlas: what public data say about width and depth}
+\label{sec:atlas}
+
+\paragraph{Data.} SWE-bench Verified~\cite{jimenez2024swebench}: \nm{atlas.swe.systems} submissions on
+\nm{atlas.swe.items} tasks, one run each, \nm{f17.systems} with per-task cost and step counts (mini-SWE-agent).
+MathArena~\cite{balunovic2025matharena}: \nm{atlas.ma.systems} configurations on \nm{atlas.ma.items} final-answer
+problems from \nm{atlas.ma.sets} competitions, usually four calls each, with answers grouped into classes by the
+grader. LiveBench~\cite{white2024livebench}: \nm{atlas.lb.systems} models on \nm{atlas.lb.items} items of three binary
+tasks, one call each, without answers or costs. Each benchmark is fitted on its own. All Atlas numbers are
+\status{post hoc}.
+
+\subsection{Failures are mostly shared}
+
+The systematic share is \nm{p6.swe.est} on SWE-bench Verified (item bootstrap \nm{p6.swe.ilo}--\nm{p6.swe.ihi}; over
+\nm{design.halves} random halves of the systems, \nm{p6.swe.hmin}--\nm{p6.swe.hmax}), \nm{p6.ma.est} on MathArena
+(\nm{p6.ma.ilo}--\nm{p6.ma.ihi}) and \nm{p6.lb.est} on LiveBench (\nm{p6.lb.ilo}--\nm{p6.lb.ihi}); our Phase~1 BBEH panel
+of four arms sits lower at \nm{p6.bbeh.est} (\nm{p6.bbeh.ilo}--\nm{p6.bbeh.ihi}; Figure~\ref{fig:share}). On the
+\nm{f17.systems} SWE-bench submissions with per-task data, difficulty alone implies \nm{f17.difficulty.share}\% of the
+mean pairwise failure correlation (\nm{f17.corr.l0} of \nm{f17.corr.obs}); two systems of one company add only
+\nm{f17.samecompany} of residual correlation. All \nm{f17.systems} fail \nm{f17.allwrong.obs}\% of tasks, against
+\nm{f17.allwrong.indep}\% if they failed independently.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figs/fig_share.pdf}
+\caption{Systematic failure share per source (L0): item-bootstrap 95\% interval (thick) and the range over system
+half-splits (thin; each half fitted on its own). The anchor's shares (hollow) await the gold files for an interval.}
+\label{fig:share}
+\end{figure}
+
+\subsection{Width is capped by the shared tail}
+
+\paragraph{Coverage and the all-wrong tail.} Fitting difficulties on half the systems and each held-out system's ability
+on half the tasks, the model predicts the coverage of held-out \nm{design.sets.lo}--\nm{design.sets.hi} system sets on held-out SWE-bench tasks within
+\nm{a5.swe.model.lo}--\nm{a5.swe.model.hi} points; independence misses by \nm{a5.swe.indep.lo}--\nm{a5.swe.indep.hi}.
+\citet{chen2026cofailure} report that a calibrated one-factor copula underprices the all-wrong tail by about
+\nm{cited.cofailure.under}$\times$
+on open-ended mathematics. We give the factor model and the copula the same information, the calibration tasks only: the
+factor model draws an unknown test task's difficulty from the calibration tasks' difficulties, the copula fits its
+correlation to the calibration tasks' pairwise failures. For all \nm{p8.swe.members} held-out SWE-bench systems on
+\nm{p8.swe.items} held-out tasks the observed all-wrong rate is \nm{p8.swe.obs}\% (Clopper--Pearson
+\nm{p8.swe.cplo}--\nm{p8.swe.cphi}); the factor model predicts \nm{p8.swe.model}\% (observed over predicted
+\nm{p8.swe.rmodel}, \nm{p8.swe.rmodello}--\nm{p8.swe.rmodelhi}), the copula \nm{p8.swe.copula}\%
+(\nm{p8.swe.rcopula}$\times$) and independence \nm{p8.swe.indep}\% (Figure~\ref{fig:tail}). The factor model's free
+distribution of difficulties carries the tail that a Gaussian latent factor misses. On the small MathArena sets
+(\nm{design.p8.ma.items.lo}--\nm{design.p8.ma.items.hi} test problems) both models underpredict the 5-system tail, on
+\nm{p8.ma.model.under} and \nm{p8.ma.copula.under} of \nm{p8.ma.sets} sets; the math tail is unresolved.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.62\linewidth]{figs/fig_tail.pdf}\hfill
+\includegraphics[width=0.36\linewidth]{figs/fig_frontier.pdf}
+\caption{Left: coverage of sets of held-out SWE-bench Verified systems on held-out tasks, observed and predicted from the
+calibration tasks only (P8). Right: tasks resolved against dollars per task, SWE-bench Verified submissions with costs;
+the price frontier in blue (A7).}
+\label{fig:tail}
+\end{figure}
+
+\paragraph{Votes of one system.} A vote of two calls cannot gain in expectation (a right--wrong split is a tie), so gains
+start at three. The factor model's \emph{vote rule} predicts a $k$-vote from one-call success $p$, the share $z$ of
+failures that abstain (abstentions are non-votes) and the chance $q$ that two wrong answers coincide. Cross-fitted on
+\nm{p1.all.cells} (system, set) cells with three calls in \nm{p1.all.sets} sets, its mean absolute vote-gain error is
+\nm{p1.all.rule} points against \nm{p1.all.zero} for the zero-gain predictor ``votes add nothing''; predicted and
+observed gains correlate at \nm{p1.all.corr}, and the gain's squared error is smaller by \nm{p1.all.msed} points$^2$
+(\nm{p1.all.msedlo} to \nm{p1.all.msedhi}; item noise adds the same variance to both and cancels). But the rule
+overstates gains (\nm{p1.pred.predgain} predicted, \nm{p1.pred.obsgain} observed where it predicts \nm{design.gainpoints}
+or more), and on the 3-vote accuracy itself it is worse than zero-gain (mean absolute error \nm{p1.all.levrule} against
+\nm{p1.all.levzero} points; squared error larger by \nm{p1.all.levmsed} points$^2$, \nm{p1.all.levmsedlo} to
+\nm{p1.all.levmsedhi}). The rule ranks where votes pay; it does not yet price them.
+
+\paragraph{Votes across systems.} Votes pay most when weak systems with different strengths are mixed. On
+\nm{p7.k3.panels} panels of three and \nm{p7.k5.panels} of five MathArena systems with one-call accuracy
+\nm{design.weak.lo}--\nm{design.weak.hi}, the plurality of one call each gains \nm{p7.k3.gain} and \nm{p7.k5.gain} points
+over a random member. Cross-fitted, the factor model predicts the panel vote with bias \nm{p7.k3.bias} and
+\nm{p7.k5.bias} points and absolute error \nm{p7.k3.model} and \nm{p7.k5.model}, against \nm{p7.k3.zero} and
+\nm{p7.k5.zero} for zero-gain and \nm{p7.k3.indep} and \nm{p7.k5.indep} for independence; it is closer than zero-gain in
+\nm{p7.k3.setszero} and \nm{p7.k5.setszero} of \nm{p7.k3.sets} sets, and closer than independence in
+\nm{p7.k3.setsindep} and \nm{p7.k5.setsindep}. Where composition matters, the model prices it without bias;
+independence overstates it and zero-gain ignores it.
+
+\subsection{Depth moves ability, not the failure pattern}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figs/fig_depth.pdf}
+\caption{One model at two adjacent reasoning settings (P2): change in ability $a$ and in failure slope $\beta$ with
+item-bootstrap 95\% intervals, and the DerSimonian--Laird random-effects pool (diamond).}
+\label{fig:depth}
+\end{figure}
+
+For each of \nm{p2.pairs} public pairs of one model at two adjacent reasoning settings (\nm{p2.models} models, some on two
+benchmarks; difficulties from every other system), we fit both settings' ability and slope on the items both answered
+(Figure~\ref{fig:depth}). Pooled with random effects, ability rises by \nm{p2.all.da.pooled} logits
+(\nm{p2.all.da.lo}--\nm{p2.all.da.hi}; between-pair variance \nm{p2.all.da.tau}); the slope changes by
+\nm{p2.all.db.pooled} (\nm{p2.all.db.lo}--\nm{p2.all.db.hi}; between-pair variance \nm{p2.all.db.tau}). One pair per
+model and benchmark (\nm{p2.modelbench} pairs) gives \nm{p2.one.da.pooled} and \nm{p2.one.db.pooled}. Held out, the
+higher setting's calls are predicted better by the lower setting plus one shift than by a refit that may also change
+the slope (log loss per call \nm{p2.all.slope.pooled} in favour of the shift, \nm{p2.all.slope.lo}--\nm{p2.all.slope.hi})
+and far better than by its base rate (\nm{p2.all.base.pooled} nats per call). The difficulties are the population's, so
+this says the higher setting fails the items that are hard for everyone; the lower setting's own item outcomes plus a
+shift predict no better (\nm{p2.all.own.pooled}, \nm{p2.all.own.lo} to \nm{p2.all.own.hi}). Two pairs left out after a
+look at output tokens (one setting of unknown order, one different checkpoint) are shown in the extension report and
+were never pooled.
+
+\paragraph{Depth against width at equal dollars (post hoc).} For \nm{p3.all.k} MathArena pairs whose lower setting has
+three or more calls, one call at the higher setting minus the vote of the lower setting with the nearest dollars per
+item (the 3-vote in every pair) is \nm{p3.all.pooled} points (\nm{p3.all.lo}--\nm{p3.all.hi}); on the \nm{p3.near.k}
+pairs priced within a factor of \nm{design.near} it is \nm{p3.near.pooled} (\nm{p3.near.lo}--\nm{p3.near.hi}; Figure~\ref{fig:dw}).
+The step pays where a model starts low and about nothing at the top of its range: \nm{p3.geminimed.diff} points for
+Gemini~3.1~Pro medium to default and \nm{p3.opus.diff} for Opus~5.5 high to max. We logged, before it is read, that this
+predicts about zero for the preregistered CD2 test of a top Haiku effort step. Price matters as much: on SWE-bench Verified
+MiniMax~M2.5 (high) resolves \nm{f18.minimax.acc}\% at \nm{f18.minimax.usd} per task against \nm{f18.opus.acc}\% at
+\nm{f18.opus.usd} for Claude Opus~4.5 (high), \nm{f18.price.ratio}$\times$ the price for one point
+(Figure~\ref{fig:tail}, right).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figs/fig_dw.pdf}
+\caption{One deeper call minus the nearest-dollar vote of the shallower setting: the anchor's confirmatory AH2 (orange,
+fresh sealed items, the first effort step of two cheap models) and public MathArena pairs (blue, post hoc) with
+item-bootstrap 95\% intervals and their random-effects pool.}
+\label{fig:dw}
+\end{figure}
+
+\section{Preregistered API studies}
+\label{sec:api}
+
+\paragraph{Phase 1: the saturated case.} On \nm{phase1.items} sealed BBEH items~\cite{kazemi2025bbeh}, one GPT-6.1 Sol
+call at low reasoning was right \nm{f3.sol.acc}\% of the time at \nm{f3.sol.usd} per call; Claude Sonnet~5.5 without
+reasoning \nm{f3.sonnet.acc}\% at \nm{f3.sonnet.usd} (\status{preregistered-descriptive}). Width bought little: \nm{f1.calls}
+Haiku calls are worth \nm{f1.neff5} independent calls (repeat correlation \nm{f1.rho}), their plurality reached
+\nm{f4.haiku5}\%, a \nm{f4.panel.calls}-call mixed panel \nm{f4.panel12}\%, and none of \nm{f4.cascades} cascade settings came within
+\nm{f4.within} points of Sol at \nm{f4.dollars}$\times$ its dollars (\status{exploratory}/\status{post hoc}). The
+confirmatory cascade test (H7) passed non-inferiority to Sonnet (\nm{f5.diff} points) only by escalating
+\nm{f5.escalates}\% of items. Sol's accuracy is not answer memory: \nm{f7.perturbed} of \nm{f7.of} perturbed items right.
+The Sol--Sonnet gap mixed vendor and reasoning, which motivated the anchor.
+
+\paragraph{The anchor.} \nm{anchor.items.bbeh} BBEH items (linguistic puzzles, cartoon captions, word sorting, causal
+judgement) and \nm{anchor.items.math} arXivMath problems were sealed before any call. Arms: Claude Haiku~5.5 (off, low,
+high), Sonnet~5.5 (off, low), GPT-6 Luna (none, low, medium), GPT-6.1 Sol (low, medium), most with three calls per
+item; dollars are measured at list prices. Each block was read once with frozen code; Holm at 5\% over the two tests
+that kept power of at least \nm{design.power.min} (AH2, AH3).
+
+\emph{AH2 (\status{confirmatory}, passes; $p = \nm{ah2.p.holm}$).} Raising a cheap model's reasoning one step beat
+repeating its no-reasoning call at the nearest measured dollars: Haiku at effort low against the Haiku-off
+\nm{ah2.haiku.k}-vote by \nm{ah2.haiku.diff} points (\nm{ah2.haiku.lo}--\nm{ah2.haiku.hi}), Luna at reasoning low against
+the Luna-none \nm{ah2.luna.k}-vote by \nm{ah2.luna.diff} (\nm{ah2.luna.lo}--\nm{ah2.luna.hi}); the deeper call cost
+\nm{ah2.haiku.ratio}$\times$ and \nm{ah2.luna.ratio}$\times$ as much. For Haiku the 2-vote equals one call in
+expectation, so this shows that effort low beats effort off at slightly more dollars, not that depth beats a wider vote;
+against the dearer 3-vote the difference is \nm{ah2.haiku.vs3} (\nm{ah2.haiku.vs3lo}--\nm{ah2.haiku.vs3hi}), not tested.
+The effect sits mainly in word sorting (and linguistic puzzles for Luna; computed after the read). The decision as frozen:
+for cheap models on these items, buy the first effort step before width. It covers neither higher steps nor other tasks.
+
+\emph{AH3, the vote rule (\status{confirmatory}, passes).} Cross-fitted on single calls, the factor model predicted the
+six 3-call arms' 3-vote accuracy with mean absolute error \nm{ah3.mae} points (upper bound \nm{ah3.upper}) and their gain
+over one call within \nm{ah3.gain} (upper bound \nm{ah3.gainupper}). The gains were small (\nm{ah3.gain.lo} to
+\nm{ah3.gain.hi} points) and zero-gain also meets the limits (gain error \nm{p1.anchor.zero} against \nm{p1.anchor.rule}),
+so AH3 shows accuracy where votes gain little; P1 above finds the same rule overstating larger gains.
+
+\emph{AH1 and AH4 (\status{exploratory}).} Sonnet's effort-low setting closed none of the
+\nm{ah1.gap}-point gap to Sol low ($R = \nm{ah1.r}$, \nm{ah1.lo} to \nm{ah1.hi}), so the vendor--reasoning confound stays
+open. The Sol judge's selection efficiency was \nm{ah4.easy} on easy items and \nm{ah4.hard} on hard ones (difference
+\nm{ah4.diff}, \nm{ah4.lo}--\nm{ah4.hi}), the predicted direction, with a ratio whose hard-half denominator is small.
+
+\paragraph{The CD study (session E6).} \pending{session E6's preregistered depth study (research/v4/cd/read.md), including
+CD2, the top Haiku effort step against a dollar-matched vote, is not yet on the main branch; status: \nm{cd.status}. Its
+numbers will be filled in by scripts/build\_numbers.py.}
+
+\section{Verification}
+\label{sec:verify}
+
+\paragraph{Label-free selection.} With repeats, Dawid--Skene rated Sol at \nm{f11.sol.est}\% on Phase~1 against a true
+\nm{f11.sol.true}\% (\status{exploratory}); on the anchor its pooled variant put Sonnet at \nm{lf.sonnet.est}\% against
+a true \nm{lf.sonnet.true}\%, and its answers (\nm{lf.answer}\%) stayed below one Sol low call (\nm{anchor.sol.all}\%).
+A simulation map (Figure~\ref{fig:labelfree}) shows when this happens: with one strong system among weak ones and one
+call each, plain Dawid--Skene ranks a weak system first in \nm{p4.sim.lone.ds.inv}\% of panels; a fixed label space
+removes the inversion in the simulation (\nm{p4.sim.lone.fixed.inv}\%) but still loses \nm{p4.sim.lone.fixed.loss}
+points to the strong system. On MathArena the fixed label space does not help: beside a lone strong system it ranks
+another system first in \nm{p4.ma.lone.fixedinv.lo}--\nm{p4.ma.lone.fixedinv.hi}\% of panels, against
+\nm{p4.ma.lone.inv.lo}--\nm{p4.ma.lone.inv.hi}\% for plain Dawid--Skene. At matched calls (three systems with one call
+each, against the best system's own 3-vote, the best chosen with labels) every policy loses beside a lone strong system
+(plurality \nm{p4.ma.match.lone.plur} points, plain Dawid--Skene \nm{p4.ma.match.lone.ds}) and none gains among
+competent ones (plurality \nm{p4.ma.match.comp.plur}, plain Dawid--Skene \nm{p4.ma.match.comp.ds}, fixed labels
+\nm{p4.ma.match.comp.fixed}).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figs/fig_labelfree.pdf}
+\caption{Label-free selection, simulation map (P4): gain over the best system (points) when one system at
+\nm{design.p4.top} sits among others at \nm{design.p4.others0}, \nm{design.p4.others1} or \nm{design.p4.others2}, at low
+or high shared difficulty (systematic share \nm{design.p4.share0} or \nm{design.p4.share1}), with one or three calls per
+system; averaged over \nm{design.p4.systems0}, \nm{design.p4.systems1} and \nm{design.p4.systems2} systems.}
+\label{fig:labelfree}
+\end{figure}
+
+\paragraph{The anchor's judge, and why it cannot test judges.} On the anchor's BBEH items the Sol low judge, choosing
+among the answers of two cheap pools, reached \nm{judge.sol.bbeh.acc}\%: \nm{judge.sol.bbeh.vsbest} points above the best
+pool arm (\nm{judge.sol.bbeh.vsbestlo}--\nm{judge.sol.bbeh.vsbesthi}), selection efficiency \nm{judge.sol.bbeh.eta}
+(\nm{judge.sol.bbeh.etalo}--\nm{judge.sol.bbeh.etahi}). Sol low answering alone scored \nm{anchor.sol.bbeh}\%, so the
+judge sat \nm{judge.sol.below} points below it (\nm{judge.sol.vsown.lo} to \nm{judge.sol.vsown.hi}) at
+\nm{judge.sol.vsown.ratio}$\times$ the dollars (Figure~\ref{fig:judge}; \status{post hoc}, computed after the read).
+But the pools covered only \nm{judge.sol.bbeh.coverage}\% of the items: even a perfect selector over them would have lost
+to Sol alone. The comparison measures the pools, not the judge's signal; a test of judges needs pools whose coverage
+exceeds the judge model's own accuracy. On math the judge was capped by \nm{judge.sol.math.coverage}\% coverage.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figs/fig_judge.pdf}
+\caption{The anchor's BBEH verification read: a judge over cheap pools against the judge model answering alone. The
+pools' coverage (grey) is below the judge model's own accuracy, which caps every selector over them.}
+\label{fig:judge}
+\end{figure}
+
+\paragraph{The price of verification on public data.} A perfect selector over random \nm{design.sets.lo}--\nm{design.sets.hi} system SWE-bench sets adds
+\nm{p5.swe.room2}--\nm{p5.swe.room5} points over the best member, at \nm{p5.swe.price2}--\nm{p5.swe.price5} of extra
+spend per point per task. With the anchor's best measured efficiency, a judge over such a set beats the most accurate
+single submission at no more of its dollars in at most \nm{p5.swe.beat.sol}\% of sets (a perfect selector in at most
+\nm{p5.swe.beat.perfect}\%, judge calls unpriced). On MathArena the room is \nm{p5.ma.room.lo}--\nm{p5.ma.room.hi}
+points because the top systems are close to perfect.
+
+\paragraph{Self-checks and execution.} Sol accepted \nm{check.sol.accept}\% of its own anchor answers (AUROC
+\nm{check.sol.auroc}); Haiku \nm{check.haiku.accept}\% (AUROC \nm{check.haiku.auroc}). On SWE-bench the step count of a
+run ranks its own successes with median AUROC \nm{f18.stepauroc}; a cascade that escalates on step count never
+escalates once its threshold is fitted. Execution-based checks on code are part of the open-weight testbed.
+
+\section{The open-weight testbed (design; results pending)}
+\label{sec:testbed}
+
+The testbed varies precision (BF16, W8, W4, W3), size (Qwen3.5 2B, 4B, 9B) and thinking budget (off, 1k, 4k) with
+several samples per item on \nm{testbed.items.all} items (\nm{testbed.items.bbeh} BBEH, \nm{testbed.items.math}
+competition math, \nm{testbed.items.code} LiveCodeBench), so width, depth and verification can be bought at measured GPU
+cost. Its preregistration (T1--T5) has power by simulation of \nm{testbed.power.t1} (T1: the W4 loss survives voting on
+hard items), \nm{testbed.power.t2} (T2), \nm{testbed.power.t3} (T3: depth against cost-matched width),
+\nm{testbed.power.t4} (T4: judge coupling to difficulty) and \nm{testbed.power.t5} (T5, exploratory: compositional
+prediction) (\status{design}). The pilot is estimated at \nm{testbed.gpu.pilot} of GPU time. No GPU has run yet; no
+result is reported.
+
+\section{Related work}
+\label{sec:related}
+
+\paragraph{Shared failure and its ceiling.} \citet{chen2026cofailure} show that any routing, voting or cascade policy
+returning one model's answer is bounded by one minus the share of queries every model fails, certify that share from a
+graded set, and find that a one-factor copula underprices it on open-ended mathematics; they exclude thinking variants
+and do not hold dollars fixed. We take the ceiling as given and ask how depth moves it and at what price.
+\citet{kim2025correlated} measure correlated errors across hundreds of models without an item-difficulty term;
+\citet{turkmen2026ensemble} prove an error floor under a Gaussian latent factor; \citet{denisovblanch2026consensus}
+find that polling does not improve truthfulness because errors are shared. \citet{ge2026psychometrics} fit an
+ability-minus-difficulty model to agentic coding leaderboards to predict tasks and agents; we use the same scale for
+composition.
+
+\paragraph{Width.} \citet{chen2024morecalls} show that vote accuracy can rise and then fall with more calls of one model
+on a mix of easy and hard queries; they count calls, not dollars. \citet{chen2025llmselector} assign different models to
+the modules of a compound system with a labelled search, which can beat any single model; this is role allocation, not
+parallel width.
+
+\paragraph{Verification and cascades.} \citet{singhi2025solve} find self-consistency more compute-efficient than
+generative verification at most practical budgets, with verification ahead only at many times the compute; our
+comparator is the judge model's own answer at measured dollars. Conformal cascades~\cite{dou2026conformal} need
+labelled calibration data; C3PO~\cite{valkanas2025c3po} anchors a label-free cascade on the strongest model's answers
+and so inherits its errors. Learn-then-Test~\cite{angelopoulos2021ltt} gives the risk control we plan for a runtime
+router.
+
+\section{Limitations}
+\label{sec:limits}
+
+Models and prices are those of October 2026, and public leaderboards mix scaffolds and dates. Most Atlas results are
+post hoc and uncorrected for the many comparisons made. Contamination cannot be ruled out: BBEH has been public since
+2025, so ``fresh'' means new to this project, and LiveCodeBench predates the testbed's models. The API studies are small
+(\nm{anchor.items.all} items in the anchor) and use two vendors; the AH2 decision covers the first effort step for cheap
+models on these items only, and depth beyond it awaits CD2. The anchor's judge test was capped by its pools. Answer
+format moves the difficulty axis~\cite{chen2026cofailure}; our anchor tasks are free-form. The all-wrong tail on small
+math sets is not resolved. The anchor's systematic shares have no interval until the gold files are restored.
+
+\section{Conclusion and next steps}
+\label{sec:conclusion}
+
+On the data we have, failures are mostly shared, and a factor model with one free difficulty per item prices the shared
+tail on code better than a one-factor copula given the same data. Reasoning moves a system along the shared difficulty
+axis without changing which items it fails. The first reasoning step of cheap models beat a dollar-matched vote of their
+no-reasoning calls on sealed items; whether depth beats width beyond that step is open, and our public pairs predict
+about zero at the top of a model's range. Selection by agreement did not beat the best system's own vote at matched
+calls, and a test of judges still needs pools that cover more than the judge answers alone. The next steps (roadmap in
+research/v4/roadmap.md): \nm{plan.items}+ items across \nm{plan.families} or more task families including agentic ones,
+with a time-split replication; a third vendor used once on the frozen design; the open-weight testbed; batch and cache
+pricing; and a budget allocator that turns a \nm{plan.pilot.lo}--\nm{plan.pilot.hi} item pilot and a price table into a
+depth, width and verification mix with predicted accuracy, cost and uncertainty.
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\appendix
+
+\section{Preregistrations}
+\label{app:prereg}
+
+The texts are committed: Phase~1 (research/v3/evidence/), the anchor (research/v4/anchor/prereg.md; question,
+predictions P1--P6, kill rules and decisions for AH1--AH4) and the open-weight testbed (research/v4/testbed/prereg.md;
+T1--T5). Each paid run carried a \texttt{prereg:} block (question, prediction, kill, decision) checked by code before
+it could spend. The prediction this paper's public pairs make for session E6's CD2 is logged in research/plan.md before
+that read.
+
+\section{Power}
+\label{app:power}
+
+Anchor: power by simulation at the chosen $n$, AH2 and AH3 kept (research/v4/anchor/power.md); AH1 and AH4 were demoted
+to exploratory below \nm{design.power.min}. Testbed: research/v4/testbed/power.csv (T1 shared-shock test \nm{testbed.power.t1shock},
+exploratory).
+
+\section{The audit process}
+\label{app:audits}
+
+An independent auditor agent read every design and every paid run's outcome before the next step and returned GO,
+ADJUST or STOP; verdicts are recorded verbatim in research/audit\_log.md. Over the project: \nm{audits.count} verdicts,
+\nm{audits.go} GO, \nm{audits.adjust} ADJUST, \nm{audits.stop} STOP. ADJUST items were fixed before any further spend.
+
+\section{Cost ledger and runs}
+\label{app:runs}
+
+\nm{runs.count} paid or simulated runs, \nm{runs.stopped} stopped by their own preregistered expectation rules,
+\nm{runs.failed} failed on a server error; total API spend \nm{spend.total}. Spend per session: pilot sessions 3--4
+\nm{spend.s3} and \nm{spend.s4}, market town \nm{spend.s5}, v3 session S1 \nm{spend.s1}, evidence session E4
+\nm{spend.e4}, session E5 \nm{spend.e5}. The list of runs is generated from results/*/status.json
+(Table~\ref{tab:runs}); session E6's review of every run (research/v4/runs\_review.md) will replace it once on main.
+
+\input{runs_table.tex}
+
+\section{Every number and its status}
+\label{app:numbers}
+
+\input{numbers_table.tex}
+
+\end{document}

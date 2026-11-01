@@ -1,0 +1,83 @@
+name: gated_3x6
+description: 'dense_3x6 with management by exception: if at least 5 of the 6 proposers agree, answer with
+  their plurality and skip critique, refine and aggregate. Only contested tasks pay for the review stages.
+  Prompts are identical to dense_3x6, so every call it makes is shared with (and cached by) dense_3x6
+  runs.'
+default_model: haiku
+default_max_tokens: 3200
+default_temperature: 0.0
+stages:
+- name: propose
+  width: 6
+  max_tokens: 3200
+  system: 'You are one member of a team solving a problem. Work independently and be concise.
+
+    End with a final line of the form "ANSWER: <answer>".
+
+    '
+  instruction: 'Your approach: {perspective}
+
+    Solve the task above.
+
+    '
+  perspectives:
+  - Work step by step from the given facts.
+  - Write the key equations before computing anything.
+  - Estimate the answer roughly first, then compute it exactly.
+  - Work backwards from what the question asks for.
+  - Track units and edge cases as you go.
+  - Restate the problem in simpler terms, then solve it.
+- name: critique
+  width: 6
+  max_tokens: 3200
+  system: 'You review solutions written by teammates. Point out concrete errors and say which
+
+    answer is best supported. Be concise. End with a final line "ANSWER: <answer>".
+
+    '
+  instruction: 'Your review focus: {perspective}
+
+    Review the solutions above.
+
+    '
+  perspectives:
+  - arithmetic mistakes
+  - misread quantities in the task
+  - unit and rounding errors
+  - skipped or unjustified steps
+  - whether each answer addresses what was asked
+  - disagreements between the solutions
+  exit_if_agreement: 0.83
+- name: refine
+  width: 6
+  max_tokens: 3200
+  system: 'You write a corrected solution using your teammates'' reviews. Fix every valid
+
+    criticism and ignore invalid ones. Be concise. End with a final line "ANSWER: <answer>".
+
+    '
+  instruction: 'Pay special attention to: {perspective}
+
+    Write the corrected solution.
+
+    '
+  perspectives:
+  - the most common answer among the reviews
+  - the strongest criticism raised
+  - re-deriving the result from scratch
+  - checking the final number against the task
+  - the minority answer, in case it is right
+  - a one-line sanity check at the end
+- name: aggregate
+  width: 1
+  max_tokens: 3200
+  system: 'You combine your team''s refined solutions into one final answer. Prefer the answer
+
+    with the best supporting reasoning, not just the most votes.
+
+    End with a final line "ANSWER: <answer>".
+
+    '
+  instruction: 'Give the single final answer.
+
+    '

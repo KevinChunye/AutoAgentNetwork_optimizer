@@ -1,0 +1,111 @@
+{
+  "run_id": "e14_forecast_open-1792695760",
+  "state": "completed",
+  "reason": "",
+  "vendor": "openai",
+  "task_kind": "forecast",
+  "items": [
+    279,
+    300
+  ],
+  "sources": [
+    {
+      "ref": "luna_none",
+      "calls": 5,
+      "first_call": 0,
+      "prompt": "base",
+      "max_tokens": 1500,
+      "items": null
+    },
+    {
+      "ref": "sol61_low",
+      "calls": 1,
+      "first_call": 0,
+      "prompt": "base",
+      "max_tokens": 8000,
+      "items": null
+    },
+    {
+      "ref": "sol61_low",
+      "calls": 1,
+      "first_call": 1,
+      "prompt": "base",
+      "max_tokens": 8000,
+      "items": "research/v3/evidence/sealed/forecast_second_call.txt"
+    }
+  ],
+  "template_hash": "918df73fdf01cefc",
+  "code": {
+    "commit": "53e52a4",
+    "dirty": false
+  },
+  "checkpoints": [
+    "committed and pushed"
+  ],
+  "calls": 138,
+  "live_calls": 138,
+  "by_source": {
+    "luna_none:base": {
+      "calls": 105,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.0085,
+      "live": 105,
+      "refused": 0
+    },
+    "sol61_low:base": {
+      "calls": 33,
+      "parsed": 1.0,
+      "truncated": 0.0,
+      "usd": 0.06935,
+      "live": 33,
+      "refused": 0
+    }
+  },
+  "model_versions": [
+    "gpt-6-luna",
+    "gpt-6.1-sol"
+  ],
+  "budget": {
+    "spent_by_account": {
+      "anthropic": 20.5944,
+      "openai": 3.9117
+    },
+    "hard_caps_usd": {
+      "anthropic": 100.0,
+      "openai": 100.0
+    },
+    "phase": "evidence",
+    "phase_total_usd": 150.0,
+    "account_caps_usd": {
+      "anthropic": 100.0,
+      "openai": 50.0
+    },
+    "room_by_account_usd": {
+      "anthropic": 66.3621,
+      "openai": 39.5666
+    },
+    "spent_total_usd": 24.5061,
+    "run_spent_usd": 0.0779,
+    "run_cap_usd": 4.0,
+    "safety_multiplier": 1.15
+  },
+  "rate_limits": {
+    "luna_none": {
+      "limit-requests": "5000",
+      "limit-tokens": "2000000",
+      "remaining-requests": "4999",
+      "remaining-tokens": "1999734",
+      "reset-requests": "12ms",
+      "reset-tokens": "7ms"
+    },
+    "sol61_low": {
+      "limit-requests": "5000",
+      "limit-tokens": "1000000",
+      "remaining-requests": "4999",
+      "remaining-tokens": "999734",
+      "reset-requests": "12ms",
+      "reset-tokens": "15ms"
+    }
+  }
+}

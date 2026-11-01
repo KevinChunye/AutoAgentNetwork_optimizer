@@ -1,0 +1,4 @@
+{"event": "shutdown", "fault": "F1", "member": "A", "released": ["unfinished"], "withdrawn_model": "sonnet_low"}
+{"api_usd": 0, "calls": 1, "cpu_total_s": 0, "event": "call_intent", "index": 1, "model": "luna_low_ev", "purpose": "recover", "tools": 0, "wall_total_s": 0.6891540199994779, "worker": "B"}
+{"api_usd": 0.000439675, "calls": 1, "cpu_total_s": 0, "event": "duplicate_proposal", "index": 2, "target": "696b028a493637ade01129e9c1f54fa4ba5361312e5c155f17049fa790cb08d6", "tools": 0, "wall_total_s": 3.200366020000729, "worker": "B"}
+{"api_usd": 0.000439675, "calls": 1, "cpu_total_s": 0, "event": "call_applied", "index": 3, "purpose": "recover", "tools": 0, "wall_total_s": 3.392409674999726, "worker": "B"}

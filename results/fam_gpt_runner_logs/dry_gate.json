@@ -1,0 +1,17 @@
+cleared (dry run)
+{
+  "batch": "fam_gpt_batch_gate",
+  "branches_total": 9,
+  "branches_reported": 9,
+  "status": "completed",
+  "status_counts": {
+    "no_positive_feasible_plan": 6,
+    "limits_reached": 3
+  },
+  "batch_run_spent_usd": 0.0,
+  "code": {
+    "commit": "9db16e5",
+    "dirty": false,
+    "dirty_paths": []
+  }
+}

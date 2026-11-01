@@ -1,0 +1,20 @@
+# DRAFT: prepare real inputs, freeze hashes and commit before a paid run.
+kind: phoenix
+name: phoenix_example
+checkpoint: data/external/phoenix_checkpoints/wine_T2_101
+capability_table: research/phoenix/capabilities.json
+policy: full
+fault: F1
+withdrawn_model: sonnet_low
+seed: 101
+api_budget_usd: 0.05
+cpu_budget_s: 120
+max_calls: 8
+max_tools: 24
+wall_s: 1200
+frozen_hashes: {}
+prereg:
+  question: Can dependency-constrained recovery improve final quality and future cost?
+  prediction: The heuristic may reduce redundant work; ordinary failover may be sufficient.
+  kill: Stop on provenance, split isolation, access, synchronization or budget violations.
+  decision: Report paired outcomes including failures; never add cases after reading results.

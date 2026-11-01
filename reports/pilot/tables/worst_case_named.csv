@@ -1,0 +1,6 @@
+name,id,calls,worst_usd,share_of_dense
+dense,k6-6-6-1,19,0.0743,1.0
+propose-heavy,k6-2-2-1,11,0.0285,0.38365
+uniform 3,k3-3-3-1,10,0.0284,0.38218
+uniform 2,k2-2-2-1,7,0.01737,0.23374
+minimal,k1-1-1-1,4,0.00847,0.11405

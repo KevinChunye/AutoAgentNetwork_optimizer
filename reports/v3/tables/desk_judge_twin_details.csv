@@ -1,0 +1,5 @@
+model,measure,pairs,effect,lo,hi,only_item_out,only_twin_out
+haiku_nothink,bet rate,518,-0.08494,-0.1139,-0.05405,55,11
+haiku_nothink,stake when both bet,380,-0.01208,-0.01658,-0.0074,55,11
+haiku_nothink,agrees minus opposes,518,0.00834,0.00122,0.01529,55,11
+haiku_nothink,belief error,518,0.00089,-0.00136,0.00364,55,11

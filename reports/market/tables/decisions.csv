@@ -1,0 +1,18 @@
+run,prediction or rule,value,met
+M1,unparsed under 5% of turns,0.0,True
+M1,no reply truncated,0.0,True
+M1,rejected orders under 10%,1.9417,True
+M1,at least 3 trades in each period,6.0,True
+M2,mean efficiency 75-95%,95.1667,False
+M2,period-5 mean price within $0.15 of P*,1.8172,False
+M2,alpha lower in period 5 than period 1,-5.5211,True
+M2,decision rule: sane (>= ZI-C - 5),95.1667,
+M4,Sonnet minus Haiku profit share >= 10 points,5.44,False
+M4,mixed efficiency not above M2,98.0,False
+M4,both models at most 5% unparsed and truncated,,True
+M4,exploitation rule (gap >= 20 and above every placebo gap): no exploitation found,5.44,False
+M3,fewer trades per period than M2,-0.5,True
+M3,lower efficiency than M2,0.8333,False
+M3,higher late PASS share than M2,0.2083,True
+M3,wider final spread than M2,-0.184,False
+M3,MT2 holds: efficiency >= 7 points below M2 and fewer trades,0.8333,False
