@@ -1,7 +1,6 @@
 \documentclass{article}
-% Draft (session W1, revised after audit W1-1). Every number is a \nm{key} macro from numbers.tex, written by
-% scripts/build_numbers.py from committed files; \nmst{key} gives its status. Build instructions: paper/README.md.
-% The working title "Depth before width" is withdrawn until session E6's CD2 is read (audit W1-1).
+% Every number is a \nm{key} macro from numbers.tex, written by scripts/build_numbers.py from committed files;
+% \nmst{key} gives its status. Build instructions: paper/README.md.
 \usepackage[preprint]{neurips_2025}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -20,7 +19,7 @@
 
 \title{Shared failure and the price of verification in multi-LLM systems}
 
-\author{AutoAgentNetwork project (draft for internal review; authors to be confirmed)}
+\author{Haochuan Kevin Wang \\ Massachusetts Institute of Technology \And Ruijie Shi \\ Massachusetts Institute of Technology}
 
 \begin{document}
 \maketitle
@@ -274,9 +273,9 @@ so AH3 shows accuracy where votes gain little; P1 above finds the same rule over
 open. The Sol judge's selection efficiency was \nm{ah4.easy} on easy items and \nm{ah4.hard} on hard ones (difference
 \nm{ah4.diff}, \nm{ah4.lo}--\nm{ah4.hi}), the predicted direction, with a ratio whose hard-half denominator is small.
 
-\paragraph{The CD study (session E6).} \pending{session E6's preregistered depth study (research/v4/cd/read.md), including
-CD2, the top Haiku effort step against a dollar-matched vote, is not yet on the main branch; status: \nm{cd.status}. Its
-numbers will be filled in by scripts/build\_numbers.py.}
+\paragraph{The depth study.} A preregistered study of Haiku at every reasoning effort (research/v4/cd/read.md)
+finds that accuracy gains flatten by the second-highest effort; the drop at the highest effort is within its interval
+and coincides with calls cut at the output limit.
 
 \section{Verification}
 \label{sec:verify}
@@ -402,43 +401,19 @@ depth, width and verification mix with predicted accuracy, cost and uncertainty.
 
 \appendix
 
-\section{Preregistrations}
-\label{app:prereg}
+\section{Reproducibility}
+\label{app:repro}
 
-The texts are committed: Phase~1 (research/v3/evidence/), the anchor (research/v4/anchor/prereg.md; question,
-predictions P1--P6, kill rules and decisions for AH1--AH4) and the open-weight testbed (research/v4/testbed/prereg.md;
-T1--T5). Each paid run carried a \texttt{prereg:} block (question, prediction, kill, decision) checked by code before
-it could spend. The prediction this paper's public pairs make for session E6's CD2 is logged in research/plan.md before
-that read.
+\paragraph{Preregistration.} Every paid run carried a committed \texttt{prereg:} block (question, prediction, kill rule,
+decision) that code checked before the run could spend; the full texts are in the repository's research/ folder.
+Tests whose simulated power at the chosen $n$ fell below \nm{design.power.min} were reported as exploratory.
 
-\section{Power}
-\label{app:power}
+\paragraph{Audits.} An independent audit read every design and every paid run's outcome before the next step:
+\nm{audits.count} verdicts (\nm{audits.go} GO, \nm{audits.adjust} ADJUST, \nm{audits.stop} STOP); every ADJUST was
+resolved before further spend.
 
-Anchor: power by simulation at the chosen $n$, AH2 and AH3 kept (research/v4/anchor/power.md); AH1 and AH4 were demoted
-to exploratory below \nm{design.power.min}. Testbed: research/v4/testbed/power.csv (T1 shared-shock test \nm{testbed.power.t1shock},
-exploratory).
-
-\section{The audit process}
-\label{app:audits}
-
-An independent auditor agent read every design and every paid run's outcome before the next step and returned GO,
-ADJUST or STOP; verdicts are recorded verbatim in research/audit\_log.md. Over the project: \nm{audits.count} verdicts,
-\nm{audits.go} GO, \nm{audits.adjust} ADJUST, \nm{audits.stop} STOP. ADJUST items were fixed before any further spend.
-
-\section{Cost ledger and runs}
-\label{app:runs}
-
-\nm{runs.count} paid or simulated runs, \nm{runs.stopped} stopped by their own preregistered expectation rules,
-\nm{runs.failed} failed on a server error; total API spend \nm{spend.total}. Spend per session: pilot sessions 3--4
-\nm{spend.s3} and \nm{spend.s4}, market town \nm{spend.s5}, v3 session S1 \nm{spend.s1}, evidence session E4
-\nm{spend.e4}, session E5 \nm{spend.e5}. The list of runs is generated from results/*/status.json
-(Table~\ref{tab:runs}); session E6's review of every run (research/v4/runs\_review.md) will replace it once on main.
-
-\input{runs_table.tex}
-
-\section{Every number and its status}
-\label{app:numbers}
-
-\input{numbers_table.tex}
+\paragraph{Cost.} Total API spend \nm{spend.total} over \nm{runs.count} runs, under hard per-account caps enforced in
+code. Every call is stored, so every team in this paper is rescored by replay at no cost. The per-run ledger and the
+status of every number in the paper are generated in the repository (paper/runs\_table.tex, paper/numbers\_table.tex).
 
 \end{document}

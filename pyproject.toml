@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "AutoAgentNetwork: what does organizing AI agents actually buy? Budgeted, preregistered measurement of multi-LLM teams"
 readme = "README.md"
 license = {text = "MIT"}
-authors = [{name = "Kevin Haochuan Wang"}]
+authors = [{name = "Haochuan Kevin Wang"}, {name = "Ruijie Shi"}]
 requires-python = ">=3.11"
 dependencies = ["pydantic>=2.7", "pyyaml>=6", "pandas>=2.2", "httpx>=0.27"]
 

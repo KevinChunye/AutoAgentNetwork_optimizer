@@ -1,6 +1,8 @@
 # AutoAgentNetwork: What Does Organizing AI Agents Actually Buy?
 
-[[report](reports/page/AutoAgentNetwork.html)] [[paper draft](paper/main.pdf)] [[findings](reports/)] [[protocol](docs/RESEARCH_PROTOCOL.md)]
+[[slides](https://drive.google.com/file/d/1-hYiSyDUIk40IKiFPU9dkVw15w0T2g79/view?usp=drive_link)] [[paper](paper/main.pdf)] [[report](reports/page/AutoAgentNetwork.html)] [[findings](reports/)] [[protocol](docs/RESEARCH_PROTOCOL.md)]
+
+Haochuan Kevin Wang and Ruijie Shi, Massachusetts Institute of Technology
 
 ## TL;DR
 
@@ -105,7 +107,7 @@ cache for free.
 ```bibtex
 @misc{wang2026autoagentnetwork,
   title  = {AutoAgentNetwork: What Does Organizing AI Agents Actually Buy?},
-  author = {Wang, Kevin Haochuan},
+  author = {Wang, Haochuan Kevin and Shi, Ruijie},
   year   = {2026},
   howpublished = {\url{https://github.com/KevinChunye/AutoAgentNetwork_optimizer}}
 }
