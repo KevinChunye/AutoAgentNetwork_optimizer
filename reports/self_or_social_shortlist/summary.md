@@ -9,7 +9,8 @@ Preregistrations: `research/self_or_social_shortlist/prereg_arxivmath.md` and `p
 
 Terms. *Accuracy*: share of items whose team (voted) answer is right; unparsed, cut-off or refused replies are wrong
 and cast no vote. *Cost*: deployment dollars per item, counting every first answer plus the chosen revisions; calls
-replayed from the cache keep their recorded dollars. *Interval*: 95% paired item bootstrap (2,000 draws, seed 2026).
+replayed from the cache keep their recorded dollars. *Interval*: 95% paired item bootstrap (2,000 draws, seed 2026). Points are rounded half away from zero, so the two exact
+ties at 6.25 points show as +6.3.
 
 ## Results at a glance
 
@@ -54,7 +55,7 @@ What this says, in plain words.
   - At twice Sonnet's cost, the plain vote of the three first answers is +2.1 [−0.7, +5.6]. The gain comes mostly
     from the round in which members read a teammate: fixed peer − vote is +4.9 [+0.7, +9.7].
   - Post hoc (audit SC-18). Fixed peer is the best of 12 methods on test, and the preregistered revision methods give
-    +4.9 [0.0, +10.4] (all-reflect) and +6.2 [+2.1, +11.1] (full review) over Sonnet alone,
+    +4.9 [0.0, +10.4] (all-reflect) and +6.3 [+2.1, +11.1] (full review) over Sonnet alone,
     both at 4.4 times the cost. The Claude team's 0.854 at $0.043 is below GPT's Sol
     low alone, 0.868 at $0.0055.
 - **The learned stop/consult policy did not help.**
@@ -228,7 +229,7 @@ single member?
 | Contrast (accuracy points, 95% interval) | Value | Verdict |
 |---|---|---|
 | **H-X1**: X − GPT vote | −0.7 [−4.9, +3.5] | not resolved |
-| **H-X1**: X − Claude vote | +6.2 [+0.7, +11.8] | positive |
+| **H-X1**: X − Claude vote | +6.3 [+0.7, +11.8] | positive |
 | **H-X1 overall** (both must be positive) | | **not supported** |
 | **H-X2**: X − Sol medium alone (best member on dev) | +4.2 [−0.7, +9.0] | not resolved |
 | X − Sol low alone (descriptive) | 0.0 [−5.6, +5.6], at 4.1 times the cost | no difference |
@@ -246,7 +247,7 @@ single member?
   - The whole +4.2 comes from Sol medium's 8 non-answers: X got 6 of them right, the GPT vote 7.
   - 15 of X's items were settled by the tie-break in Sol medium's favour.
   - The best possible score (any member right) is 0.924 for X and for the GPT team alike.
-  - X − Claude vote (+6.2) is the known GPT − Claude gap (+6.9).
+  - X − Claude vote (+6.3) is close to the known GPT − Claude gap (+6.9).
 - **The providers' refusals are disjoint, but too few to matter for a vote.** Each provider refused on only 8-10 items,
   and two other members still answered each of them.
 - **A mixed panel only beats the weaker provider's vote.**

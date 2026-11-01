@@ -17,7 +17,7 @@
 \newcommand{\status}[1]{{\upshape\textsc{\small #1}}}
 \newcommand{\pending}[1]{\textcolor{gray}{[pending: #1]}}
 
-\title{Shared failure and the price of verification in multi-LLM systems}
+\title{Can AI Agents Be Organized More Efficiently for Discovering Science?}
 
 \author{Haochuan Kevin Wang \\ Massachusetts Institute of Technology \And Ruijie Shi \\ Massachusetts Institute of Technology}
 
@@ -25,23 +25,25 @@
 \maketitle
 
 \begin{abstract}
-A system built from language-model calls can spend a fixed budget in three ways: more calls whose answers are combined
-(\emph{width}), more reasoning or a stronger model per call (\emph{depth}), or a check that picks among answers
-(\emph{verification}). We fit a factor model of item difficulty, system ability and a failure slope to
-\nm{atlas.public.systems} public systems on \nm{atlas.public.items} items (SWE-bench Verified, MathArena, LiveBench) and
-read it beside small preregistered API studies on sealed items. Failures are mostly shared: item difficulty accounts for
-\nm{p6.swe.est} (item-bootstrap interval \nm{p6.swe.ilo}--\nm{p6.swe.ihi}) of the latent variation in success on
-SWE-bench Verified and \nm{p6.ma.est} on MathArena. Given the same calibration data as a one-factor copula, the model
-predicts how often all \nm{p8.swe.members} held-out SWE-bench systems fail a held-out task (\nm{p8.swe.model}\%
-predicted, \nm{p8.swe.obs}\% observed), where the copula underprices it (\nm{p8.swe.copula}\%); on small math sets both
-underprice. Across \nm{p2.pairs} public pairs of one model at two adjacent reasoning settings, one step up raises ability
-by \nm{p2.all.da.pooled} logits and leaves the failure slope unchanged (\nm{p2.all.db.pooled},
-\nm{p2.all.db.lo}--\nm{p2.all.db.hi}): the higher setting still fails the items that are hard for everyone. On fresh
-sealed items, raising a cheap model's reasoning one step beat repeating its no-reasoning call at the nearest measured
-dollars (confirmatory; \nm{ah2.haiku.diff} and \nm{ah2.luna.diff} points, the deeper call costing
-\nm{ah2.haiku.ratio}$\times$ and \nm{ah2.luna.ratio}$\times$ as much); on public pairs such a step pays where a model
-starts low and about nothing at the top of its range, so depth against width beyond the first step is open. Label-free
-selection among systems, given the same number of calls, did not beat the best system's own vote. Public-data results are
+Teams of language-model agents add cost; when do they add accuracy? A budget can buy more calls whose answers are
+combined (\emph{width}), more reasoning or a stronger model per call (\emph{depth}), or a check that picks among answers
+(\emph{verification}). We measured each at matched cost with Claude and GPT models, under preregistration and hard
+spending caps. A 19-agent Haiku team did not clearly beat one Sonnet call (\nm{pilot.team.acc}\% against
+\nm{pilot.sonnet.acc}\% on \nm{pilot.items} BBEH questions; difference \nm{pilot.diff} points, \nm{pilot.diff.lo} to
+\nm{pilot.diff.hi}). The reason is shared failure: six proposers were worth \nm{pilot.neff} independent answers, and on
+public leaderboards item difficulty accounts for \nm{p6.swe.est} of the latent variation in success on SWE-bench
+Verified; a factor model with one difficulty per item prices the tail that all held-out systems fail
+(\nm{p8.swe.model}\% predicted, \nm{p8.swe.obs}\% observed). At matched cost, one reasoning call beat a vote of quick
+copies (confirmatory; \nm{ah2.haiku.diff} and \nm{ah2.luna.diff} points). Verification selects but cannot create: critics
+and refiners recovered none of the \nm{pilot.rescue.zero.n} questions that no proposer answered, and a judge is capped by
+its candidates' coverage. Different members helped only where the best member left room: on LAB-Bench biology a team of
+Haiku and Sonnet gained \nm{lab.claude.reviewminus} points over Sonnet alone at \nm{lab.claude.review.ratio}$\times$ its
+cost, no GPT team beat GPT-6.1 Sol alone, and a preregistered panel mixing the providers did not beat GPT's own vote
+(\nm{lab.mix.gpt}, \nm{lab.mix.gpt.lo} to \nm{lab.mix.gpt.hi}). Smarter coordination rules did not pay: a learned rule for
+when to ask a teammate failed its preregistered test, and a recovery rule for a lost team member (PHOENIX,
+\nm{phx.recoveries} sealed recoveries on physics and ecology tables) showed no resolved gain where it could be isolated
+(\nm{phx.main}, \nm{phx.main.lo} to \nm{phx.main.hi}); a stronger planner model drove the gains. Which members are called
+matters more than how they are organized: every winning cell of our budget map is a single model. Public-data results are
 post hoc, and every number carries its status.
 \end{abstract}
 
@@ -52,13 +54,16 @@ stronger or longer-reasoning model once, or ask several models and let a judge c
 The answer depends on one quantity: how much the systems' failures are \emph{shared}. If every system fails the same
 hard items, extra calls fail with them, and only a system that moves the hard items helps.
 
-\paragraph{Three claims, tested rather than assumed.} (i) Failures are dominated by shared item difficulty, so width is
-capped by the items everyone fails. (ii) Reasoning moves a system along that same difficulty axis, so depth may be the
-cheaper first purchase. (iii) Picking among agents needs a signal stronger than agreement. On our data, (i) holds on
-code and math, with a factor model that prices the shared tail on code; (ii) holds as a description of what reasoning
-does, and as a purchase only for the first effort step of cheap models, which a preregistered test supports; beyond it
-the question is open and is the subject of a separate preregistered study (Section~\ref{sec:api}); (iii) holds for
-agreement-based selection, while our one judge test was capped by its candidate pools and cannot speak to judges.
+\paragraph{Six questions, in the order we met them.} (1) Can a team be compressed? A pruned 19-agent team was matched
+by one stronger call (Section~\ref{sec:pilot}). (2) Why didn't 19 agents beat one call? Failures are dominated by shared
+item difficulty, so width is capped by the items everyone fails (Sections~\ref{sec:pilot} and~\ref{sec:atlas}). (3) If
+copies don't help, what does a dollar buy? Reasoning moves a system along the same difficulty axis, and the first effort
+step of cheap models beat a dollar-matched vote in a preregistered test; verification selects among answers someone
+produced and is capped by their coverage (Sections~\ref{sec:api} and~\ref{sec:verify}). (4) Do different members help
+where copies don't? Only where the best member leaves room (Section~\ref{sec:members}). (5) Does a smarter coordination
+rule help? Neither a learned rule for asking a teammate nor a recovery rule showed a gain we can credit to the rule; the
+stronger member did (Section~\ref{sec:members}). (6) So the budget question reduces to choosing members
+(Section~\ref{sec:alloc}).
 
 \paragraph{Contributions.}
 \begin{itemize}
@@ -71,9 +76,13 @@ random effects, and a dollar-matched comparison of one deeper call against a wid
 \item \textbf{Preregistered API studies}: a Phase~1 case where one reasoning call wins, and an anchor study on
 \nm{anchor.items.all} sealed items with two confirmatory tests (AH2: the first effort step against the nearest-dollar
 vote; AH3: the factor model's vote prediction), read once with frozen code.
+\item \textbf{Team studies}: a 19-agent pilot; LAB-Bench teams for each provider with a preregistered rule for when to
+ask a teammate and a preregistered cross-provider panel; and PHOENIX, a recovery rule for a lost member, on
+\nm{phx.cases} cases of three science tables with every predictor sealed before scoring.
+\item \textbf{A budget map}: the best team for each dollar and latency budget, chosen from stored calls at no cost.
 \item \textbf{Process}: sealed items, single reads, preregistered stop rules and \nm{audits.count} independent audits,
 for \nm{spend.total} of API spend in total. Every number in this paper is generated from a committed file and carries a
-status (Appendix~\ref{app:numbers}).
+status (Appendix~\ref{app:repro}).
 \end{itemize}
 
 \section{Definitions}
@@ -108,6 +117,26 @@ shrinks a panel's calibration gap without improving its ranking (F13 in our find
 items, not preregistered as a test. \status{post hoc}: chosen after the data were read, or on data not sealed for it;
 all public-data analyses are post hoc in this sense, as are numbers computed after a read. Post hoc results are many and
 uncorrected for multiplicity; we read them as descriptions, not tests.
+
+\section{The pilot: nineteen agents and one call}
+\label{sec:pilot}
+
+Our first study pruned a team rather than measuring a lever. Six Claude Haiku~5.5 proposers answered each question, six
+critics read all six answers, six refiners revised, and one aggregator answered: 19 calls. On \nm{pilot.items} BBEH
+questions the full team scored \nm{pilot.team.acc}\% at \nm{pilot.team.usd} per question; one Sonnet~5.5 call with
+thinking off scored \nm{pilot.sonnet.acc}\% at \nm{pilot.sonnet.usd}, a difference of \nm{pilot.diff} points
+(\nm{pilot.diff.lo} to \nm{pilot.diff.hi}; \status{exploratory}). The pruned teams tied within this noise.
+
+The proposers' right-or-wrong records correlate at \nm{pilot.rho} on average, so six are worth \nm{pilot.neff}
+independent answers (effective size $n/(1+(n-1)\rho)$, a measure of redundancy rather than a number of agents one could
+deploy). A plurality vote of one proposer scores \nm{pilot.vote.k1}\% and of all six \nm{pilot.vote.k6}\% (averaged over
+every set of proposers), while the chance that at least one is right rises from \nm{pilot.cover.k1}\% to
+\nm{pilot.cover.k6}\%; independent errors at the same accuracy would give \nm{pilot.cover.indep}\%. Accuracy rose through
+critique (\nm{pilot.stage.critique}\%) and refinement (\nm{pilot.stage.refine}\%) to \nm{pilot.stage.aggregate}\%: on the
+\nm{pilot.rescue.low.n} questions where one or two proposers were right the team reached \nm{pilot.rescue.low.acc}\%, and
+on the \nm{pilot.rescue.zero.n} where none was right it never recovered (\nm{pilot.rescue.zero.acc}\%). Checking selected
+among answers someone produced; it did not create them. The stages were not ablated one by one. The next two sections ask
+why failures are shared and what a dollar buys instead.
 
 \section{The Atlas: what public data say about width and depth}
 \label{sec:atlas}
@@ -334,6 +363,59 @@ points because the top systems are close to perfect.
 run ranks its own successes with median AUROC \nm{f18.stepauroc}; a cascade that escalates on step count never
 escalates once its threshold is fitted. Execution-based checks on code are part of the open-weight testbed.
 
+\section{Different members and coordination rules}
+\label{sec:members}
+
+\paragraph{Different members.} If copies fail together, members that fail differently should help. On \nm{lab.items}
+held-out LAB-Bench questions (DNA-sequence manipulation and protocol troubleshooting), each provider fielded one cheap model
+and one strong model at two reasoning efforts: Claude Haiku~5.5 with Sonnet~5.5 at low and medium effort (two models,
+three settings), and GPT-6 Luna with GPT-6.1 Sol at low and medium. With every member reading both teammates' answers
+before revising, the Claude team scored \nm{lab.claude.review.acc}\% against \nm{lab.claude.single.acc}\% for Sonnet low
+alone, \nm{lab.claude.reviewminus} points (\nm{lab.claude.reviewminus.lo} to \nm{lab.claude.reviewminus.hi};
+\status{post hoc}) at \nm{lab.claude.review.ratio}$\times$ the cost; a plain vote of the three first answers gained
+\nm{lab.claude.voteminus} (\nm{lab.claude.voteminus.lo} to \nm{lab.claude.voteminus.hi}). Sol low alone scored
+\nm{lab.gpt.single.acc}\% at \nm{lab.gpt.single.usd} per question, and no GPT team beat it by a resolved margin (every
+member reading both teammates: \nm{lab.gpt.reviewminus}, \nm{lab.gpt.reviewminus.lo} to \nm{lab.gpt.reviewminus.hi}). The
+best Claude team (\nm{lab.claude.peer.acc}\% at \nm{lab.claude.peer.usd}) stayed below that one Sol call. A preregistered
+panel mixing the providers, chosen on practice questions and replayed from stored calls at no cost, scored
+\nm{lab.mix.acc}\% at \nm{lab.mix.usd}: \nm{lab.mix.gpt} points against GPT's own vote (\nm{lab.mix.gpt.lo} to
+\nm{lab.mix.gpt.hi}) and \nm{lab.mix.claude} against Claude's (\nm{lab.mix.claude.lo} to \nm{lab.mix.claude.hi}). The claim
+needed both to be positive and is not supported (\status{confirmatory}). The two providers refused disjoint questions, too
+few to matter for a vote.
+
+\paragraph{A learned rule for when to ask a teammate.} After its first answer each member could stop, think again alone,
+or ask one teammate. A per-member rule was fitted on practice questions, frozen, and read once; it had to be cheaper than
+every member thinking again, with the lower 95\% bound of its accuracy difference above $-3$ points. Neither team's rule
+passed: Claude \nm{lab.claude.primary} (\nm{lab.claude.primary.lo} to \nm{lab.claude.primary.hi}) at
+\nm{lab.claude.policy.usd} against \nm{lab.claude.reflect.usd} per question, and GPT \nm{lab.gpt.primary}
+(\nm{lab.gpt.primary.lo} to \nm{lab.gpt.primary.hi}) (\status{confirmatory}). Claude's rule did worse than random choices
+of the same number of calls (\nm{lab.claude.random}, \nm{lab.claude.random.lo} to \nm{lab.claude.random.hi}), and GPT's
+mostly reproduced the plain vote.
+
+\paragraph{Recovering a lost member (PHOENIX).} Three agents build a classifier on a public science table (forest cover
+type, MiniBooNE neutrino events or HIGGS collisions), and halfway through one member is shut down and its model withdrawn.
+Three recoveries ran under the same caps on dollars, calls, tools and CPU time: ordinary takeover by the next model, a
+planner model choosing every step, and PHOENIX, which ranks candidate plans by expected gain per dollar along the
+workflow's dependencies. Every recovered predictor was sealed and then scored once on a held-out split
+(\nm{phx.recoveries} recoveries, balanced-accuracy points). Where the rule can be isolated, with one cheap model doing
+everything, PHOENIX minus takeover is \nm{phx.main} (\nm{phx.main.lo} to \nm{phx.main.hi}; \status{confirmatory}, not
+resolved). With Claude Opus~5.5 planning it beats takeover by \nm{phx.claude} (\nm{phx.claude.lo} to \nm{phx.claude.hi}),
+but Opus choosing every step without the rule already gains \nm{phx.planner} (\nm{phx.planner.lo} to \nm{phx.planner.hi};
+\status{post hoc}); the rule adds \nm{phx.rule} (\nm{phx.rule.lo} to \nm{phx.rule.hi}) at \nm{phx.usd.full} against
+\nm{phx.usd.llm} per recovery. With GPT-6.1 Sol planning the gain over takeover is \nm{phx.gpt} (\nm{phx.gpt.lo} to
+\nm{phx.gpt.hi}) and fragile, and two draws of the same method on one case differed by up to \nm{phx.drawnoise} points.
+The planner model mattered; the rule's own value is not shown.
+
+\section{Choosing members per budget}
+\label{sec:alloc}
+
+Because every call is stored, every team in this paper is rescored by replay at no cost, and the best team for each dollar
+and latency budget can be chosen from calls already made. On the anchor's BBEH questions \nm{map.cells} budget cells have a
+feasible team, and in every one the winner is a single model: one call in \nm{map.single} cells and a vote of its own
+copies in \nm{map.vote}. Chosen on half the questions and scored on the other half, the choice loses
+\nm{map.regret.lo}--\nm{map.regret.hi} points on average against the best team for the held-out half
+(\status{exploratory}). This is stability within one benchmark, not transfer to a new task.
+
 \section{The open-weight testbed (design; results pending)}
 \label{sec:testbed}
 
@@ -378,19 +460,25 @@ Models and prices are those of October 2026, and public leaderboards mix scaffol
 post hoc and uncorrected for the many comparisons made. Contamination cannot be ruled out: BBEH has been public since
 2025, so ``fresh'' means new to this project, and LiveCodeBench predates the testbed's models. The API studies are small
 (\nm{anchor.items.all} items in the anchor) and use two vendors; the AH2 decision covers the first effort step for cheap
-models on these items only, and depth beyond it awaits CD2. The anchor's judge test was capped by its pools. Answer
+models on these items only; beyond it the depth study describes flattening gains but does not test depth against
+width. The anchor's judge test was capped by its pools. The team studies are small (\nm{lab.items} LAB-Bench test
+questions, \nm{phx.cases} PHOENIX cases on tables near their accuracy ceiling), several team comparisons are post hoc, and
+the budget map's stability is measured within one benchmark. Answer
 format moves the difficulty axis~\cite{chen2026cofailure}; our anchor tasks are free-form. The all-wrong tail on small
 math sets is not resolved. The anchor's systematic shares have no interval until the gold files are restored.
 
 \section{Conclusion and next steps}
 \label{sec:conclusion}
 
-On the data we have, failures are mostly shared, and a factor model with one free difficulty per item prices the shared
+Which members a system calls matters more than how it organizes them. On the data we have, failures are mostly shared, and a factor model with one free difficulty per item prices the shared
 tail on code better than a one-factor copula given the same data. Reasoning moves a system along the shared difficulty
 axis without changing which items it fails. The first reasoning step of cheap models beat a dollar-matched vote of their
 no-reasoning calls on sealed items; whether depth beats width beyond that step is open, and our public pairs predict
 about zero at the top of a model's range. Selection by agreement did not beat the best system's own vote at matched
-calls, and a test of judges still needs pools that cover more than the judge answers alone. The next steps (roadmap in
+calls, and a test of judges still needs pools that cover more than the judge answers alone. Different members helped
+only where the best member left room, and smarter coordination rules, for asking a teammate or for recovering a lost
+member, showed no gain we can credit to the rule. A preregistered handoff test, how much of a strong model's
+accuracy a cheaper team completes from the strong model's partial reasoning, has run and is not yet read. The next steps (roadmap in
 research/v4/roadmap.md): \nm{plan.items}+ items across \nm{plan.families} or more task families including agentic ones,
 with a time-split replication; a third vendor used once on the frozen design; the open-weight testbed; batch and cache
 pricing; and a budget allocator that turns a \nm{plan.pilot.lo}--\nm{plan.pilot.hi} item pilot and a price table into a
@@ -409,8 +497,8 @@ decision) that code checked before the run could spend; the full texts are in th
 Tests whose simulated power at the chosen $n$ fell below \nm{design.power.min} were reported as exploratory.
 
 \paragraph{Audits.} An independent audit read every design and every paid run's outcome before the next step:
-\nm{audits.count} verdicts (\nm{audits.go} GO, \nm{audits.adjust} ADJUST, \nm{audits.stop} STOP); every ADJUST was
-resolved before further spend.
+\nm{audits.count} audits, with \nm{audits.go} GO, \nm{audits.adjust} ADJUST and \nm{audits.stop} STOP verdicts; every
+ADJUST was resolved before further spend.
 
 \paragraph{Cost.} Total API spend \nm{spend.total} over \nm{runs.count} runs, under hard per-account caps enforced in
 code. Every call is stored, so every team in this paper is rescored by replay at no cost. The per-run ledger and the

@@ -611,9 +611,16 @@ def process_numbers(runs: pd.DataFrame) -> None:
                       ("v3, session S1", "s1"), ("Evidence, session E4", "e4"), ("v4, session E5", "e5")):
         put(f"spend.{key}", by.get(name, 0.0), "record", src, "usd", 2)
     audit = (ROOT / "research/audit_log.md").read_text()
-    verdicts = re.findall(r"VERDICT: (GO|ADJUST|STOP)", audit)
+    # one verdict per audit entry ("## " heading): its "VERDICT: X" line, else the first GO/ADJUST/STOP word of its
+    # opening lines (later entries open with "ADJUST; ..."); entries without a verdict (smoke reports) count as audits
+    entries = [b for b in re.split(r"\n(?=## )", audit) if b.startswith("## ")]
+    verdicts = []
+    for entry in entries:
+        m = re.search(r"VERDICT: (GO|ADJUST|STOP)", entry) or re.search(r"\b(GO|ADJUST|STOP)\b", "\n".join(entry.split("\n")[1:6]))
+        if m:
+            verdicts.append(m.group(1))
     counts = pd.Series(verdicts).value_counts()
-    put("audits.count", len(verdicts), "record", ROOT / "research/audit_log.md", "int")
+    put("audits.count", len(entries), "record", ROOT / "research/audit_log.md", "int")
     for v in ("GO", "ADJUST", "STOP"):
         put(f"audits.{v.lower()}", int(counts.get(v, 0)), "record", ROOT / "research/audit_log.md", "int")
 
@@ -889,6 +896,164 @@ def write_runs(path: Path, runs: pd.DataFrame) -> None:
                     "\n\\bottomrule\n\\end{longtable}\n")
 
 
+# ---------------------------------------------------------------------------------------------------------
+# Team studies (session SC and the pilot): the 19-agent pilot, the LAB-Bench teams and the cross-provider panel,
+# PHOENIX recovery, and the budget allocator's map. Every value is read or recomputed from a committed file.
+
+
+def half_up(value: float, digits: int) -> float:
+    """value rounded half away from zero at `digits` decimals of its displayed form (points), as the study summaries
+    print it (Python's round and format round half to even on binary floats: -6.25 would show as -6.2)."""
+    from decimal import ROUND_HALF_UP, Decimal
+
+    q = Decimal(str(round(100 * float(value), 6))).quantize(Decimal(1).scaleb(-digits), ROUND_HALF_UP)
+    return float(q) / 100
+
+def pilot_numbers() -> None:
+    """The pilot's 19-agent Haiku team on the 80 grid questions (reports/pilot/tables), against one Sonnet call; stage
+    accuracy and effective size n / (1 + (n - 1) rho); and, from the stored proposer answers
+    (results/p4_bbeh_grid_*/agents.csv, team k6-6-6-1): a plurality vote of k of the six proposers averaged over every
+    set of k (ties split evenly), the coverage of k (at least one right), and team accuracy by how many proposers were
+    right."""
+    import itertools
+
+    src = ROOT / "reports/pilot/tables/headline.csv"
+    h = pd.read_csv(src)
+    r = h[(h["comparison"] == "single Sonnet minus dense") & (h["items"] == "20-99")].iloc[0]
+    put("pilot.items", r["n"], "record", src, "int")
+    put("pilot.team.acc", half_up(r["acc_b"], 1), "exploratory", src, "pct", 1)
+    put("pilot.sonnet.acc", half_up(r["acc_a"], 1), "exploratory", src, "pct", 1)
+    put("pilot.team.usd", r["cost_b"], "record", src, "usd", 4)
+    put("pilot.sonnet.usd", r["cost_a"], "record", src, "usd", 4)
+    put("pilot.diff", half_up(r["diff_points"] / 100, 1), "exploratory", src, "signed", 1)
+    put("pilot.diff.lo", half_up(r["lo"] / 100, 1), "exploratory", src, "signed", 1)
+    put("pilot.diff.hi", half_up(r["hi"] / 100, 1), "exploratory", src, "signed", 1)
+    src = ROOT / "reports/pilot/tables/econ_effective_team_size.csv"
+    e = pd.read_csv(src).set_index("stage")
+    put("pilot.rho", e.loc["propose", "error_correlation"], "exploratory", src, "num", 2)
+    put("pilot.neff", e.loc["propose", "effective_team_size"], "exploratory", src, "num", 1)
+    for stage in ("propose", "critique", "refine", "aggregate"):
+        put(f"pilot.stage.{stage}", e.loc[stage, "accuracy"], "exploratory", src, "pct", 1)
+    files = sorted(glob.glob(str(ROOT / "results/p4_bbeh_grid_[a-p]/agents.csv")))
+    agents = pd.concat([pd.read_csv(f) for f in files])
+    agents = agents[agents["config_id"] == "k6-6-6-1"]
+    prop = agents[agents["stage"] == "propose"].assign(norm=lambda d: d["answer"].astype(str).str.strip().str.lower())
+    src = "results/p4_bbeh_grid_*/agents.csv (k6-6-6-1)"
+    ids = sorted(prop["agent_id"].unique())
+    for k in (1, 6):
+        accs, covs = [], []
+        for subset in itertools.combinations(ids, k):
+            q = prop[prop["agent_id"].isin(subset)]
+            acc = 0.0
+            for _, g in q.groupby("task_id"):
+                g = g[g["answer"].notna() & (g["answer"].astype(str).str.len() > 0)]
+                if g.empty:
+                    continue
+                counts = g.groupby("norm").agg(n=("correct", "size"), right=("correct", "max"))
+                acc += counts[counts["n"] == counts["n"].max()]["right"].mean()
+            accs.append(acc / q["task_id"].nunique())
+            covs.append(q.groupby("task_id")["correct"].max().mean())
+        put(f"pilot.vote.k{k}", float(np.mean(accs)), "exploratory", src, "pct", 1)
+        put(f"pilot.cover.k{k}", float(np.mean(covs)), "exploratory", src, "pct", 1)
+    p1 = prop.groupby("task_id")["correct"].mean().mean()
+    put("pilot.cover.indep", 1 - (1 - p1) ** 6, "exploratory", src, "pct", 0,
+        note="coverage of six independent proposers at the mean single accuracy")
+    right = prop.groupby("task_id")["correct"].sum()
+    team = agents[agents["stage"] == "aggregate"].set_index("task_id")["correct"]
+    for name, mask in (("zero", right == 0), ("low", right.between(1, 2))):
+        put(f"pilot.rescue.{name}.n", int(mask.sum()), "exploratory", src, "int")
+        put(f"pilot.rescue.{name}.acc", float(team.reindex(right[mask].index).mean()), "exploratory", src, "pct", 1)
+
+
+def lab_numbers() -> None:
+    """LAB-Bench, 144 test questions (reports/self_or_social_shortlist): each team's methods, the preregistered
+    contrasts, post hoc team-minus-single intervals (95% paired item bootstrap, 2,000 draws, seed 2026), and the
+    cross-provider vote panel."""
+    from autoagentnet.self_or_social.score import paired_bootstrap
+
+    base = ROOT / "reports/self_or_social_shortlist"
+    for team, folder in (("claude", "labbench_claude2"), ("gpt", "labbench_gpt")):
+        summ = pd.read_csv(base / folder / "summary.csv").set_index("method")
+        src = base / folder / "summary.csv"
+        for m, key in (("fixed_peer", "peer"), ("full_review", "review"), ("all_reflect", "reflect"), ("vote", "vote"),
+                       ("policy", "policy"), ("single_B", "single")):
+            put(f"lab.{team}.{key}.acc", summ.loc[m, "accuracy"], "preregistered-descriptive", src, "pct", 1)
+            put(f"lab.{team}.{key}.usd", summ.loc[m, "usd_per_item"], "record", src, "usd", 3)
+        con = pd.read_csv(base / folder / "contrasts.csv")
+        src = base / folder / "contrasts.csv"
+        for (m, b), key, status in ((("policy", "all_reflect"), "primary", "confirmatory"),
+                                    (("fixed_peer", "all_reflect"), "h4", "confirmatory"),
+                                    (("policy", "random_matched"), "random", "preregistered-descriptive")):
+            row = con[(con["method"] == m) & (con["baseline"] == b)].iloc[0]
+            for suffix, col in (("", "d_acc"), (".lo", "d_acc_lo"), (".hi", "d_acc_hi")):
+                put(f"lab.{team}.{key}{suffix}", half_up(row[col], 1), status, src, "signed", 1)
+        per = pd.read_csv(base / folder / "per_item.csv")
+        src = base / folder / "per_item.csv"
+        if team == "claude":
+            put("lab.items", per["item"].nunique(), "record", src, "int")
+            put("lab.claude.review.ratio", summ.loc["full_review", "usd_per_item"] / summ.loc["single_B", "usd_per_item"],
+                "record", base / folder / "summary.csv", "num", 1)
+        for m, key in (("full_review", "review"), ("fixed_peer", "peer"), ("vote", "vote")):
+            r = paired_bootstrap(per, m, "single_B", draws=2000, seed=2026)
+            for suffix, col in (("", "d_acc"), (".lo", "d_acc_lo"), (".hi", "d_acc_hi")):
+                put(f"lab.{team}.{key}minus{suffix}", half_up(r[col], 1), "post hoc", src, "signed", 1)
+    src = base / "cross_provider/contrasts.csv"
+    con = pd.read_csv(src)
+    for b, key in (("gpt_vote", "gpt"), ("claude_vote", "claude")):
+        row = con[(con["method"] == "panel_X") & (con["baseline"] == b)].iloc[0]
+        for suffix, col in (("", "d_acc"), (".lo", "d_acc_lo"), (".hi", "d_acc_hi")):
+            put(f"lab.mix.{key}{suffix}", half_up(row[col], 1), "confirmatory", src, "signed", 1)
+    summ = pd.read_csv(base / "cross_provider/summary.csv").set_index("method")
+    put("lab.mix.acc", summ.loc["panel_X", "accuracy"], "confirmatory", base / "cross_provider/summary.csv", "pct", 1)
+    put("lab.mix.usd", summ.loc["panel_X", "usd_per_item"], "record", base / "cross_provider/summary.csv", "usd", 3)
+
+
+def phoenix_numbers() -> None:
+    """PHOENIX recovery on three science tables (reports/phoenix_science/report/branches.csv): sealed test balanced
+    accuracy in points, paired by case (each arm case the mean of its two draws), with the study's own bootstrap
+    (analysis/phoenix_science.py)."""
+    sys.path.insert(0, str(ROOT / "analysis"))
+    import phoenix_science as PS
+
+    src = ROOT / "reports/phoenix_science/report/branches.csv"
+    b = pd.read_csv(src)
+    f = b.assign(test_points=100 * b["test_balanced_accuracy"], dataset=b["case_id"].str.split("_").str[0],
+                 withdrawn_model="-")
+    put("phx.cases", int(f[f["experiment"] == "fam_claude"]["case_id"].nunique()), "record", src, "int")
+    put("phx.recoveries", int(f["test_points"].notna().sum()),
+        "record", src, "int")
+    for exp, comp, key in (("E1", "fixed", "main"), ("fam_claude", "fixed", "claude"), ("fam_claude", "llm", "rule"),
+                           ("fam_gpt", "fixed", "gpt")):
+        r = PS.contrast_rows(f, exp, comp, "test_points")[0]
+        for suffix, col in (("", "mean"), (".lo", "ci_low"), (".hi", "ci_high")):
+            put(f"phx.{key}{suffix}", r[col] / 100, "confirmatory", src, "signed", 2)
+    w = f[f["experiment"] == "fam_claude"].pivot_table(index="case_id", columns="policy", values="test_points", aggfunc="mean")
+    mean, lo, hi, _ = PS.bootstrap((w["llm"] - w["fixed"]).dropna())
+    for suffix, v in (("", mean), (".lo", lo), (".hi", hi)):
+        put(f"phx.planner{suffix}", v / 100, "post hoc", src, "signed", 2)
+    usd = f[f["experiment"] == "fam_claude"].groupby("policy")["logical_api_usd"].mean()
+    put("phx.usd.full", usd["full"], "record", src, "usd", 3)
+    put("phx.usd.llm", usd["llm"], "record", src, "usd", 3)
+    arms = f[f["experiment"].isin(["fam_claude", "fam_gpt"])]
+    draws = arms.pivot_table(index=["experiment", "case_id", "policy"], columns="draw", values="test_points")
+    put("phx.drawnoise", float((draws.max(axis=1) - draws.min(axis=1)).max()), "exploratory", src, "num", 2)
+
+
+def allocator_numbers() -> None:
+    """The budget map on the 440 BBEH questions (research/v4/measurement/tables/config_map.csv, p95 total latency):
+    how many budget cells have a winner and how many winners are one call; held-out regret per latency measure."""
+    src = ROOT / "research/v4/measurement/tables/config_map.csv"
+    m = pd.read_csv(src)
+    bb = m[m["benchmark"] == "bbeh"]
+    cells = bb[(bb["latency"] == "p95 total") & bb["winner"].notna()]
+    put("map.cells", len(cells), "exploratory", src, "int")
+    put("map.single", int(cells["winner"].str.endswith("single").sum()), "exploratory", src, "int")
+    put("map.vote", int(cells["winner"].str.contains("vote").sum()), "exploratory", src, "int")
+    regret = bb.groupby("latency")["regret"].mean()
+    put("map.regret.lo", regret.min() * 100, "exploratory", src, "num", 1)
+    put("map.regret.hi", regret.max() * 100, "exploratory", src, "num", 1)
+
+
 def main() -> None:
     atlas_numbers()
     extension_numbers()
@@ -897,6 +1062,10 @@ def main() -> None:
     anchor_numbers()
     cd_numbers()
     testbed_numbers()
+    pilot_numbers()
+    lab_numbers()
+    phoenix_numbers()
+    allocator_numbers()
     runs = runs_table()
     process_numbers(runs)
     (ROOT / "paper").mkdir(exist_ok=True)

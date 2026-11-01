@@ -50,6 +50,10 @@ def built():
     B.anchor_numbers()
     B.cd_numbers()
     B.testbed_numbers()
+    B.pilot_numbers()
+    B.lab_numbers()
+    B.phoenix_numbers()
+    B.allocator_numbers()
     runs = B.runs_table()
     B.process_numbers(runs)
     return B, runs
@@ -91,3 +95,8 @@ def test_figures_draw(tmp_path, monkeypatch):
         f()
     assert len(list(tmp_path.glob("*.pdf"))) == len(P.FIGURES)
     assert P.settings("openai/o3-mini--medium", "openai/o3-mini") == ("medium", "default")
+
+
+def test_half_up_rounds_ties_away_from_zero():
+    B = load_builder()
+    assert B.half_up(-0.0625, 1) == -0.063 and B.half_up(0.0625, 1) == 0.063 and B.half_up(0.7125, 1) == 0.713
