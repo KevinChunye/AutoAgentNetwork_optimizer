@@ -38,7 +38,7 @@ OUT = ROOT / "paper/figs"
 BLUE, ORANGE, AQUA, YELLOW = "#2a78d6", "#eb6834", "#1baf7a", "#eda100"
 INK, INK2, MUTED, GRID = "#0b0b0b", "#52514e", "#898781", "#e1e0d9"
 DIVERGING = LinearSegmentedColormap.from_list("gain", ["#d03b3b", "#f0efec", "#2a78d6"])
-WIDTH = 5.5  # inches: the NeurIPS text width
+COL, TEXT = 3.3, 6.75  # inches: the ICML column and text widths (figures are drawn at their printed size)
 
 plt.rcParams.update({
     "font.family": "sans-serif", "font.size": 8, "axes.edgecolor": "#c3c2b7", "axes.labelcolor": INK2,
@@ -75,7 +75,7 @@ def fig_share() -> None:
     p6 = p6[p6["source"].isin(names)].assign(label=lambda d: d["source"].map(names)).sort_values("share")
     tail = read_table(["k", "observed", "independent", "L0", "L1", "copula", "rho", "items"], READ)
     anchor = tail[tail["items"].isin(["bbeh", "math"])].drop_duplicates("items")
-    fig, ax = plt.subplots(figsize=(WIDTH, 2.2))
+    fig, ax = plt.subplots(figsize=(COL, 2.3))
     y = np.arange(len(p6))
     ax.hlines(y, p6["half-split min"], p6["half-split max"], color=BLUE, lw=1, alpha=0.5, label="system half-splits (range)")
     ax.hlines(y, p6["item lo"], p6["item hi"], color=BLUE, lw=3, label="item bootstrap")
@@ -86,14 +86,14 @@ def fig_share() -> None:
     ax.set_yticklabels(list(p6["label"]) + [f"anchor, {i}" for i in anchor["items"]], color=INK2)
     ax.set_xlim(0, 1)
     ax.set_xlabel("systematic share of failure variation (L0)")
-    ax.legend(loc="lower right", fontsize=7)
+    ax.legend(loc="upper center", bbox_to_anchor=(0.35, -0.22), ncol=2, fontsize=6.5, columnspacing=1.0, handlelength=1.5)
     save(fig, "fig_share")
 
 
 def fig_tail() -> None:
     t8 = pd.read_csv(EXT / "p8_tail.csv")
     t = t8[t8["benchmark"] == "swebench_verified"].sort_values("members")
-    fig, ax = plt.subplots(figsize=(WIDTH * 0.62, 2.4))
+    fig, ax = plt.subplots(figsize=(TEXT * 0.62, 2.4))
     x = t["members"]
     for col, color, label, style in (("independence", AQUA, "independence", "-"), ("copula", YELLOW, "one-factor copula", "-"),
                                      ("factor model", ORANGE, "factor model", "-")):
@@ -113,7 +113,7 @@ def fig_depth() -> None:
     pooled = pd.read_csv(EXT / "p2_pooled.csv").query("scope == 'all adjacent pairs'").set_index("quantity")
     p2 = p2.assign(label=[pair_label(m, lo, hi, src) for m, lo, hi, src in zip(p2["model"], p2["low"], p2["high"],
                                                                               p2["source"])])
-    fig, axes = plt.subplots(1, 2, figsize=(WIDTH, 3.6), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(TEXT, 3.4), sharey=True)
     y = np.arange(len(p2))[::-1]
     for ax, q, title in ((axes[0], "delta a", "change in ability a (logits)"),
                          (axes[1], "delta beta", "change in failure beta")):
@@ -138,7 +138,7 @@ def fig_dw() -> None:
     lo = list(ah2["lo"]) + list(p3["difference lo"])
     hi = list(ah2["hi"]) + list(p3["difference hi"])
     colors = [ORANGE] * len(ah2) + [BLUE] * len(p3)
-    fig, ax = plt.subplots(figsize=(WIDTH, 2.9))
+    fig, ax = plt.subplots(figsize=(COL, 3.0))
     y = np.arange(len(est))[::-1]
     for yy, e, a, b, c in zip(y, est, lo, hi, colors):
         ax.hlines(yy, 100 * a, 100 * b, color=c, lw=1.2)
@@ -163,7 +163,7 @@ def fig_judge() -> None:
              BLUE),
             ("coverage of the pools (perfect selector)", j["coverage"], "", MUTED),
             ("Sol low answering alone", sol["accuracy"], f"${sol['dollars_per_item']:.4f}", ORANGE)]
-    fig, ax = plt.subplots(figsize=(WIDTH, 1.9))
+    fig, ax = plt.subplots(figsize=(COL, 2.0))
     y = np.arange(len(rows))[::-1]
     for yy, (label, v, usd, c) in zip(y, rows):
         ax.barh(yy, 100 * v, color=c, height=0.6)
@@ -180,7 +180,7 @@ def fig_labelfree() -> None:
     m = pd.read_csv(EXT / "p4_map.csv")
     g = m.groupby(["others", "sd_b", "repeats"])[["Dawid-Skene gain", "pooled Dawid-Skene, fixed labels gain",
                                                   "plurality gain"]].mean().reset_index()
-    fig, axes = plt.subplots(1, 3, figsize=(WIDTH, 1.9), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(TEXT, 2.0), sharey=True)
     cols = [(sd, r) for sd in (0.5, 2.0) for r in (1, 3)]
     for ax, (name, title) in zip(axes, (("plurality gain", "plurality"), ("Dawid-Skene gain", "Dawid-Skene, plain"),
                                         ("pooled Dawid-Skene, fixed labels gain", "pooled, fixed labels"))):
@@ -203,15 +203,16 @@ def fig_labelfree() -> None:
 def fig_frontier() -> None:
     prices = pd.read_csv(ATLAS / "f18_prices.csv").dropna(subset=["usd"])
     front = set(pd.read_csv(ATLAS / "a7_frontier.csv").query("benchmark == 'swebench_verified'")["system"])
-    fig, ax = plt.subplots(figsize=(WIDTH * 0.62, 2.4))
+    fig, ax = plt.subplots(figsize=(TEXT * 0.36, 2.4))
     other = prices[~prices["system"].isin(front)]
     on = prices[prices["system"].isin(front)].sort_values("usd")
     ax.plot(other["usd"], 100 * other["accuracy"], "o", color=MUTED, ms=3.5, alpha=0.7, label="submission")
     ax.plot(on["usd"], 100 * on["accuracy"], "o-", color=BLUE, ms=5, label="price frontier")
-    offsets = [(4, -10), (-10, -12), (-60, 8), (-40, 8)]  # cheapest first; placed by hand so labels do not collide
+    offsets = [(4, -10), (-30, 6), (3, -11), (-46, 6)]  # cheapest first; placed by hand so labels do not collide
     for r, off in zip(on.itertuples(), offsets):
         name = r.system.split("_", 2)[-1].replace("-high", " (high)")
-        ax.annotate(name, (r.usd, 100 * r.accuracy), textcoords="offset points", xytext=off, fontsize=6, color=INK2)
+        ax.annotate(name, (r.usd, 100 * r.accuracy), textcoords="offset points", xytext=off, fontsize=6, color=INK2,
+                    bbox=dict(boxstyle="round,pad=0.12", fc="white", ec="none", alpha=0.85), zorder=5)
     ax.set_xscale("log")
     ax.set_xlabel("dollars per task (log scale)")
     ax.set_ylabel("tasks resolved (%)")

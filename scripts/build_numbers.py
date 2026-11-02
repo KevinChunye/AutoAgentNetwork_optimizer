@@ -679,8 +679,10 @@ def series(runs: pd.DataFrame) -> dict:
 
 
 def tex(display: str) -> str:
-    """A display string made safe for LaTeX text (dollar signs and percent signs escaped)."""
-    return display.replace("$", "\\$").replace("%", "\\%")
+    """A display string made safe for LaTeX text (dollar and percent signs escaped, a leading minus as a minus)."""
+    out = display.replace("$", "\\$").replace("%", "\\%")
+    # a leading minus sign typeset as a minus (in text and in math), not a hyphen
+    return re.sub(r"^(\\\$)?-(?=[\d.])", lambda m: (m.group(1) or "") + "\\ensuremath{-}", out)
 
 
 def one_item() -> dict:

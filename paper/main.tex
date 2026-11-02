@@ -1,28 +1,37 @@
 \documentclass{article}
-% Every number is a \nm{key} macro from numbers.tex, written by scripts/build_numbers.py from committed files;
-% \nmst{key} gives its status. Build instructions: paper/README.md.
-\usepackage[preprint]{neurips_2025}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{xcolor}
-\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
-\usepackage{url}
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{amsmath,amsfonts}
-\usepackage{graphicx}
+% ICML 2026 style (preprint option). Every number is a \nm{key} macro from numbers.tex, written by
+% scripts/build_numbers.py from committed files; \nmst{key} gives its status. Build instructions: paper/README.md.
 \usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+\usepackage[preprint]{icml2026}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{url}
 \input{numbers.tex}
 
 \newcommand{\status}[1]{{\upshape\textsc{\small #1}}}
-\newcommand{\pending}[1]{\textcolor{gray}{[pending: #1]}}
 
-\title{Can AI Agents Be Organized More Efficiently for Discovering Science?}
-
-\author{Haochuan Kevin Wang \\ Massachusetts Institute of Technology \And Ruijie Shi \\ Massachusetts Institute of Technology}
+\icmltitlerunning{Can AI Agents Be Organized More Efficiently?}
+% correspondence by name only (no email); the style requires the field
+\makeatletter\gdef\icmlcorrespondingauthor@text{Haochuan Kevin Wang}\makeatother
 
 \begin{document}
-\maketitle
+
+\twocolumn[
+  \icmltitle{Can AI Agents Be Organized More Efficiently\\for Discovering Science?}
+  \begin{icmlauthorlist}
+    \icmlauthor{Haochuan Kevin Wang}{mit}
+    \icmlauthor{Ruijie Shi}{mit}
+  \end{icmlauthorlist}
+  \icmlaffiliation{mit}{Massachusetts Institute of Technology, Cambridge, MA, USA}
+  \icmlkeywords{multi-agent systems, language models, test-time compute, verification, preregistration}
+  \vskip 0.3in
+]
+
+\printAffiliationsAndNotice{}
 
 \begin{abstract}
 Teams of language-model agents add cost; when do they add accuracy? A budget can buy more calls whose answers are
@@ -46,6 +55,18 @@ when to ask a teammate failed its preregistered test, and a recovery rule for a 
 matters more than how they are organized: every winning cell of our budget map is a single model. Public-data results are
 post hoc, and every number carries its status.
 \end{abstract}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/fig_hero.pdf}
+\caption{The collective minus its best alternative, in accuracy points with 95\% intervals; left of zero the alternative
+wins, and the right column is the collective's cost as a multiple of the alternative's. Rows 1--2 (\status{confirmatory};
+\nm{anchor.items.all} sealed questions): a vote of no-reasoning copies against one reasoning call of the same model at about
+the same dollars. Row 3: the pilot's 19-agent Haiku team against one Sonnet call (\nm{pilot.items} BBEH questions). Rows
+4--6 (LAB-Bench, \nm{lab.items} test questions): every member reading both teammates' answers against the team's best
+single setting, and a preregistered Claude + GPT panel against GPT's own vote. Grey rows are descriptive.}
+\label{fig:hero}
+\end{figure*}
 
 \section{Introduction}
 
@@ -121,7 +142,7 @@ uncorrected for multiplicity; we read them as descriptions, not tests.
 \section{The pilot: nineteen agents and one call}
 \label{sec:pilot}
 
-Our first study pruned a team rather than measuring a lever. Six Claude Haiku~5.5 proposers answered each question, six
+Our first study pruned a team rather than measuring a lever (Figure~\ref{fig:hero}, row 3). Six Claude Haiku~5.5 proposers answered each question, six
 critics read all six answers, six refiners revised, and one aggregator answered: 19 calls. On \nm{pilot.items} BBEH
 questions the full team scored \nm{pilot.team.acc}\% at \nm{pilot.team.usd} per question; one Sonnet~5.5 call with
 thinking off scored \nm{pilot.sonnet.acc}\% at \nm{pilot.sonnet.usd}, a difference of \nm{pilot.diff} points
@@ -136,7 +157,16 @@ critique (\nm{pilot.stage.critique}\%) and refinement (\nm{pilot.stage.refine}\%
 \nm{pilot.rescue.low.n} questions where one or two proposers were right the team reached \nm{pilot.rescue.low.acc}\%, and
 on the \nm{pilot.rescue.zero.n} where none was right it never recovered (\nm{pilot.rescue.zero.acc}\%). Checking selected
 among answers someone produced; it did not create them. The stages were not ablated one by one. The next two sections ask
-why failures are shared and what a dollar buys instead.
+why failures are shared and what a dollar buys instead (Figure~\ref{fig:plateau}).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/fig_plateau.pdf}
+\caption{Six Claude Haiku~5.5 proposers in the pilot (\nm{pilot.items} BBEH questions): a plurality vote of $k$ proposers
+(averaged over every set of $k$) against the share of questions at least one of the $k$ answered right, and that share
+under independent errors at the same accuracy. Copies add coverage slowly and votes almost nothing.}
+\label{fig:plateau}
+\end{figure}
 
 \section{The Atlas: what public data say about width and depth}
 \label{sec:atlas}
@@ -162,7 +192,7 @@ mean pairwise failure correlation (\nm{f17.corr.l0} of \nm{f17.corr.obs}); two s
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figs/fig_share.pdf}
+\includegraphics[width=\columnwidth]{figs/fig_share.pdf}
 \caption{Systematic failure share per source (L0): item-bootstrap 95\% interval (thick) and the range over system
 half-splits (thin; each half fitted on its own). The anchor's shares (hollow) await the gold files for an interval.}
 \label{fig:share}
@@ -185,16 +215,6 @@ correlation to the calibration tasks' pairwise failures. For all \nm{p8.swe.memb
 distribution of difficulties carries the tail that a Gaussian latent factor misses. On the small MathArena sets
 (\nm{design.p8.ma.items.lo}--\nm{design.p8.ma.items.hi} test problems) both models underpredict the 5-system tail, on
 \nm{p8.ma.model.under} and \nm{p8.ma.copula.under} of \nm{p8.ma.sets} sets; the math tail is unresolved.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.62\linewidth]{figs/fig_tail.pdf}\hfill
-\includegraphics[width=0.36\linewidth]{figs/fig_frontier.pdf}
-\caption{Left: coverage of sets of held-out SWE-bench Verified systems on held-out tasks, observed and predicted from the
-calibration tasks only (P8). Right: tasks resolved against dollars per task, SWE-bench Verified submissions with costs;
-the price frontier in blue (A7).}
-\label{fig:tail}
-\end{figure}
 
 \paragraph{Votes of one system.} A vote of two calls cannot gain in expectation (a right--wrong split is a tie), so gains
 start at three. The factor model's \emph{vote rule} predicts a $k$-vote from one-call success $p$, the share $z$ of
@@ -219,14 +239,6 @@ over a random member. Cross-fitted, the factor model predicts the panel vote wit
 independence overstates it and zero-gain ignores it.
 
 \subsection{Depth moves ability, not the failure pattern}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{figs/fig_depth.pdf}
-\caption{One model at two adjacent reasoning settings (P2): change in ability $a$ and in failure slope $\beta$ with
-item-bootstrap 95\% intervals, and the DerSimonian--Laird random-effects pool (diamond).}
-\label{fig:depth}
-\end{figure}
 
 For each of \nm{p2.pairs} public pairs of one model at two adjacent reasoning settings (\nm{p2.models} models, some on two
 benchmarks; difficulties from every other system), we fit both settings' ability and slope on the items both answered
@@ -255,7 +267,7 @@ MiniMax~M2.5 (high) resolves \nm{f18.minimax.acc}\% at \nm{f18.minimax.usd} per 
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figs/fig_dw.pdf}
+\includegraphics[width=\columnwidth]{figs/fig_dw.pdf}
 \caption{One deeper call minus the nearest-dollar vote of the shallower setting: the anchor's confirmatory AH2 (orange,
 fresh sealed items, the first effort step of two cheap models) and public MathArena pairs (blue, post hoc) with
 item-bootstrap 95\% intervals and their random-effects pool.}
@@ -323,16 +335,6 @@ each, against the best system's own 3-vote, the best chosen with labels) every p
 competent ones (plurality \nm{p4.ma.match.comp.plur}, plain Dawid--Skene \nm{p4.ma.match.comp.ds}, fixed labels
 \nm{p4.ma.match.comp.fixed}).
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{figs/fig_labelfree.pdf}
-\caption{Label-free selection, simulation map (P4): gain over the best system (points) when one system at
-\nm{design.p4.top} sits among others at \nm{design.p4.others0}, \nm{design.p4.others1} or \nm{design.p4.others2}, at low
-or high shared difficulty (systematic share \nm{design.p4.share0} or \nm{design.p4.share1}), with one or three calls per
-system; averaged over \nm{design.p4.systems0}, \nm{design.p4.systems1} and \nm{design.p4.systems2} systems.}
-\label{fig:labelfree}
-\end{figure}
-
 \paragraph{The anchor's judge, and why it cannot test judges.} On the anchor's BBEH items the Sol low judge, choosing
 among the answers of two cheap pools, reached \nm{judge.sol.bbeh.acc}\%: \nm{judge.sol.bbeh.vsbest} points above the best
 pool arm (\nm{judge.sol.bbeh.vsbestlo}--\nm{judge.sol.bbeh.vsbesthi}), selection efficiency \nm{judge.sol.bbeh.eta}
@@ -345,7 +347,7 @@ exceeds the judge model's own accuracy. On math the judge was capped by \nm{judg
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figs/fig_judge.pdf}
+\includegraphics[width=\columnwidth]{figs/fig_judge.pdf}
 \caption{The anchor's BBEH verification read: a judge over cheap pools against the judge model answering alone. The
 pools' coverage (grey) is below the judge model's own accuracy, which caps every selector over them.}
 \label{fig:judge}
@@ -363,10 +365,28 @@ points because the top systems are close to perfect.
 run ranks its own successes with median AUROC \nm{f18.stepauroc}; a cascade that escalates on step count never
 escalates once its threshold is fitted. Execution-based checks on code are part of the open-weight testbed.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/fig_lab.pdf}
+\caption{LAB-Bench test (\nm{lab.items} questions): accuracy against cost per question. Open circles: one model alone;
+squares: each provider's five team methods (a vote, everyone thinking again, asking the best peer, reading both peers, the
+learned rule); star: the preregistered Claude + GPT panel. One GPT-6.1 Sol call at low effort matches every team.}
+\label{fig:lab}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/fig_phx.pdf}
+\caption{PHOENIX on \nm{phx.cases} cases of three science tables: sealed test balanced-accuracy points, paired by case
+(each arm case is the mean of two draws). Blue rows are preregistered contrasts; the grey row is post hoc. The rule alone is
+not resolved, and most of the gain over takeover comes from the stronger planner.}
+\label{fig:phx}
+\end{figure}
+
 \section{Different members and coordination rules}
 \label{sec:members}
 
-\paragraph{Different members.} If copies fail together, members that fail differently should help. On \nm{lab.items}
+\paragraph{Different members.} If copies fail together, members that fail differently should help (Figure~\ref{fig:lab}). On \nm{lab.items}
 held-out LAB-Bench questions (DNA-sequence manipulation and protocol troubleshooting), each provider fielded one cheap model
 and one strong model at two reasoning efforts: Claude Haiku~5.5 with Sonnet~5.5 at low and medium effort (two models,
 three settings), and GPT-6 Luna with GPT-6.1 Sol at low and medium. With every member reading both teammates' answers
@@ -392,7 +412,7 @@ passed: Claude \nm{lab.claude.primary} (\nm{lab.claude.primary.lo} to \nm{lab.cl
 of the same number of calls (\nm{lab.claude.random}, \nm{lab.claude.random.lo} to \nm{lab.claude.random.hi}), and GPT's
 mostly reproduced the plain vote.
 
-\paragraph{Recovering a lost member (PHOENIX).} Three agents build a classifier on a public science table (forest cover
+\paragraph{Recovering a lost member (PHOENIX; Figure~\ref{fig:phx}).} Three agents build a classifier on a public science table (forest cover
 type, MiniBooNE neutrino events or HIGGS collisions), and halfway through one member is shut down and its model withdrawn.
 Three recoveries ran under the same caps on dollars, calls, tools and CPU time: ordinary takeover by the next model, a
 planner model choosing every step, and PHOENIX, which ranks candidate plans by expected gain per dollar along the
@@ -406,11 +426,20 @@ but Opus choosing every step without the rule already gains \nm{phx.planner} (\n
 \nm{phx.gpt.hi}) and fragile, and two draws of the same method on one case differed by up to \nm{phx.drawnoise} points.
 The planner model mattered; the rule's own value is not shown.
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/fig_map.pdf}
+\caption{The budget map on the anchor's BBEH questions: the most accurate team within each dollar budget (columns) and
+95th-percentile latency budget (rows), chosen by replaying stored calls. Shading is its accuracy; ``$\times$3'' marks a vote of
+three calls of one model; hatched rows have no team fast enough. Every winner is a single model.}
+\label{fig:map}
+\end{figure*}
+
 \section{Choosing members per budget}
 \label{sec:alloc}
 
 Because every call is stored, every team in this paper is rescored by replay at no cost, and the best team for each dollar
-and latency budget can be chosen from calls already made. On the anchor's BBEH questions \nm{map.cells} budget cells have a
+and latency budget can be chosen from calls already made (Figure~\ref{fig:map}). On the anchor's BBEH questions \nm{map.cells} budget cells have a
 feasible team, and in every one the winner is a single model: one call in \nm{map.single} cells and a vote of its own
 copies in \nm{map.vote}. Chosen on half the questions and scored on the other half, the choice loses
 \nm{map.regret.lo}--\nm{map.regret.hi} points on average against the best team for the held-out half
@@ -484,7 +513,7 @@ with a time-split replication; a third vendor used once on the frozen design; th
 pricing; and a budget allocator that turns a \nm{plan.pilot.lo}--\nm{plan.pilot.hi} item pilot and a price table into a
 depth, width and verification mix with predicted accuracy, cost and uncertainty.
 
-\bibliographystyle{plainnat}
+\bibliographystyle{icml2026}
 \bibliography{refs}
 
 \appendix
@@ -503,5 +532,36 @@ ADJUST was resolved before further spend.
 \paragraph{Cost.} Total API spend \nm{spend.total} over \nm{runs.count} runs, under hard per-account caps enforced in
 code. Every call is stored, so every team in this paper is rescored by replay at no cost. The per-run ledger and the
 status of every number in the paper are generated in the repository (paper/runs\_table.tex, paper/numbers\_table.tex).
+
+\section{Additional figures}
+\label{app:figs}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.62\textwidth]{figs/fig_tail.pdf}\hfill
+\includegraphics[width=0.36\textwidth]{figs/fig_frontier.pdf}
+\caption{Left: coverage of sets of held-out SWE-bench Verified systems on held-out tasks, observed and predicted from the
+calibration tasks only (P8). Right: tasks resolved against dollars per task, SWE-bench Verified submissions with costs;
+the price frontier in blue (A7).}
+\label{fig:tail}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/fig_depth.pdf}
+\caption{One model at two adjacent reasoning settings (P2): change in ability $a$ and in failure slope $\beta$ with
+item-bootstrap 95\% intervals, and the DerSimonian--Laird random-effects pool (diamond).}
+\label{fig:depth}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/fig_labelfree.pdf}
+\caption{Label-free selection, simulation map (P4): gain over the best system (points) when one system at
+\nm{design.p4.top} sits among others at \nm{design.p4.others0}, \nm{design.p4.others1} or \nm{design.p4.others2}, at low
+or high shared difficulty (systematic share \nm{design.p4.share0} or \nm{design.p4.share1}), with one or three calls per
+system; averaged over \nm{design.p4.systems0}, \nm{design.p4.systems1} and \nm{design.p4.systems2} systems.}
+\label{fig:labelfree}
+\end{figure*}
 
 \end{document}
