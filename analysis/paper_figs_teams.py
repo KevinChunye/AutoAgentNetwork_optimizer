@@ -96,9 +96,11 @@ def fig_hero(N) -> None:
     save(fig, "fig_hero")
 
 
-def fig_plateau() -> None:
-    """Six Haiku proposers in the pilot: a vote of k (mean over every set of k, ties split) against the share of
-    questions at least one of the k answers right, and that share under independent errors."""
+def plateau_data():
+    """Six Haiku proposers in the pilot (team k6-6-6-1): for k = 1..6, a plurality vote of k proposers and the share of
+    questions at least one of the k answers right, each averaged over every set of k (vote ties split evenly), and
+    that share under independent errors at the mean single accuracy. Returns (ks, vote %, cover %, indep %,
+    questions)."""
     files = sorted(glob.glob(str(ROOT / "results/p4_bbeh_grid_[a-p]/agents.csv")))
     a = pd.concat([pd.read_csv(f) for f in files])
     p = a[(a["config_id"] == "k6-6-6-1") & (a["stage"] == "propose")].copy()
@@ -121,11 +123,17 @@ def fig_plateau() -> None:
         cover.append(100 * np.mean(covs))
     single = p.groupby("task_id")["correct"].mean().mean()
     indep = [100 * (1 - (1 - single) ** k) for k in ks]
+    return ks, vote, cover, indep, p["task_id"].nunique()
+
+
+def fig_plateau() -> None:
+    """Six Haiku proposers in the pilot: a vote of k against coverage and independence (plateau_data)."""
+    ks, vote, cover, indep, n = plateau_data()
     fig, ax = plt.subplots(figsize=(COL, 2.3))
     ax.plot(ks, indep, "--", color=MUTED, label="one right, if errors were independent")
     ax.plot(ks, cover, "-o", color=AQUA, ms=3.5, label="one of the k proposers right")
     ax.plot(ks, vote, "-o", color=BLUE, ms=3.5, label="plurality vote of the k")
-    ax.set_xlabel(f"proposers k (Claude Haiku 5.5, {p['task_id'].nunique()} BBEH questions)")
+    ax.set_xlabel(f"proposers k (Claude Haiku 5.5, {n} BBEH questions)")
     ax.set_ylabel("accuracy (%)")
     ax.set_ylim(15, 100)
     ax.set_xticks(ks)

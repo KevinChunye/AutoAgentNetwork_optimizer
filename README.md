@@ -4,6 +4,12 @@
 
 Haochuan Kevin Wang and Ruijie Shi, Massachusetts Institute of Technology
 
+<p align="center"><img src="paper/figs/fig_overview.png" width="100%" alt="Figure 1: how every comparison works and the collective minus its best alternative"></p>
+
+*Figure 1 of the [paper](paper/main.pdf): a budget buys width, depth or checking (left); a collective and its best
+single alternative answer the same held-out questions (middle); the collective minus its best alternative, in accuracy
+points with 95% intervals and the cost ratio (right).*
+
 ## TL;DR
 
 Accuracy per dollar is set by what the members can answer, not by how they are organized. Votes, debate, judges and

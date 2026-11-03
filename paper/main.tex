@@ -58,13 +58,19 @@ post hoc, and every number carries its status.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figs/fig_hero.pdf}
-\caption{The collective minus its best alternative, in accuracy points with 95\% intervals; left of zero the alternative
-wins, and the right column is the collective's cost as a multiple of the alternative's. Rows 1--2 (\status{confirmatory};
-\nm{anchor.items.all} sealed questions): a vote of no-reasoning copies against one reasoning call of the same model at about
-the same dollars. Row 3: the pilot's 19-agent Haiku team against one Sonnet call (\nm{pilot.items} BBEH questions). Rows
-4--6 (LAB-Bench, \nm{lab.items} test questions): every member reading both teammates' answers against the team's best
-single setting, and a preregistered Claude + GPT panel against GPT's own vote. Grey rows are descriptive.}
+\includegraphics[width=\textwidth]{figs/fig_overview.pdf}
+\caption{How every comparison in this paper works, and what it found. (1) A budget can buy width (more calls whose
+answers are combined), depth (more reasoning per call, or a stronger model) or checking (a verifier choosing among
+candidates); each has a deep-learning counterpart. (2) A collective and its best single alternative answer the same
+held-out questions, every reply is graded by exact match with the answer key, and every call is stored and priced.
+(3) The collective minus its best alternative, in accuracy points with 95\% paired-bootstrap intervals; left of zero
+the alternative wins, and the right column is the collective's cost as a multiple of the alternative's. Rows 1--2
+(\status{confirmatory}; \nm{anchor.items.all} sealed questions): a vote of reasoning-off copies against one
+reasoning-on call of the same model at about the same dollars. Row 3: the pilot's 19-agent Haiku team against one
+Sonnet call (\nm{pilot.items} BBEH questions). Rows 4--7 (LAB-Bench, \nm{lab.items} test questions): Claude's team
+with every member thinking again, or reading both teammates, against Sonnet low alone; GPT's team against Sol low
+alone; and a preregistered Claude + GPT panel against GPT's own vote. The box below lists the studies; green marks
+those with preregistered tests.}
 \label{fig:hero}
 \end{figure*}
 
@@ -159,14 +165,18 @@ on the \nm{pilot.rescue.zero.n} where none was right it never recovered (\nm{pil
 among answers someone produced; it did not create them. The stages were not ablated one by one. The next two sections ask
 why failures are shared and what a dollar buys instead (Figure~\ref{fig:plateau}).
 
-\begin{figure}[t]
+\begin{figure*}[t]
 \centering
-\includegraphics[width=\columnwidth]{figs/fig_plateau.pdf}
-\caption{Six Claude Haiku~5.5 proposers in the pilot (\nm{pilot.items} BBEH questions): a plurality vote of $k$ proposers
-(averaged over every set of $k$) against the share of questions at least one of the $k$ answered right, and that share
-under independent errors at the same accuracy. Copies add coverage slowly and votes almost nothing.}
+\includegraphics[width=\textwidth]{figs/fig_pilot.pdf}
+\caption{The pilot. (1) Nineteen Claude Haiku~5.5 agents in four stages; pruning keeps the first 1, 3 or 6 agents of
+each middle stage, which gives 27 teams. (2) The full team's measurements, and why it does not gain more: a
+plurality vote of $k$ proposers (averaged over every set of $k$) against the share of questions at least one of the $k$
+answered right, and that share if their errors were independent; six proposers are worth \nm{pilot.neff} independent
+answers. (3) All 27 teams on the same \nm{pilot.items} BBEH questions, accuracy against dollars per question; the
+vertical bar is the full team's 95\% interval, wide enough to cover most teams, and the star is one Sonnet~5.5 call
+with thinking off (\status{exploratory}).}
 \label{fig:plateau}
-\end{figure}
+\end{figure*}
 
 \section{The Atlas: what public data say about width and depth}
 \label{sec:atlas}
@@ -184,19 +194,11 @@ tasks, one call each, without answers or costs. Each benchmark is fitted on its 
 The systematic share is \nm{p6.swe.est} on SWE-bench Verified (item bootstrap \nm{p6.swe.ilo}--\nm{p6.swe.ihi}; over
 \nm{design.halves} random halves of the systems, \nm{p6.swe.hmin}--\nm{p6.swe.hmax}), \nm{p6.ma.est} on MathArena
 (\nm{p6.ma.ilo}--\nm{p6.ma.ihi}) and \nm{p6.lb.est} on LiveBench (\nm{p6.lb.ilo}--\nm{p6.lb.ihi}); our Phase~1 BBEH panel
-of four arms sits lower at \nm{p6.bbeh.est} (\nm{p6.bbeh.ilo}--\nm{p6.bbeh.ihi}; Figure~\ref{fig:share}). On the
+of four arms sits lower at \nm{p6.bbeh.est} (\nm{p6.bbeh.ilo}--\nm{p6.bbeh.ihi}; Appendix Figure~\ref{fig:share}). On the
 \nm{f17.systems} SWE-bench submissions with per-task data, difficulty alone implies \nm{f17.difficulty.share}\% of the
 mean pairwise failure correlation (\nm{f17.corr.l0} of \nm{f17.corr.obs}); two systems of one company add only
 \nm{f17.samecompany} of residual correlation. All \nm{f17.systems} fail \nm{f17.allwrong.obs}\% of tasks, against
 \nm{f17.allwrong.indep}\% if they failed independently.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figs/fig_share.pdf}
-\caption{Systematic failure share per source (L0): item-bootstrap 95\% interval (thick) and the range over system
-half-splits (thin; each half fitted on its own). The anchor's shares (hollow) await the gold files for an interval.}
-\label{fig:share}
-\end{figure}
 
 \subsection{Width is capped by the shared tail}
 
@@ -257,22 +259,13 @@ were never pooled.
 \paragraph{Depth against width at equal dollars (post hoc).} For \nm{p3.all.k} MathArena pairs whose lower setting has
 three or more calls, one call at the higher setting minus the vote of the lower setting with the nearest dollars per
 item (the 3-vote in every pair) is \nm{p3.all.pooled} points (\nm{p3.all.lo}--\nm{p3.all.hi}); on the \nm{p3.near.k}
-pairs priced within a factor of \nm{design.near} it is \nm{p3.near.pooled} (\nm{p3.near.lo}--\nm{p3.near.hi}; Figure~\ref{fig:dw}).
+pairs priced within a factor of \nm{design.near} it is \nm{p3.near.pooled} (\nm{p3.near.lo}--\nm{p3.near.hi}; Appendix Figure~\ref{fig:dw}).
 The step pays where a model starts low and about nothing at the top of its range: \nm{p3.geminimed.diff} points for
 Gemini~3.1~Pro medium to default and \nm{p3.opus.diff} for Opus~5.5 high to max. We logged, before it is read, that this
 predicts about zero for the preregistered CD2 test of a top Haiku effort step. Price matters as much: on SWE-bench Verified
 MiniMax~M2.5 (high) resolves \nm{f18.minimax.acc}\% at \nm{f18.minimax.usd} per task against \nm{f18.opus.acc}\% at
 \nm{f18.opus.usd} for Claude Opus~4.5 (high), \nm{f18.price.ratio}$\times$ the price for one point
 (Figure~\ref{fig:tail}, right).
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figs/fig_dw.pdf}
-\caption{One deeper call minus the nearest-dollar vote of the shallower setting: the anchor's confirmatory AH2 (orange,
-fresh sealed items, the first effort step of two cheap models) and public MathArena pairs (blue, post hoc) with
-item-bootstrap 95\% intervals and their random-effects pool.}
-\label{fig:dw}
-\end{figure}
 
 \section{Preregistered API studies}
 \label{sec:api}
@@ -321,6 +314,33 @@ and coincides with calls cut at the output limit.
 \section{Verification}
 \label{sec:verify}
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/fig_lab_setup.pdf}
+\caption{The LAB-Bench team study. (1) Each provider fields one cheap model and one strong model at two reasoning
+efforts; every member answers alone first, and the team's answer is a plurality vote of its members' final answers.
+(2) The round-2 methods compared: a plain vote, every member thinking again alone, asking its best teammate, reading
+both teammates, and a learned per-member rule, plus a panel mixing the providers that is replayed from stored calls at
+no cost; the rule and the panel had preregistered tests. (3) Accuracy against cents per question (log scale) on the
+\nm{lab.items} test questions, each method read once. Open circles: one model alone; squares: the team methods; star:
+the panel. One GPT-6.1 Sol call at low effort matches every team.}
+\label{fig:lab}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/fig_phoenix.pdf}
+\caption{PHOENIX, recovery of a lost team member. (1) Three agents build classifier pipelines on a public science
+table; halfway, one is shut down and its model withdrawn. (2) Three recoveries run under the same caps per recovery:
+fixed takeover, a planner model choosing every step, and PHOENIX, which ranks candidate plans by expected gain per unit
+of budget along the workflow's dependencies. (3) Top: one case's validation score (training-internal rows) as the
+recovery spends CPU time, with each branch's final score and API dollars. Bottom: the sealed test, scored once, in
+balanced-accuracy points paired by case (each arm case is the mean of two draws); orange rows are preregistered
+contrasts, the grey row is post hoc. The rule alone is not resolved; most of the gain over takeover comes from the
+stronger planner.}
+\label{fig:phx}
+\end{figure*}
+
 \paragraph{Label-free selection.} With repeats, Dawid--Skene rated Sol at \nm{f11.sol.est}\% on Phase~1 against a true
 \nm{f11.sol.true}\% (\status{exploratory}); on the anchor its pooled variant put Sonnet at \nm{lf.sonnet.est}\% against
 a true \nm{lf.sonnet.true}\%, and its answers (\nm{lf.answer}\%) stayed below one Sol low call (\nm{anchor.sol.all}\%).
@@ -340,18 +360,10 @@ among the answers of two cheap pools, reached \nm{judge.sol.bbeh.acc}\%: \nm{jud
 pool arm (\nm{judge.sol.bbeh.vsbestlo}--\nm{judge.sol.bbeh.vsbesthi}), selection efficiency \nm{judge.sol.bbeh.eta}
 (\nm{judge.sol.bbeh.etalo}--\nm{judge.sol.bbeh.etahi}). Sol low answering alone scored \nm{anchor.sol.bbeh}\%, so the
 judge sat \nm{judge.sol.below} points below it (\nm{judge.sol.vsown.lo} to \nm{judge.sol.vsown.hi}) at
-\nm{judge.sol.vsown.ratio}$\times$ the dollars (Figure~\ref{fig:judge}; \status{post hoc}, computed after the read).
+\nm{judge.sol.vsown.ratio}$\times$ the dollars (Appendix Figure~\ref{fig:judge}; \status{post hoc}, computed after the read).
 But the pools covered only \nm{judge.sol.bbeh.coverage}\% of the items: even a perfect selector over them would have lost
 to Sol alone. The comparison measures the pools, not the judge's signal; a test of judges needs pools whose coverage
 exceeds the judge model's own accuracy. On math the judge was capped by \nm{judge.sol.math.coverage}\% coverage.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figs/fig_judge.pdf}
-\caption{The anchor's BBEH verification read: a judge over cheap pools against the judge model answering alone. The
-pools' coverage (grey) is below the judge model's own accuracy, which caps every selector over them.}
-\label{fig:judge}
-\end{figure}
 
 \paragraph{The price of verification on public data.} A perfect selector over random \nm{design.sets.lo}--\nm{design.sets.hi} system SWE-bench sets adds
 \nm{p5.swe.room2}--\nm{p5.swe.room5} points over the best member, at \nm{p5.swe.price2}--\nm{p5.swe.price5} of extra
@@ -364,24 +376,6 @@ points because the top systems are close to perfect.
 \nm{check.sol.auroc}); Haiku \nm{check.haiku.accept}\% (AUROC \nm{check.haiku.auroc}). On SWE-bench the step count of a
 run ranks its own successes with median AUROC \nm{f18.stepauroc}; a cascade that escalates on step count never
 escalates once its threshold is fitted. Execution-based checks on code are part of the open-weight testbed.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figs/fig_lab.pdf}
-\caption{LAB-Bench test (\nm{lab.items} questions): accuracy against cost per question. Open circles: one model alone;
-squares: each provider's five team methods (a vote, everyone thinking again, asking the best peer, reading both peers, the
-learned rule); star: the preregistered Claude + GPT panel. One GPT-6.1 Sol call at low effort matches every team.}
-\label{fig:lab}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figs/fig_phx.pdf}
-\caption{PHOENIX on \nm{phx.cases} cases of three science tables: sealed test balanced-accuracy points, paired by case
-(each arm case is the mean of two draws). Blue rows are preregistered contrasts; the grey row is post hoc. The rule alone is
-not resolved, and most of the gain over takeover comes from the stronger planner.}
-\label{fig:phx}
-\end{figure}
 
 \section{Different members and coordination rules}
 \label{sec:members}
@@ -535,6 +529,31 @@ status of every number in the paper are generated in the repository (paper/runs\
 
 \section{Additional figures}
 \label{app:figs}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/fig_share.pdf}
+\caption{Systematic failure share per source (L0): item-bootstrap 95\% interval (thick) and the range over system
+half-splits (thin; each half fitted on its own). The anchor's shares (hollow) await the gold files for an interval.}
+\label{fig:share}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/fig_dw.pdf}
+\caption{One deeper call minus the nearest-dollar vote of the shallower setting: the anchor's confirmatory AH2 (orange,
+fresh sealed items, the first effort step of two cheap models) and public MathArena pairs (blue, post hoc) with
+item-bootstrap 95\% intervals and their random-effects pool.}
+\label{fig:dw}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/fig_judge.pdf}
+\caption{The anchor's BBEH verification read: a judge over cheap pools against the judge model answering alone. The
+pools' coverage (grey) is below the judge model's own accuracy, which caps every selector over them.}
+\label{fig:judge}
+\end{figure}
 
 \begin{figure*}[t]
 \centering

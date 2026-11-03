@@ -995,7 +995,7 @@ def lab_numbers() -> None:
             put("lab.items", per["item"].nunique(), "record", src, "int")
             put("lab.claude.review.ratio", summ.loc["full_review", "usd_per_item"] / summ.loc["single_B", "usd_per_item"],
                 "record", base / folder / "summary.csv", "num", 1)
-        for m, key in (("full_review", "review"), ("fixed_peer", "peer"), ("vote", "vote")):
+        for m, key in (("full_review", "review"), ("fixed_peer", "peer"), ("vote", "vote"), ("all_reflect", "reflect")):
             r = paired_bootstrap(per, m, "single_B", draws=2000, seed=2026)
             for suffix, col in (("", "d_acc"), (".lo", "d_acc_lo"), (".hi", "d_acc_hi")):
                 put(f"lab.{team}.{key}minus{suffix}", half_up(r[col], 1), "post hoc", src, "signed", 1)
