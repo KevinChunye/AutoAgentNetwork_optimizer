@@ -15,8 +15,17 @@
 \newcommand{\status}[1]{{\upshape\textsc{\small #1}}}
 
 \icmltitlerunning{Can AI Agents Be Organized More Efficiently?}
-% correspondence by name only (no email); the style requires the field
-\makeatletter\gdef\icmlcorrespondingauthor@text{Haochuan Kevin Wang}\makeatother
+% First-page footnote: the affiliation and both authors' emails; no corresponding author and no preprint line
+% (the style's version prints "Correspondence to:" and, under the preprint option, "Preprint." with the date).
+\makeatletter
+\renewcommand{\printAffiliationsAndNotice}[1]{\global\icml@noticeprintedtrue%
+  \stepcounter{@affiliationcounter}%
+  {\let\thefootnote\relax\footnotetext{\hspace*{-\footnotesep}%
+      \forloop{@affilnum}{1}{\value{@affilnum} < \value{@affiliationcounter}}{%
+        \textsuperscript{\arabic{@affilnum}}\csname @affilname\the@affilnum\endcsname}.
+      Emails: Haochuan Kevin Wang \textless\texttt{hcw@mit.edu}\textgreater,
+      Ruijie Shi \textless\texttt{rjshi@mit.edu}\textgreater.}}}
+\makeatother
 
 \begin{document}
 
