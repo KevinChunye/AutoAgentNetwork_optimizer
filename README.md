@@ -30,15 +30,20 @@ budget from calls already made.
 
 ## Abstract
 
-We took the efficiency tools of deep learning (pruning, quantization, architecture search) to teams of LLM agents and
-asked what each extra call buys. A pruned 19-agent team was matched by one stronger call. The reason is shared
-failure: copies of one model fail on the same questions, so six proposers carry about as much information as two
-independent ones, and critics, refiners or a judge can select a right answer but never invent one. At matched cost,
-one reasoning call beats a vote of quick copies (preregistered). Different models help only where the best member
-leaves headroom, and mixing providers did not beat the stronger provider's own vote. Smarter coordination rules, a
-learned rule for when to ask a teammate and a recovery rule for a lost member (PHOENIX), showed no gain we can credit
-to the rule; the member that mattered was the stronger model. Every call is made once and stored, every team is scored
-by replaying stored calls, and paid runs only test predictions written down in advance.
+Pruning and quantization shrink neural networks because large networks are redundant: many channels carry the same
+signal, so removing them costs little. We apply the same tools to teams of language-model agents and find the same
+redundancy, with a sharper consequence for anyone who pays for them. A team can spend its budget on **width** (more
+calls whose answers are voted on, like the channels pruning removes), on **depth** (more reasoning per call, like the
+bits quantization removes) or on **checking** (a verifier that picks one answer, like re-ranking). The members of a
+team fail on the same questions. Six copies of one model carry the information of 1.9 independent answers, so a
+19-agent team can be pruned heavily with a loss inside the noise, and it does not beat one call to a stronger model.
+Checking selects but cannot create: on the 20 questions no member answered, critics and refiners recovered none. At
+equal dollars, one step of extra reasoning beat a vote of quick copies in a preregistered test on sealed questions (by
+3.7 and 10.7 points for two cheap models). The knob that moved accuracy per dollar most was the choice of member. On
+LAB-Bench biology questions one call to a strong model matched every team at a fraction of the best team's cost, and
+when a team building classifiers on physics and ecology tables lost a member, the planner model, not the recovery
+rule, set the result. A factor model with one difficulty per question prices this shared failure on public
+leaderboards, and a replay tool picks the cheapest members for a budget from calls already made.
 
 ## Key results
 
