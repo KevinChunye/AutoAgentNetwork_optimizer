@@ -43,26 +43,21 @@
 \printAffiliationsAndNotice{}
 
 \begin{abstract}
-Teams of language-model agents add cost; when do they add accuracy? A budget can buy more calls whose answers are
-combined (\emph{width}), more reasoning or a stronger model per call (\emph{depth}), or a check that picks among answers
-(\emph{verification}). We measured each at matched cost with Claude and GPT models, under preregistration and hard
-spending caps. A 19-agent Haiku team did not clearly beat one Sonnet call (\nm{pilot.team.acc}\% against
-\nm{pilot.sonnet.acc}\% on \nm{pilot.items} BBEH questions; difference \nm{pilot.diff} points, \nm{pilot.diff.lo} to
-\nm{pilot.diff.hi}). The reason is shared failure: six proposers were worth \nm{pilot.neff} independent answers, and on
-public leaderboards item difficulty accounts for \nm{p6.swe.est} of the latent variation in success on SWE-bench
-Verified; a factor model with one difficulty per item prices the tail that all held-out systems fail
-(\nm{p8.swe.model}\% predicted, \nm{p8.swe.obs}\% observed). At matched cost, one reasoning call beat a vote of quick
-copies (confirmatory; \nm{ah2.haiku.diff} and \nm{ah2.luna.diff} points). Verification selects but cannot create: critics
-and refiners recovered none of the \nm{pilot.rescue.zero.n} questions that no proposer answered, and a judge is capped by
-its candidates' coverage. Different members helped only where the best member left room: on LAB-Bench biology a team of
-Haiku and Sonnet gained \nm{lab.claude.reviewminus} points over Sonnet alone at \nm{lab.claude.review.ratio}$\times$ its
-cost, no GPT team beat GPT-6.1 Sol alone, and a preregistered panel mixing the providers did not beat GPT's own vote
-(\nm{lab.mix.gpt}, \nm{lab.mix.gpt.lo} to \nm{lab.mix.gpt.hi}). Smarter coordination rules did not pay: a learned rule for
-when to ask a teammate failed its preregistered test, and a recovery rule for a lost team member (PHOENIX,
-\nm{phx.recoveries} sealed recoveries on physics and ecology tables) showed no resolved gain where it could be isolated
-(\nm{phx.main}, \nm{phx.main.lo} to \nm{phx.main.hi}); a stronger planner model drove the gains. Which members are called
-matters more than how they are organized: every winning cell of our budget map is a single model. Public-data results are
-post hoc, and every number carries its status.
+Pruning and quantization shrink neural networks because large networks are redundant: many channels carry the same
+signal, so removing them costs little. We apply the same tools to teams of language-model agents and find the same
+redundancy, with a sharper consequence for anyone who pays for them. A team can spend its budget on \emph{width} (more
+calls whose answers are voted on, like the channels pruning removes), on \emph{depth} (more reasoning per call, like the
+bits quantization removes) or on \emph{checking} (a verifier that picks one answer, like re-ranking). The members of a
+team fail on the same questions. Six copies of one model carry the information of \nm{pilot.neff} independent answers,
+so a 19-agent team can be pruned heavily with a loss inside the noise, and it does not beat one call to a stronger
+model. Checking selects but cannot create: on the \nm{pilot.rescue.zero.n} questions no member answered, critics and
+refiners recovered none. At equal dollars, one step of extra reasoning beat a vote of quick copies in a preregistered
+test on sealed questions (by \nm{ah2.haiku.diff} and \nm{ah2.luna.diff} points for two cheap models). The knob that
+moved accuracy per dollar most was the choice of member. On LAB-Bench biology questions one call to a strong model
+matched every team at a fraction of the best team's cost, and when a team building classifiers on physics and ecology
+tables lost a member, the planner model, not the recovery rule, set the result. A factor model with one difficulty per
+question prices this shared failure on public leaderboards, and a replay tool picks the cheapest members for a budget
+from calls already made.
 \end{abstract}
 
 \begin{figure*}[t]
@@ -76,50 +71,146 @@ held-out questions, every reply is graded by exact match with the answer key, an
 the alternative wins, and the right column is the collective's cost as a multiple of the alternative's. Rows 1--2
 (\status{confirmatory}; \nm{anchor.items.all} sealed questions): a vote of reasoning-off copies against one
 reasoning-on call of the same model at about the same dollars. Row 3: the pilot's 19-agent Haiku team against one
-Sonnet call (\nm{pilot.items} BBEH questions). Rows 4--7 (LAB-Bench, \nm{lab.items} test questions): Claude's team
-with every member thinking again, or reading both teammates, against Sonnet low alone; GPT's team against Sol low
-alone; and a preregistered Claude + GPT panel against GPT's own vote. The box below lists the studies; green marks
+Sonnet call (\nm{pilot.items} BBEH questions). Rows 4--7 (LAB-Bench, \nm{lab.items} test questions): a team of a small and a mid-sized
+model (Claude) with every member thinking again, or reading both teammates, against its best member alone; a team built
+around a strong model (GPT) against that model alone; and a preregistered panel mixing the two families against one
+family's own vote. The box below lists the studies; green marks
 those with preregistered tests.}
 \label{fig:hero}
 \end{figure*}
 
 \section{Introduction}
+\label{sec:intro}
 
-Suppose an agent system has a fixed budget per task. It can ask a cheap model several times and vote, ask a
-stronger or longer-reasoning model once, or ask several models and let a judge choose. Which should it buy first?
-The answer depends on one quantity: how much the systems' failures are \emph{shared}. If every system fails the same
-hard items, extra calls fail with them, and only a system that moves the hard items helps.
+A biologist asks an AI assistant why most cells died in an amnion-isolation protocol, and the answer is wrong. Four
+knobs are within reach: ask again, ask the model to think harder, ask a second model to check, or switch to a stronger
+model. Each costs money, and each changes the system's behavior in its own way. This paper measures what each knob
+buys.
 
-\paragraph{Six questions, in the order we met them.} (1) Can a team be compressed? A pruned 19-agent team was matched
-by one stronger call (Section~\ref{sec:pilot}). (2) Why didn't 19 agents beat one call? Failures are dominated by shared
-item difficulty, so width is capped by the items everyone fails (Sections~\ref{sec:pilot} and~\ref{sec:atlas}). (3) If
-copies don't help, what does a dollar buy? Reasoning moves a system along the same difficulty axis, and the first effort
-step of cheap models beat a dollar-matched vote in a preregistered test; verification selects among answers someone
-produced and is capped by their coverage (Sections~\ref{sec:api} and~\ref{sec:verify}). (4) Do different members help
-where copies don't? Only where the best member leaves room (Section~\ref{sec:members}). (5) Does a smarter coordination
-rule help? Neither a learned rule for asking a teammate nor a recovery rule showed a gain we can credit to the rule; the
-stronger member did (Section~\ref{sec:members}). (6) So the budget question reduces to choosing members
-(Section~\ref{sec:alloc}).
+The question has a familiar shape for anyone who compresses neural networks. Compression asks which parts of a network
+carry information and which are redundant: pruning removes units whose signal other units already
+carry~\citep{han2016deep,he2018amc}, and quantization lowers precision until accuracy starts to
+fall~\citep{kumar2024precision}. A team of agents is a network whose units are model calls. Asking again adds width, an
+ensemble of copies; thinking harder or switching models adds depth, the counterpart of precision; a checking model is
+re-ranking. We took pruning, quantization and architecture search to such teams (Figure~\ref{fig:hero}) and found the
+redundancy that compression relies on. Its consequence for a budget is the subject of this paper: \emph{accuracy per
+dollar is set by which members a team calls, not by how it wires them.}
+
+\paragraph{One question, followed through a team.} Our first team had six proposers, six critics, six refiners and an
+aggregator, all copies of one small model, working on hard reasoning puzzles from BIG-Bench Extra
+Hard~\citep[BBEH;][]{kazemi2025bbeh}. One puzzle lists dozens of statements such as ``Mindy says Olga lies'' and asks
+which of three people tell the truth (Table~\ref{tab:data}). Only \nm{pilot.ex.propose} of the 6 proposers answered it
+correctly. The other \nm{pilot.ex.wrongdistinct} gave \nm{pilot.ex.wrongdistinct} different wrong answers, so a vote had
+nothing to work with. Then \nm{pilot.ex.critique} of the 6 critics re-derived the right answer from the one correct
+proposal, all \nm{pilot.ex.refine} refiners agreed, and the team answered correctly. This is a team at its best: it
+found the one right answer and amplified it. The other side is just as clear. On the \nm{pilot.rescue.zero.n} questions
+where no proposer was right, the team recovered none (\nm{pilot.rescue.zero.acc}\%). Critics and refiners select among
+answers someone produced; they do not produce new ones, just as no later layer can restore information that no channel
+carries.
+
+\paragraph{Copies are correlated channels.} The example generalizes because copies fail together. The six proposers'
+right-or-wrong records correlate at $\rho = \nm{pilot.rho}$, so by the design effect of survey
+sampling~\citep{kish1965} they are worth $6/(1+5\rho) = \nm{pilot.neff}$ independent answers. The chance that at least
+one of the six is right reaches \nm{pilot.cover.k6}\%, against \nm{pilot.cover.indep}\% if their errors were
+independent, and a plurality vote rises only from \nm{pilot.vote.k1}\% to \nm{pilot.vote.k6}\%
+(Figure~\ref{fig:plateau}). This is the textbook failure condition for ensembles: the Condorcet jury theorem needs
+independent voters~\citep{ladha1992}, and an ensemble improves on its members only through their
+disagreement~\citep{krogh1995}. Redundancy is also why the team prunes well: \nm{pilot.grid.within} of its
+\nm{pilot.grid.teams} pruned structures, the full team included, lie inside the full team's 95\% interval of
+$\pm$\nm{pilot.grid.half} points. And it is why the full team did not beat one call to a stronger model, whose lead was
+\nm{pilot.diff} points (\nm{pilot.diff.lo} to \nm{pilot.diff.hi}).
+
+\paragraph{Turning one knob changes the behavior.} Interpretability research shows that turning up a single internal
+feature of a model, such as one that represents the Golden Gate Bridge, changes what the model says in a predictable
+direction~\citep{templeton2024scaling}. A team has a handful of such knobs on the outside, and we turned each with the
+others held fixed (Figure~\ref{fig:hero}). \emph{Width} moves coverage slowly and the vote hardly at all. \emph{Depth}
+moves accuracy: on \nm{anchor.items.all} sealed questions, raising a cheap model's reasoning by one step beat a vote of
+its quick copies at about the same dollars, by \nm{ah2.haiku.diff} and \nm{ah2.luna.diff} points for two models
+(\status{confirmatory}). On public leaderboards the higher setting shifts a model's ability without changing which
+questions are hard (Section~\ref{sec:atlas}), much as precision moves a network's effective parameter count in a
+precision scaling law~\citep{kumar2024precision}. \emph{Checking} is capped by what the members cover. \emph{The
+member} moves the most. On LAB-Bench biology~\citep{laurent2024labbench}, a team of a small and a mid-sized model gained
+\nm{lab.claude.reviewminus} points over its best member when every member read the others' answers, at
+\nm{lab.claude.review.ratio}$\times$ the cost, yet one call to a stronger model matched every team at
+$1/\nm{lab.peer.vssol.ratio}$ of the cost of the best team of smaller models. In PHOENIX, a three-agent team building
+classifiers on physics and ecology tables loses a member mid-run; the planner model set the quality of the recovery,
+and a smarter recovery rule added no gain we can credit to the rule.
+
+\paragraph{Why this matters to people who use these systems.} For a scientist who uses an assistant every day, the
+knobs translate into rules of thumb. Asking again mostly repeats the mistake, and five agreeing answers are not five
+confirmations. One step of extra reasoning is the cheapest gain. A checker helps only when some answer is already
+right. A stronger model helps most, and can cost less than a team of weaker ones. The behavior worth regulating is
+shared failure: the questions every member gets wrong are invisible to votes and to agreement scores, and
+agreement-based selection can even rate a weaker model above the strongest one (Section~\ref{sec:verify}). We give a
+factor model that measures shared failure from graded questions, and a tool that turns stored calls into a choice of
+members for each budget (Section~\ref{sec:alloc}).
+
+\paragraph{Data and outline.} Table~\ref{tab:data} shows one item from each source and how it is graded: BBEH puzzles
+and recent research mathematics for the preregistered tests of depth against width, LAB-Bench DNA-sequence and
+protocol questions for the team studies, three public science tables for PHOENIX, and public leaderboards for the
+factor model. Every model call is stored with its price, so every team in this paper is rescored by replay at no cost.
+Section~\ref{sec:pilot} follows the pilot, Section~\ref{sec:atlas} measures shared failure on public data,
+Sections~\ref{sec:api} and~\ref{sec:verify} test depth and checking, Section~\ref{sec:members} changes the members and
+the coordination rules, and Section~\ref{sec:alloc} turns the results into a budget map.
 
 \paragraph{Contributions.}
 \begin{itemize}
-\item \textbf{The Atlas}: one factor model fitted to \nm{atlas.swe.systems} SWE-bench Verified submissions,
-\nm{atlas.ma.systems} MathArena configurations over \nm{atlas.ma.sets} competitions and \nm{atlas.lb.systems} LiveBench
-models, with intervals for every systematic share and held-out tests of what it predicts about sets of systems:
-coverage, the all-wrong tail and vote accuracy.
-\item \textbf{Depth on public data}: \nm{p2.pairs} pairs of one model at two adjacent reasoning settings, pooled with
-random effects, and a dollar-matched comparison of one deeper call against a wider vote (post hoc).
-\item \textbf{Preregistered API studies}: a Phase~1 case where one reasoning call wins, and an anchor study on
-\nm{anchor.items.all} sealed items with two confirmatory tests (AH2: the first effort step against the nearest-dollar
-vote; AH3: the factor model's vote prediction), read once with frozen code.
-\item \textbf{Team studies}: a 19-agent pilot; LAB-Bench teams for each provider with a preregistered rule for when to
-ask a teammate and a preregistered cross-provider panel; and PHOENIX, a recovery rule for a lost member, on
-\nm{phx.cases} cases of three science tables with every predictor sealed before scoring.
-\item \textbf{A budget map}: the best team for each dollar and latency budget, chosen from stored calls at no cost.
-\item \textbf{Process}: sealed items, single reads, preregistered stop rules and \nm{audits.count} independent audits,
-for \nm{spend.total} of API spend in total. Every number in this paper is generated from a committed file and carries a
-status (Appendix~\ref{app:repro}).
+\item \textbf{A knob-by-knob measurement} of width, depth, checking and member choice at matched dollars, with
+preregistered tests read once on sealed questions.
+\item \textbf{The Atlas}: a Rasch-type factor model~\citep{rasch1960} with one difficulty per question, fitted to
+\nm{atlas.swe.systems} SWE-bench Verified submissions, \nm{atlas.ma.systems} MathArena configurations and
+\nm{atlas.lb.systems} LiveBench models. It prices the questions that every held-out system fails better than
+independence or a one-factor copula.
+\item \textbf{Team studies} on biology questions and science tables: a preregistered rule for when a member should ask a
+teammate, a preregistered panel mixing two model families, and PHOENIX, a recovery rule for a lost member, scored on
+\nm{phx.recoveries} sealed recoveries.
+\item \textbf{A budget map} that picks the best members for each dollar and latency budget from stored calls, and a
+process record: \nm{audits.count} independent audits and \nm{spend.total} of API spend, with every number in the paper
+generated from a committed file and labelled with its status (Appendix~\ref{app:repro}).
 \end{itemize}
+
+\begin{table*}[t]
+\caption{The data behind each finding, with one item from each source (abridged: long passages elided with \ldots).
+Every reply ends with an answer line that is graded against the key; the science tables are scored on a sealed test
+split.}
+\label{tab:data}
+\centering
+\small
+\begin{tabular}{@{}p{0.2\textwidth}p{0.55\textwidth}p{0.19\textwidth}@{}}
+\toprule
+Source and use & One item & Graded by \\
+\midrule
+BBEH puzzles~\citep{kazemi2025bbeh}: the pilot (\nm{pilot.items} questions) and the anchor (\nm{anchor.items.bbeh}
+sealed) &
+\emph{Web of lies.} ``Assume each person either always tells the truth or always lies. Mindy says Olga lies. Mustafa
+says Odell lies. \ldots{} Do Vina, Melanie, and Helene tell the truth?'' \hfill Key: \texttt{no, unknown, yes} &
+Exact match of the answer line, after case and punctuation are normalised \\
+Research mathematics (MathArena;~\citealp{balunovic2025matharena}): the anchor (\nm{anchor.items.math} sealed) &
+A final-answer problem taken from a recent arXiv paper, with one closed-form answer such as a number or an
+expression. &
+Symbolic equivalence with the key \\
+LAB-Bench SeqQA~\citep{laurent2024labbench}: the team studies (\nm{lab.items.seqqa} test questions) &
+``What is the expected amplicon length if I used the primer pair TCAAGCTCAACCACAGGACCC, GATGGCAGCATCTTGATCTACT in a PCR
+from the following template: ATGGCCAACCC\ldots?'' Options A.~439, B.~470, C.~596, D.~838, E.~insufficient
+information. \hfill Key: C &
+Exact option letter \\
+LAB-Bench ProtocolQA: the team studies (\nm{lab.items.protocolqa} test questions) &
+A multi-step protocol for isolating amnion cells, then the outcome ``the vast majority of the cells are dead'' and a
+question asking which step was done wrong. Option B: ``I omitted in the step 1d to pre-wet the second sterile tray with
+washing buffer with antibiotics.'' \hfill Key: B &
+Exact option letter \\
+Science tables: PHOENIX (\nm{phx.cases} cases) &
+One row of HIGGS~\citep{baldi2014higgs}: 28 kinematic measurements of a simulated collision, labelled signal or
+background. Forest cover type~\citep{blackard1999covertype}: 54 cartographic features of a plot, labelled with one of 7
+tree covers. MiniBooNE~\citep{roe2005miniboone}: 50 particle-identification features, labelled signal or background. &
+Balanced accuracy of the recovered classifier on a sealed test split, scored once \\
+Public leaderboards: the Atlas &
+SWE-bench Verified~\citep{jimenez2024swebench}: \nm{atlas.swe.systems} submissions on \nm{atlas.swe.items} GitHub
+issues, each resolved or not; MathArena~\citep{balunovic2025matharena} and LiveBench~\citep{white2024livebench}. &
+Each leaderboard's own grading \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 \section{Definitions}
 \label{sec:defs}
@@ -163,16 +254,12 @@ questions the full team scored \nm{pilot.team.acc}\% at \nm{pilot.team.usd} per 
 thinking off scored \nm{pilot.sonnet.acc}\% at \nm{pilot.sonnet.usd}, a difference of \nm{pilot.diff} points
 (\nm{pilot.diff.lo} to \nm{pilot.diff.hi}; \status{exploratory}). The pruned teams tied within this noise.
 
-The proposers' right-or-wrong records correlate at \nm{pilot.rho} on average, so six are worth \nm{pilot.neff}
-independent answers (effective size $n/(1+(n-1)\rho)$, a measure of redundancy rather than a number of agents one could
-deploy). A plurality vote of one proposer scores \nm{pilot.vote.k1}\% and of all six \nm{pilot.vote.k6}\% (averaged over
-every set of proposers), while the chance that at least one is right rises from \nm{pilot.cover.k1}\% to
-\nm{pilot.cover.k6}\%; independent errors at the same accuracy would give \nm{pilot.cover.indep}\%. Accuracy rose through
-critique (\nm{pilot.stage.critique}\%) and refinement (\nm{pilot.stage.refine}\%) to \nm{pilot.stage.aggregate}\%: on the
-\nm{pilot.rescue.low.n} questions where one or two proposers were right the team reached \nm{pilot.rescue.low.acc}\%, and
-on the \nm{pilot.rescue.zero.n} where none was right it never recovered (\nm{pilot.rescue.zero.acc}\%). Checking selected
-among answers someone produced; it did not create them. The stages were not ablated one by one. The next two sections ask
-why failures are shared and what a dollar buys instead (Figure~\ref{fig:plateau}).
+Across the \nm{pilot.items} questions the worked example of Section~\ref{sec:intro} is the rule (Figure~\ref{fig:plateau}). Accuracy
+rose through critique (\nm{pilot.stage.critique}\%) and refinement (\nm{pilot.stage.refine}\%) to
+\nm{pilot.stage.aggregate}\%; on the \nm{pilot.rescue.low.n} questions where one or two proposers were right the team
+reached \nm{pilot.rescue.low.acc}\%, and on the \nm{pilot.rescue.zero.n} where none was right
+\nm{pilot.rescue.zero.acc}\%. The effective size $n/(1+(n-1)\rho)$ measures redundancy, not a number of agents one
+could deploy, and the stages were not ablated one by one.
 
 \begin{figure*}[t]
 \centering
@@ -227,27 +314,9 @@ distribution of difficulties carries the tail that a Gaussian latent factor miss
 (\nm{design.p8.ma.items.lo}--\nm{design.p8.ma.items.hi} test problems) both models underpredict the 5-system tail, on
 \nm{p8.ma.model.under} and \nm{p8.ma.copula.under} of \nm{p8.ma.sets} sets; the math tail is unresolved.
 
-\paragraph{Votes of one system.} A vote of two calls cannot gain in expectation (a right--wrong split is a tie), so gains
-start at three. The factor model's \emph{vote rule} predicts a $k$-vote from one-call success $p$, the share $z$ of
-failures that abstain (abstentions are non-votes) and the chance $q$ that two wrong answers coincide. Cross-fitted on
-\nm{p1.all.cells} (system, set) cells with three calls in \nm{p1.all.sets} sets, its mean absolute vote-gain error is
-\nm{p1.all.rule} points against \nm{p1.all.zero} for the zero-gain predictor ``votes add nothing''; predicted and
-observed gains correlate at \nm{p1.all.corr}, and the gain's squared error is smaller by \nm{p1.all.msed} points$^2$
-(\nm{p1.all.msedlo} to \nm{p1.all.msedhi}; item noise adds the same variance to both and cancels). But the rule
-overstates gains (\nm{p1.pred.predgain} predicted, \nm{p1.pred.obsgain} observed where it predicts \nm{design.gainpoints}
-or more), and on the 3-vote accuracy itself it is worse than zero-gain (mean absolute error \nm{p1.all.levrule} against
-\nm{p1.all.levzero} points; squared error larger by \nm{p1.all.levmsed} points$^2$, \nm{p1.all.levmsedlo} to
-\nm{p1.all.levmsedhi}). The rule ranks where votes pay; it does not yet price them.
-
-\paragraph{Votes across systems.} Votes pay most when weak systems with different strengths are mixed. On
-\nm{p7.k3.panels} panels of three and \nm{p7.k5.panels} of five MathArena systems with one-call accuracy
-\nm{design.weak.lo}--\nm{design.weak.hi}, the plurality of one call each gains \nm{p7.k3.gain} and \nm{p7.k5.gain} points
-over a random member. Cross-fitted, the factor model predicts the panel vote with bias \nm{p7.k3.bias} and
-\nm{p7.k5.bias} points and absolute error \nm{p7.k3.model} and \nm{p7.k5.model}, against \nm{p7.k3.zero} and
-\nm{p7.k5.zero} for zero-gain and \nm{p7.k3.indep} and \nm{p7.k5.indep} for independence; it is closer than zero-gain in
-\nm{p7.k3.setszero} and \nm{p7.k5.setszero} of \nm{p7.k3.sets} sets, and closer than independence in
-\nm{p7.k3.setsindep} and \nm{p7.k5.setsindep}. Where composition matters, the model prices it without bias;
-independence overstates it and zero-gain ignores it.
+\paragraph{Votes.} The factor model's vote rule ranks where votes of one system pay but overstates the gains, and votes pay
+most when weak systems with different strengths are mixed, where the model prices the composition without bias
+(Appendix~\ref{app:more}).
 
 \subsection{Depth moves ability, not the failure pattern}
 
@@ -311,11 +380,6 @@ over one call within \nm{ah3.gain} (upper bound \nm{ah3.gainupper}). The gains w
 \nm{ah3.gain.hi} points) and zero-gain also meets the limits (gain error \nm{p1.anchor.zero} against \nm{p1.anchor.rule}),
 so AH3 shows accuracy where votes gain little; P1 above finds the same rule overstating larger gains.
 
-\emph{AH1 and AH4 (\status{exploratory}).} Sonnet's effort-low setting closed none of the
-\nm{ah1.gap}-point gap to Sol low ($R = \nm{ah1.r}$, \nm{ah1.lo} to \nm{ah1.hi}), so the vendor--reasoning confound stays
-open. The Sol judge's selection efficiency was \nm{ah4.easy} on easy items and \nm{ah4.hard} on hard ones (difference
-\nm{ah4.diff}, \nm{ah4.lo}--\nm{ah4.hi}), the predicted direction, with a ratio whose hard-half denominator is small.
-
 \paragraph{The depth study.} A preregistered study of Haiku at every reasoning effort (research/v4/cd/read.md)
 finds that accuracy gains flatten by the second-highest effort; the drop at the highest effort is within its interval
 and coincides with calls cut at the output limit.
@@ -373,18 +437,6 @@ judge sat \nm{judge.sol.below} points below it (\nm{judge.sol.vsown.lo} to \nm{j
 But the pools covered only \nm{judge.sol.bbeh.coverage}\% of the items: even a perfect selector over them would have lost
 to Sol alone. The comparison measures the pools, not the judge's signal; a test of judges needs pools whose coverage
 exceeds the judge model's own accuracy. On math the judge was capped by \nm{judge.sol.math.coverage}\% coverage.
-
-\paragraph{The price of verification on public data.} A perfect selector over random \nm{design.sets.lo}--\nm{design.sets.hi} system SWE-bench sets adds
-\nm{p5.swe.room2}--\nm{p5.swe.room5} points over the best member, at \nm{p5.swe.price2}--\nm{p5.swe.price5} of extra
-spend per point per task. With the anchor's best measured efficiency, a judge over such a set beats the most accurate
-single submission at no more of its dollars in at most \nm{p5.swe.beat.sol}\% of sets (a perfect selector in at most
-\nm{p5.swe.beat.perfect}\%, judge calls unpriced). On MathArena the room is \nm{p5.ma.room.lo}--\nm{p5.ma.room.hi}
-points because the top systems are close to perfect.
-
-\paragraph{Self-checks and execution.} Sol accepted \nm{check.sol.accept}\% of its own anchor answers (AUROC
-\nm{check.sol.auroc}); Haiku \nm{check.haiku.accept}\% (AUROC \nm{check.haiku.auroc}). On SWE-bench the step count of a
-run ranks its own successes with median AUROC \nm{f18.stepauroc}; a cascade that escalates on step count never
-escalates once its threshold is fitted. Execution-based checks on code are part of the open-weight testbed.
 
 \section{Different members and coordination rules}
 \label{sec:members}
@@ -448,18 +500,6 @@ copies in \nm{map.vote}. Chosen on half the questions and scored on the other ha
 \nm{map.regret.lo}--\nm{map.regret.hi} points on average against the best team for the held-out half
 (\status{exploratory}). This is stability within one benchmark, not transfer to a new task.
 
-\section{The open-weight testbed (design; results pending)}
-\label{sec:testbed}
-
-The testbed varies precision (BF16, W8, W4, W3), size (Qwen3.5 2B, 4B, 9B) and thinking budget (off, 1k, 4k) with
-several samples per item on \nm{testbed.items.all} items (\nm{testbed.items.bbeh} BBEH, \nm{testbed.items.math}
-competition math, \nm{testbed.items.code} LiveCodeBench), so width, depth and verification can be bought at measured GPU
-cost. Its preregistration (T1--T5) has power by simulation of \nm{testbed.power.t1} (T1: the W4 loss survives voting on
-hard items), \nm{testbed.power.t2} (T2), \nm{testbed.power.t3} (T3: depth against cost-matched width),
-\nm{testbed.power.t4} (T4: judge coupling to difficulty) and \nm{testbed.power.t5} (T5, exploratory: compositional
-prediction) (\status{design}). The pilot is estimated at \nm{testbed.gpu.pilot} of GPU time. No GPU has run yet; no
-result is reported.
-
 \section{Related work}
 \label{sec:related}
 
@@ -499,22 +539,41 @@ the budget map's stability is measured within one benchmark. Answer
 format moves the difficulty axis~\cite{chen2026cofailure}; our anchor tasks are free-form. The all-wrong tail on small
 math sets is not resolved. The anchor's systematic shares have no interval until the gold files are restored.
 
-\section{Conclusion and next steps}
+\section{Discussion}
 \label{sec:conclusion}
 
-Which members a system calls matters more than how it organizes them. On the data we have, failures are mostly shared, and a factor model with one free difficulty per item prices the shared
-tail on code better than a one-factor copula given the same data. Reasoning moves a system along the shared difficulty
-axis without changing which items it fails. The first reasoning step of cheap models beat a dollar-matched vote of their
-no-reasoning calls on sealed items; whether depth beats width beyond that step is open, and our public pairs predict
-about zero at the top of a model's range. Selection by agreement did not beat the best system's own vote at matched
-calls, and a test of judges still needs pools that cover more than the judge answers alone. Different members helped
-only where the best member left room, and smarter coordination rules, for asking a teammate or for recovering a lost
-member, showed no gain we can credit to the rule. A preregistered handoff test, how much of a strong model's
-accuracy a cheaper team completes from the strong model's partial reasoning, has run and is not yet read. The next steps (roadmap in
-research/v4/roadmap.md): \nm{plan.items}+ items across \nm{plan.families} or more task families including agentic ones,
-with a time-split replication; a third vendor used once on the frozen design; the open-weight testbed; batch and cache
-pricing; and a budget allocator that turns a \nm{plan.pilot.lo}--\nm{plan.pilot.hi} item pilot and a price table into a
-depth, width and verification mix with predicted accuracy, cost and uncertainty.
+\paragraph{The claim in compression terms.} A team of copies is an over-parameterized layer with highly correlated
+channels. Like such a layer it can be pruned heavily at little cost, and like such a layer it gains parameters, not
+capacity, when it is widened. Its accuracy is bounded by coverage, the share of questions at least one member answers;
+coverage grows slowly because failures are shared, and a vote or a judge recovers part of the gap between the best
+member and coverage, never more~\citep{brown2024monkeys,chen2026cofailure}. The moves that raise capacity are the ones
+compression predicts: more precision per unit (a step of reasoning) and a larger unit (a stronger member).
+Coordination, whether votes, critiques, judges or learned rules for when to consult, routes answers among members. It
+helped where the best member left room, as in the LAB-Bench team of smaller models, but one stronger model reached the
+same accuracy alone at a fraction of the cost.
+
+\paragraph{Shared failure is measurable, and it says where width pays.} One difficulty per question accounts for
+\nm{p6.swe.est} of the latent variation in success on SWE-bench Verified, and a factor model built on it predicts the
+share of questions every held-out system fails (\nm{p8.swe.model}\% predicted, \nm{p8.swe.obs}\% observed), where
+independence and a Gaussian copula do not. The same model says where width does pay: weak systems with different
+strengths, mixed in one panel (Appendix~\ref{app:more}). A practitioner can measure the quantity on a small graded
+pilot: the correlation of the members' errors gives the effective team size, and coverage gives the ceiling of any rule
+that picks among them.
+
+\paragraph{For practitioners.} Spend on depth and on the choice of member before width, and on checking only where
+the members already cover the answer. Treat agreement among copies as one vote, not many. The budget map makes the
+choice concrete: on BBEH every winning cell, across dollar and latency budgets, is a single model called once or voted
+three times, and the choice made on half the questions loses \nm{map.regret.lo}--\nm{map.regret.hi} points on the other
+half (\status{exploratory}).
+
+\paragraph{What remains open.} The depth result covers the first reasoning step of cheap models; beyond it gains
+flatten, and whether depth beats width at the top of a model's range is untested. The budget map is stable within one
+benchmark; transfer to a new task is the next test. A preregistered handoff test, how much of a strong model's accuracy
+a cheaper team completes from the strong model's partial reasoning, has run and is not yet read. The next steps
+(roadmap in research/v4/roadmap.md) are \nm{plan.items}+ items across \nm{plan.families} or more task families including
+agentic ones, a third model family used once on the frozen design, the open-weight testbed, and a budget allocator that
+turns a \nm{plan.pilot.lo}--\nm{plan.pilot.hi} item pilot and a price table into a depth, width and verification mix
+with predicted accuracy and cost.
 
 \bibliographystyle{icml2026}
 \bibliography{refs}
@@ -535,6 +594,60 @@ ADJUST was resolved before further spend.
 \paragraph{Cost.} Total API spend \nm{spend.total} over \nm{runs.count} runs, under hard per-account caps enforced in
 code. Every call is stored, so every team in this paper is rescored by replay at no cost. The per-run ledger and the
 status of every number in the paper are generated in the repository (paper/runs\_table.tex, paper/numbers\_table.tex).
+
+\section{Further results}
+\label{app:more}
+
+\paragraph{Votes of one system.} A vote of two calls cannot gain in expectation (a right--wrong split is a tie), so gains
+start at three. The factor model's \emph{vote rule} predicts a $k$-vote from one-call success $p$, the share $z$ of
+failures that abstain (abstentions are non-votes) and the chance $q$ that two wrong answers coincide. Cross-fitted on
+\nm{p1.all.cells} (system, set) cells with three calls in \nm{p1.all.sets} sets, its mean absolute vote-gain error is
+\nm{p1.all.rule} points against \nm{p1.all.zero} for the zero-gain predictor ``votes add nothing''; predicted and
+observed gains correlate at \nm{p1.all.corr}, and the gain's squared error is smaller by \nm{p1.all.msed} points$^2$
+(\nm{p1.all.msedlo} to \nm{p1.all.msedhi}; item noise adds the same variance to both and cancels). But the rule
+overstates gains (\nm{p1.pred.predgain} predicted, \nm{p1.pred.obsgain} observed where it predicts \nm{design.gainpoints}
+or more), and on the 3-vote accuracy itself it is worse than zero-gain (mean absolute error \nm{p1.all.levrule} against
+\nm{p1.all.levzero} points; squared error larger by \nm{p1.all.levmsed} points$^2$, \nm{p1.all.levmsedlo} to
+\nm{p1.all.levmsedhi}). The rule ranks where votes pay; it does not yet price them.
+
+\paragraph{Votes across systems.} Votes pay most when weak systems with different strengths are mixed. On
+\nm{p7.k3.panels} panels of three and \nm{p7.k5.panels} of five MathArena systems with one-call accuracy
+\nm{design.weak.lo}--\nm{design.weak.hi}, the plurality of one call each gains \nm{p7.k3.gain} and \nm{p7.k5.gain} points
+over a random member. Cross-fitted, the factor model predicts the panel vote with bias \nm{p7.k3.bias} and
+\nm{p7.k5.bias} points and absolute error \nm{p7.k3.model} and \nm{p7.k5.model}, against \nm{p7.k3.zero} and
+\nm{p7.k5.zero} for zero-gain and \nm{p7.k3.indep} and \nm{p7.k5.indep} for independence; it is closer than zero-gain in
+\nm{p7.k3.setszero} and \nm{p7.k5.setszero} of \nm{p7.k3.sets} sets, and closer than independence in
+\nm{p7.k3.setsindep} and \nm{p7.k5.setsindep}. Where composition matters, the model prices it without bias;
+independence overstates it and zero-gain ignores it.
+
+\paragraph{AH1 and AH4 (\status{exploratory}).} Sonnet's effort-low setting closed none of the
+\nm{ah1.gap}-point gap to Sol low ($R = \nm{ah1.r}$, \nm{ah1.lo} to \nm{ah1.hi}), so the vendor--reasoning confound stays
+open. The Sol judge's selection efficiency was \nm{ah4.easy} on easy items and \nm{ah4.hard} on hard ones (difference
+\nm{ah4.diff}, \nm{ah4.lo}--\nm{ah4.hi}), the predicted direction, with a ratio whose hard-half denominator is small.
+
+\paragraph{The price of verification on public data.} A perfect selector over random \nm{design.sets.lo}--\nm{design.sets.hi} system SWE-bench sets adds
+\nm{p5.swe.room2}--\nm{p5.swe.room5} points over the best member, at \nm{p5.swe.price2}--\nm{p5.swe.price5} of extra
+spend per point per task. With the anchor's best measured efficiency, a judge over such a set beats the most accurate
+single submission at no more of its dollars in at most \nm{p5.swe.beat.sol}\% of sets (a perfect selector in at most
+\nm{p5.swe.beat.perfect}\%, judge calls unpriced). On MathArena the room is \nm{p5.ma.room.lo}--\nm{p5.ma.room.hi}
+points because the top systems are close to perfect.
+
+\paragraph{Self-checks and execution.} Sol accepted \nm{check.sol.accept}\% of its own anchor answers (AUROC
+\nm{check.sol.auroc}); Haiku \nm{check.haiku.accept}\% (AUROC \nm{check.haiku.auroc}). On SWE-bench the step count of a
+run ranks its own successes with median AUROC \nm{f18.stepauroc}; a cascade that escalates on step count never
+escalates once its threshold is fitted. Execution-based checks on code are part of the open-weight testbed.
+
+\paragraph{The open-weight testbed (design; results pending).}
+\label{sec:testbed}
+
+The testbed varies precision (BF16, W8, W4, W3), size (Qwen3.5 2B, 4B, 9B) and thinking budget (off, 1k, 4k) with
+several samples per item on \nm{testbed.items.all} items (\nm{testbed.items.bbeh} BBEH, \nm{testbed.items.math}
+competition math, \nm{testbed.items.code} LiveCodeBench), so width, depth and verification can be bought at measured GPU
+cost. Its preregistration (T1--T5) has power by simulation of \nm{testbed.power.t1} (T1: the W4 loss survives voting on
+hard items), \nm{testbed.power.t2} (T2), \nm{testbed.power.t3} (T3: depth against cost-matched width),
+\nm{testbed.power.t4} (T4: judge coupling to difficulty) and \nm{testbed.power.t5} (T5, exploratory: compositional
+prediction) (\status{design}). The pilot is estimated at \nm{testbed.gpu.pilot} of GPU time. No GPU has run yet; no
+result is reported.
 
 \section{Additional figures}
 \label{app:figs}

@@ -965,6 +965,23 @@ def pilot_numbers() -> None:
     for name, mask in (("zero", right == 0), ("low", right.between(1, 2))):
         put(f"pilot.rescue.{name}.n", int(mask.sum()), "exploratory", src, "int")
         put(f"pilot.rescue.{name}.acc", float(team.reindex(right[mask].index).mean()), "exploratory", src, "pct", 1)
+    # the worked example in the introduction: one web-of-lies question followed through the full team's stages
+    ex = agents[agents["task_id"] == "bbeh-web_of_lies-4112"]
+    for stage in ("propose", "critique", "refine", "aggregate"):
+        put(f"pilot.ex.{stage}", int(ex[ex["stage"] == stage]["correct"].sum()), "exploratory", src, "int")
+    wrong = prop[(prop["task_id"] == "bbeh-web_of_lies-4112") & (prop["correct"] == 0)]
+    put("pilot.ex.wrongdistinct", int(wrong["norm"].nunique()), "exploratory", src, "int",
+        note="distinct wrong answers among the proposers on the example question")
+    # the 27 pruned teams against the full team's 95% interval (normal approximation at the pilot's n questions)
+    files = sorted(glob.glob(str(ROOT / "results/p4_bbeh_grid_[a-p]/results.csv")))
+    grid = pd.concat([pd.read_csv(f) for f in files]).groupby("config_id")["correct"].mean()
+    src = "results/p4_bbeh_grid_*/results.csv"
+    full, n = grid["k6-6-6-1"], len(prop["task_id"].unique())
+    half = 1.96 * (full * (1 - full) / n) ** 0.5
+    put("pilot.grid.teams", len(grid), "record", src, "int")
+    put("pilot.grid.within", int(((grid - full).abs() <= half).sum()), "exploratory", src, "int",
+        note="teams (the full team included) whose accuracy lies inside the full team's 95% interval")
+    put("pilot.grid.half", 100 * half, "exploratory", src, "num", 0)
 
 
 def lab_numbers() -> None:
@@ -993,6 +1010,9 @@ def lab_numbers() -> None:
         src = base / folder / "per_item.csv"
         if team == "claude":
             put("lab.items", per["item"].nunique(), "record", src, "int")
+            items = pd.Series(per["item"].unique())
+            put("lab.items.seqqa", int(items.str.contains("seqqa").sum()), "record", src, "int")
+            put("lab.items.protocolqa", int(items.str.contains("protocolqa").sum()), "record", src, "int")
             put("lab.claude.review.ratio", summ.loc["full_review", "usd_per_item"] / summ.loc["single_B", "usd_per_item"],
                 "record", base / folder / "summary.csv", "num", 1)
         for m, key in (("full_review", "review"), ("fixed_peer", "peer"), ("vote", "vote"), ("all_reflect", "reflect")):
@@ -1005,6 +1025,11 @@ def lab_numbers() -> None:
         row = con[(con["method"] == "panel_X") & (con["baseline"] == b)].iloc[0]
         for suffix, col in (("", "d_acc"), (".lo", "d_acc_lo"), (".hi", "d_acc_hi")):
             put(f"lab.mix.{key}{suffix}", half_up(row[col], 1), "confirmatory", src, "signed", 1)
+    claude = pd.read_csv(base / "labbench_claude2/summary.csv").set_index("method")
+    gpt = pd.read_csv(base / "labbench_gpt/summary.csv").set_index("method")
+    put("lab.peer.vssol.ratio", claude.loc["fixed_peer", "usd_per_item"] / gpt.loc["single_B", "usd_per_item"], "record",
+        base / "labbench_claude2/summary.csv", "num", 0,
+        note="the best Claude team's dollars per question over one Sol low call's")
     summ = pd.read_csv(base / "cross_provider/summary.csv").set_index("method")
     put("lab.mix.acc", summ.loc["panel_X", "accuracy"], "confirmatory", base / "cross_provider/summary.csv", "pct", 1)
     put("lab.mix.usd", summ.loc["panel_X", "usd_per_item"], "record", base / "cross_provider/summary.csv", "usd", 3)
